@@ -645,6 +645,20 @@ function ElevatorScene({
 )}
         <div className="relative h-full w-full overflow-hidden bg-[var(--black)]">
           <motion.div
+  aria-hidden="true"
+  className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+>
+  <motion.div
+    className="absolute top-0 h-full w-[45%] blur-3xl opacity-30"
+    style={{
+      background:
+        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.2) 20%, rgba(122,12,12,0.65) 50%, rgba(122,12,12,0.2) 80%, transparent 100%)",
+    }}
+    animate={{ x: ["-40%", "140%", "-40%"] }}
+    transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+  />
+</motion.div>
+          <motion.div
             aria-hidden="true"
             initial={false}
             animate={{ opacity: cinematicGlow ? 0.04 : 0.01, scale: cinematicGlow ? 1 : 0.995 }}
