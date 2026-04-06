@@ -649,7 +649,7 @@ function ElevatorScene({
   className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
 >
   <motion.div
-    className="absolute top-0 h-full w-[45%] blur-3xl opacity-30"
+    className="absolute top-0 h-full w-[45%] blur-3xl opacity-40"
     style={{
       background:
         "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.2) 20%, rgba(122,12,12,0.65) 50%, rgba(122,12,12,0.2) 80%, transparent 100%)",
