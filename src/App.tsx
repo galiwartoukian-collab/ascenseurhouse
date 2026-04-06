@@ -635,8 +635,7 @@ function ElevatorScene({
   <img
   src={logo}
   alt="Ascenseur House"
-  className="h-10 md:h-12 w-auto object-contain opacity-90"
-/>
+className="pointer-events-none absolute left-1/2 top-4 z-40 flex -translate-x-1/2 flex-col items-center gap-3"/>
 </button>
           </div>
         </div>
