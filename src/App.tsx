@@ -618,18 +618,18 @@ function ElevatorScene({
         <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-7 w-full border-t border-white/8 bg-[#060606]" />
 
 <div className="absolute left-1/2 top-2 z-40 flex -translate-x-1/2 flex-col items-start gap-3">          <div className="relative">
-            <div
-              className="absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-60"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
-                boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
-              }}
-            />
+           <div
+  className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-60"
+  style={{
+    background:
+      "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
+    boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
+  }}
+/>
          <button
   type="button"
   onClick={goLobby}
-  className="pointer-events-auto"
+  className="pointer-events-auto cursor-pointer relative z-50"
 >
   <img
   src={logo}
