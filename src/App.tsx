@@ -36,6 +36,7 @@ type ElevatorSceneProps = {
   displayFloor: FloorCode;
   travelState: TravelState;
   lobbyDoorProgress: number;
+  goLobby: () => void;
 };
 
 type ElevatorPanelProps = {
@@ -593,6 +594,7 @@ function ElevatorScene({
   displayFloor,
   travelState,
   lobbyDoorProgress,
+  goLobby,
 }: ElevatorSceneProps) {
   const isLobby = view === "lobby";
   const doorsOpen = !isLobby && (travelState === "opening" || travelState === "idle");
@@ -625,7 +627,13 @@ function ElevatorScene({
                 boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
               }}
             />
-            <img src={logo} alt="Ascenseur House" className="relative h-8 w-auto object-contain opacity-95 md:h-10" />
+         <button
+  type="button"
+  onClick={goLobby}
+  className="pointer-events-auto"
+>
+  <img src={logo} alt="Ascenseur House" className="..." />
+</button>
           </div>
         </div>
 
@@ -1034,13 +1042,14 @@ export default function App() {
       </AnimatePresence>
 
       <div className="sticky top-0 h-screen overflow-hidden">
-        <ElevatorScene
-          view={view}
-          selectedProfile={selectedProfile}
-          displayFloor={displayFloor}
-          travelState={travelState}
-          lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
-        />
+     <ElevatorScene
+  view={view}
+  selectedProfile={selectedProfile}
+  displayFloor={displayFloor}
+  travelState={travelState}
+  lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
+  goLobby={goLobby}
+/>
       </div>
 
       <ScrollController
