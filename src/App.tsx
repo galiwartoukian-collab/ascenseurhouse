@@ -402,8 +402,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-10 flex justify-center"
-      style={{ paddingTop: '25px' }}
+      className="absolute inset-0 z-10 flex items-start justify-center"
     >
       <div
         className="relative h-[74vh] w-[min(84vw,1120px)] overflow-visible rounded-[30px] border shadow-2xl backdrop-blur-sm md:grid md:grid-cols-[1.02fr_0.98fr]"
