@@ -36,7 +36,6 @@ type ElevatorSceneProps = {
   displayFloor: FloorCode;
   travelState: TravelState;
   lobbyDoorProgress: number;
-  goLobby: () => void;
 };
 
 type ElevatorPanelProps = {
@@ -594,7 +593,6 @@ function ElevatorScene({
   displayFloor,
   travelState,
   lobbyDoorProgress,
-  goLobby,
 }: ElevatorSceneProps) {
   const isLobby = view === "lobby";
   const doorsOpen = !isLobby && (travelState === "opening" || travelState === "idle");
@@ -616,29 +614,6 @@ function ElevatorScene({
         <div className="pointer-events-none absolute inset-0 border border-white/6" />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 border-b border-white/8 bg-[#0d0d0d]" />
         <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-7 w-full border-t border-white/8 bg-[#060606]" />
-
-<div className="absolute left-1/2 top-2 z-[9999] flex -translate-x-1/2 flex-col items-start gap-3">          <div className="relative">
-           <div
-  className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-60"
-  style={{
-    background:
-      "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
-    boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
-  }}
-/>
-         <button
-  type="button"
-  onClick={goLobby}
-  className="pointer-events-auto cursor-pointer relative z-[10000]"
->
-  <img
-  src={logo}
-  alt="Ascenseur House"
-  className="h-10 md:h-12 w-auto object-contain opacity-90"
-/>
-</button>
-          </div>
-        </div>
 
 {!isLobby && (
   <TravelIndicator displayFloor={displayFloor} travelState={travelState} />
@@ -1022,7 +997,29 @@ export default function App() {
           "--glass": "rgba(255,255,255,0.04)",
         } as React.CSSProperties
       }
+    ><div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
+  <div className="relative">
+    <div
+      className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-60"
+      style={{
+        background:
+          "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
+        boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
+      }}
+    />
+    <button
+      type="button"
+      onClick={goLobby}
+      className="relative z-[10002] cursor-pointer"
     >
+      <img
+        src={logo}
+        alt="Ascenseur House"
+        className="h-10 md:h-12 w-auto object-contain opacity-90"
+      />
+    </button>
+  </div>
+</div>
       <AnimatePresence>
         {activeFloor !== "00" && travelState === "idle" && (
           <motion.div
@@ -1051,7 +1048,6 @@ export default function App() {
   displayFloor={displayFloor}
   travelState={travelState}
   lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
-  goLobby={goLobby}
 />
       </div>
 
