@@ -632,7 +632,11 @@ function ElevatorScene({
   onClick={goLobby}
   className="pointer-events-auto"
 >
-  <img src={logo} alt="Ascenseur House" className="..." />
+  <img
+  src={logo}
+  alt="Ascenseur House"
+  className="h-10 md:h-12 w-auto object-contain opacity-90"
+/>
 </button>
           </div>
         </div>
