@@ -412,7 +412,20 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           boxShadow:
             "0 28px 80px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(122,12,12,0.08)",
         }}
-      >
+      ><motion.div
+  aria-hidden="true"
+  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+>
+  <motion.div
+    className="absolute top-0 h-full w-[38%] blur-3xl opacity-35"
+    style={{
+      background:
+        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+    }}
+    animate={{ x: ["-25%", "140%", "-25%"] }}
+    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+  />
+</motion.div>
         <div className="relative min-h-[240px] overflow-hidden rounded-l-[30px] md:min-h-full">
           <img
             src={profile.image}
@@ -477,7 +490,20 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
           boxShadow:
             "0 28px 80px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(122,12,12,0.08)",
         }}
-      >
+      ><motion.div
+  aria-hidden="true"
+  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+>
+  <motion.div
+    className="absolute top-0 h-full w-[38%] blur-3xl opacity-35"
+    style={{
+      background:
+        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+    }}
+    animate={{ x: ["-25%", "140%", "-25%"] }}
+    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+  />
+</motion.div>
         <div className="grid h-full md:grid-cols-[1.06fr_0.94fr]">
           <div className="overflow-y-auto px-6 py-7 sm:px-7 sm:py-8 md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
