@@ -481,7 +481,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
+      className="absolute inset-0 z-50 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
     >
       <div
         className="relative h-[78vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
@@ -525,7 +525,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
             <form
               action="https://formspree.io/f/mvzvlkkq"
               method="POST"
-              className="relative z-20 mt-5 pointer-events-auto"
+              className="relative z-[60] mt-5 pointer-events-auto"
             >
               <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
