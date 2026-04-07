@@ -247,16 +247,16 @@ function ElevatorPanel({
       {/* MOBILE */}
       <div className="relative md:hidden">
         <div
-          className="absolute bottom-0 right-0 h-[30px] w-[92px] rounded-tl-[18px] rounded-bl-[18px] rounded-br-[20px] border"
-          style={{
-            borderColor: "rgba(255,255,255,0.08)",
-            background: "#0c0d10",
-            boxShadow: "0 10px 24px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.04)",
-          }}
-        />
+  className="absolute bottom-0 right-0 h-[24px] w-[64px] rounded-tl-[14px] rounded-br-[18px] border"
+  style={{
+    borderColor: "rgba(255,255,255,0.08)",
+    background: "#0c0d10",
+    boxShadow: "0 8px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04)",
+  }}
+/>
 
         <div
-          className="relative ml-auto mb-[12px] w-[78px] rounded-[20px] border p-[2px]"
+  className="relative ml-auto mb-[10px] w-[86px] rounded-[20px] border p-[2px]"
           style={{
             borderColor: "rgba(255,255,255,0.08)",
             background: "#111214",
@@ -268,8 +268,8 @@ function ElevatorPanel({
           <div className="pointer-events-none absolute bottom-2 left-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
           <div className="pointer-events-none absolute bottom-2 right-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
 
-          <div
-            className="relative overflow-hidden rounded-[16px] border px-2 pb-2 pt-3"
+<div
+  className="relative overflow-hidden rounded-[16px] border px-2.5 pb-2.5 pt-3"
             style={{
               borderColor: "rgba(255,255,255,0.07)",
               background: "#0a0b0d",
@@ -277,17 +277,17 @@ function ElevatorPanel({
             }}
           >
             <div className="mb-2 text-center">
-              <div className="text-[7px] uppercase tracking-[0.3em] text-white/32">Ascenseur</div>
-              <div
-                className="mt-2 rounded-md border px-2 py-2"
-                style={{
-                  borderColor: "rgba(255,255,255,0.06)",
-                  background: "#060708",
-                }}
-              >
-                <div className="text-[8px] uppercase tracking-[0.24em] text-white/26">Control Panel</div>
-              </div>
-            </div>
+  <div className="text-[6px] uppercase tracking-[0.22em] text-white/32">Ascenseur</div>
+  <div
+    className="mt-2 rounded-md border px-1.5 py-1.5"
+    style={{
+      borderColor: "rgba(255,255,255,0.06)",
+      background: "#060708",
+    }}
+  >
+    <div className="text-[7px] uppercase tracking-[0.16em] text-white/26">Control Panel</div>
+  </div>
+</div>
 
             <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2">
               <MetalButton
