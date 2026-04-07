@@ -481,139 +481,146 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6" >
+      className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
+    >
       <div
-        className="relative h-[72vh] sm:h-[74vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
+        className="relative h-[78vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
           boxShadow:
             "0 28px 80px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(122,12,12,0.08)",
         }}
-      ><motion.div
-  aria-hidden="true"
-  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
->
-  <motion.div
-className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"    style={{
-      background:
-        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
-    }}
-    animate={{ x: ["-25%", "140%", "-25%"] }}
-    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-  />
-</motion.div>
-        <div className="grid h-full min-h-0 grid-cols-1 overflow-y-auto md:grid-cols-[1.06fr_0.94fr] md:overflow-hidden">
-  <div className="min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:px-10 md:py-10">
-  <div className="mb-3 flex items-start gap-2 text-white/78">
-    <CalendarDays className="h-4 w-4 text-white/70" />
-    <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
-  </div>
-
-  <h2 className="text-2xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
-    Book Ascenseur House
-  </h2>
-
-  <p className="mt-4 max-w-[42ch] text-sm leading-7 text-white/68 sm:text-[15px]">
-    Private events, artist bookings, venue partnerships, and curated experiences.
-  </p>
-
-<form
-  action="https://formspree.io/f/mvzvlkkq"
-  method="POST"
-  className="mt-5 pointer-events-auto"
->
-    <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
-
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <input
-        type="text"
-        name="name"
-        required
-        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        placeholder="Your Name"
-      />
-      <input
-        type="text"
-        name="company"
-        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        placeholder="Company / Venue"
-      />
-      <input
-        type="email"
-        name="email"
-        required
-        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        placeholder="Email"
-      />
-      <input
-        type="tel"
-        name="phone"
-        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        placeholder="Phone"
-      />
-      <textarea
-        name="message"
-        required
-        className="min-h-[110px] md:min-h-[140px] rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition sm:col-span-2"
-        style={{
-          borderColor: "rgba(255,255,255,0.08)",
-          background: "rgba(255,255,255,0.03)",
-        }}
-        placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
-      />
-
-      <div className="sm:col-span-2">
-        <UIButton
-          type="submit"
-          className="mt-1 border text-white"
-          style={{
-            borderColor: "rgba(255,255,255,0.12)",
-            background: "rgba(255,255,255,0.06)",
-          }}
+      >
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
         >
-          Send Inquiry
-        </UIButton>
-      </div>
-    </div>
-  </form>
-</div>
+          <motion.div
+            className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+            }}
+            animate={{ x: ["-25%", "140%", "-25%"] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+
+        <div className="relative z-10 grid h-full min-h-0 grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
+          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+            <div className="mb-3 flex items-start gap-2 text-white/78">
+              <CalendarDays className="h-4 w-4 text-white/70 shrink-0" />
+              <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
+            </div>
+
+            <h2 className="text-2xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
+              Book Ascenseur House
+            </h2>
+
+            <p className="mt-4 max-w-[42ch] text-sm leading-7 text-white/68 sm:text-[15px]">
+              Private events, artist bookings, venue partnerships, and curated experiences.
+            </p>
+
+            <form
+              action="https://formspree.io/f/mvzvlkkq"
+              method="POST"
+              className="relative z-20 mt-5 pointer-events-auto"
+            >
+              <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}
+                  placeholder="Your Name"
+                />
+
+                <input
+                  type="text"
+                  name="company"
+                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}
+                  placeholder="Company / Venue"
+                />
+
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}
+                  placeholder="Email"
+                />
+
+                <input
+                  type="tel"
+                  name="phone"
+                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}
+                  placeholder="Phone"
+                />
+
+                <textarea
+                  name="message"
+                  required
+                  className="min-h-[130px] w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05] sm:col-span-2"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                  }}
+                  placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
+                />
+
+                <div className="sm:col-span-2">
+                  <UIButton
+                    type="submit"
+                    className="mt-1 border text-white"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.12)",
+                      background: "rgba(255,255,255,0.06)",
+                    }}
+                  >
+                    Send Inquiry
+                  </UIButton>
+                </div>
+              </div>
+            </form>
+          </div>
 
           <div
-            className="flex h-auto md:h-full min-h-0 flex-col justify-between border-t md:border-t-0 md:border-l px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-10"
+            className="border-t px-4 py-4 sm:px-6 sm:py-6 md:min-h-0 md:overflow-y-auto md:border-l md:border-t-0 md:px-8 md:py-10"
             style={{
               borderColor: "rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
             }}
           >
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/42">Direct Contact</p>
+            <p className="text-[10px] uppercase tracking-[0.22em] text-white/42">Direct Contact</p>
 
-              <div className="mt-5 space-y-4 text-sm text-white/78">
-                <div className="flex items-start gap-3">
-                  <Mail className="h-4 w-4 text-white/70" />
-                  <span>bookings@ascenseurhouse.com</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Phone className="h-4 w-4 text-white/70" />
-                  <span>(000) 000-0000</span>
-                </div>
+            <div className="mt-5 space-y-4 text-sm text-white/78">
+              <div className="flex items-start gap-3 break-all sm:break-normal">
+                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-white/70" />
+                <span>bookings@ascenseurhouse.com</span>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/70" />
+                <span>(000) 000-0000</span>
               </div>
             </div>
 
@@ -632,7 +639,6 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
     </motion.div>
   );
 }
-
 function ElevatorScene({
   view,
   selectedProfile,
@@ -698,9 +704,11 @@ function ElevatorScene({
 
           <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10 opacity-25" />
 
-          <div className={`absolute inset-x-0 inset-y-[10%] z-30 flex items-center justify-center px-6 text-center ${
-  view === "lobby" ? "pointer-events-none" : "pointer-events-auto"
-}`}>
+          <div
+  className={`absolute inset-x-0 inset-y-[10%] z-30 flex justify-center px-3 sm:px-6 ${
+    view === "lobby" ? "pointer-events-none items-center text-center" : "pointer-events-auto items-start text-left"
+  }`}
+>
             <AnimatePresence mode="wait">
               {isLobby ? (
                 <motion.div
