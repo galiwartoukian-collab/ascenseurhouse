@@ -243,20 +243,28 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-<div className="pointer-events-auto fixed z-[9999] right-1 sm:right-2 md:right-10 bottom-1 sm:bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.72] sm:scale-[0.82] md:scale-[0.94] origin-bottom-right md:origin-right">      <div
-className="relative w-[86px] sm:w-[104px] md:w-[132px] rounded-l-[26px] rounded-r-[16px] md:rounded-[26px] border p-[2px]"        style={{
+<div className="pointer-events-auto fixed z-[9999] right-1 sm:right-2 md:right-10 bottom-1 sm:bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 origin-bottom-right md:origin-right">      <div
+  className="relative w-[92px] sm:w-[108px] md:w-[132px] rounded-[24px] md:rounded-[26px] border p-[2px]"        style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
           boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
         }}
       >
+         <div
+    className="absolute bottom-0 right-0 h-[28px] w-[132px] rounded-tl-[18px] rounded-bl-[18px] rounded-br-[24px] border md:hidden"
+    style={{
+      borderColor: "rgba(255,255,255,0.08)",
+      background: "rgba(8,9,11,0.96)",
+      boxShadow: "0 10px 22px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.04)",
+    }}
+  />
         <div className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute right-2 top-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute bottom-2 left-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
 
         <div
-          className="relative overflow-hidden rounded-l-[22px] rounded-r-[12px] md:rounded-[22px] border px-3 pb-3 pt-4 sm:px-4 sm:pb-4 sm:pt-5"
+  className="relative ml-auto mb-[14px] overflow-hidden rounded-[20px] md:mb-0 md:rounded-[22px] border px-3 pb-3 pt-4 sm:px-4 sm:pb-4 sm:pt-5"
           style={{
             borderColor: "rgba(255,255,255,0.07)",
             background: "#0a0b0d",
@@ -276,7 +284,7 @@ className="relative w-[86px] sm:w-[104px] md:w-[132px] rounded-l-[26px] rounded-
             </div>
           </div>
 
-          <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2.5 sm:gap-3">
+          <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2 md:gap-3">
             <MetalButton
               label="1"
               active={activeFloor === "01" || targetFloor === "01"}
