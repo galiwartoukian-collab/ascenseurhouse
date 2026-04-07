@@ -203,7 +203,7 @@ function MetalButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={`Go to ${label}`}
-      className="group relative h-7 w-7 rounded-full border text-[13px] font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
+      className="group relative h-6.5 w-6.5 rounded-full border text-[12px] font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
       style={{
         borderColor: active ? "rgba(122,12,12,0.42)" : "rgba(255,255,255,0.08)",
         background: active
@@ -243,55 +243,118 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-auto fixed z-[9999] right-1 sm:right-2 md:right-10 bottom-1 sm:bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 origin-bottom-right md:origin-right">
+    <div className="pointer-events-auto fixed z-[9999] right-1 bottom-1 sm:right-2 sm:bottom-3 md:right-10 md:bottom-auto md:top-1/2 md:-translate-y-1/2 origin-bottom-right md:origin-right">
+      {/* MOBILE */}
+      <div className="relative md:hidden">
+        <div
+          className="absolute bottom-0 right-0 h-[30px] w-[92px] rounded-tl-[18px] rounded-bl-[18px] rounded-br-[20px] border"
+          style={{
+            borderColor: "rgba(255,255,255,0.08)",
+            background: "#0c0d10",
+            boxShadow: "0 10px 24px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.04)",
+          }}
+        />
+
+        <div
+          className="relative ml-auto mb-[12px] w-[78px] rounded-[20px] border p-[2px]"
+          style={{
+            borderColor: "rgba(255,255,255,0.08)",
+            background: "#111214",
+            boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
+          }}
+        >
+          <div className="pointer-events-none absolute left-2 top-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
+          <div className="pointer-events-none absolute right-2 top-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
+          <div className="pointer-events-none absolute bottom-2 left-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
+          <div className="pointer-events-none absolute bottom-2 right-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
+
+          <div
+            className="relative overflow-hidden rounded-[16px] border px-2 pb-2 pt-3"
+            style={{
+              borderColor: "rgba(255,255,255,0.07)",
+              background: "#0a0b0d",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.03)",
+            }}
+          >
+            <div className="mb-2 text-center">
+              <div className="text-[7px] uppercase tracking-[0.3em] text-white/32">Ascenseur</div>
+              <div
+                className="mt-2 rounded-md border px-2 py-2"
+                style={{
+                  borderColor: "rgba(255,255,255,0.06)",
+                  background: "#060708",
+                }}
+              >
+                <div className="text-[8px] uppercase tracking-[0.24em] text-white/26">Control Panel</div>
+              </div>
+            </div>
+
+            <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2">
+              <MetalButton
+                label="1"
+                active={activeFloor === "01" || targetFloor === "01"}
+                disabled={disabled}
+                onClick={onGoToAra}
+              />
+              <MetalButton
+                label="2"
+                active={activeFloor === "02" || targetFloor === "02"}
+                disabled={disabled}
+                onClick={onGoToAnais}
+              />
+              <MetalButton
+                label="3"
+                active={activeFloor === "03" || targetFloor === "03"}
+                disabled={disabled}
+                onClick={onGoToBliss}
+              />
+              <MetalButton
+                label="B"
+                active={activeFloor === "B" || targetFloor === "B"}
+                disabled={disabled}
+                onClick={onGoToBooking}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP */}
       <div
-        className="relative w-[92px] sm:w-[108px] md:w-[132px] rounded-[24px] md:rounded-[26px] border p-[2px]"
+        className="relative hidden w-[132px] rounded-[26px] border p-[2px] md:block"
         style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
           boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
         }}
       >
-        <div
-          className="pointer-events-none absolute bottom-[8px] right-[10px] h-[20px] w-[52px] rounded-l-[14px] rounded-r-[18px] border md:hidden"
-          style={{
-            borderColor: "rgba(255,255,255,0.08)",
-            background: "rgba(8,9,11,0.96)",
-            boxShadow: "0 8px 18px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.04)",
-          }}
-        />
-
         <div className="pointer-events-none absolute left-2 top-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute right-2 top-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute bottom-2 left-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
         <div className="pointer-events-none absolute bottom-2 right-2 h-2.5 w-2.5 rounded-full border border-white/10 bg-[#1b1c1f]" />
 
         <div
-          className="relative ml-auto mb-[10px] overflow-hidden rounded-[20px] border px-2.5 pb-2.5 pt-3 md:mb-0 md:rounded-[22px] md:px-4 md:pb-4 md:pt-5"
+          className="relative overflow-hidden rounded-[22px] border px-4 pb-4 pt-5"
           style={{
             borderColor: "rgba(255,255,255,0.07)",
             background: "#0a0b0d",
             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.03)",
           }}
         >
-          <div className="mb-2 text-center md:mb-4">
-            <div className="text-[8px] uppercase tracking-[0.28em] text-white/32 md:text-[9px]">
-              Ascenseur
-            </div>
+          <div className="mb-4 text-center">
+            <div className="text-[9px] uppercase tracking-[0.32em] text-white/32">Ascenseur</div>
             <div
-              className="mt-2 rounded-md border px-2 py-2 md:px-3"
+              className="mt-2 rounded-md border px-3 py-2"
               style={{
                 borderColor: "rgba(255,255,255,0.06)",
                 background: "#060708",
               }}
             >
-              <div className="text-[9px] uppercase tracking-[0.24em] text-white/26 md:text-[10px]">
-                Control Panel
-              </div>
+              <div className="text-[10px] uppercase tracking-[0.24em] text-white/26">Control Panel</div>
             </div>
           </div>
 
-          <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2 md:gap-3">
+          <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-3">
             <MetalButton
               label="1"
               active={activeFloor === "01" || targetFloor === "01"}
@@ -409,7 +472,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-[100] flex justify-center px-3 pb-24 pt-10 sm:px-4 md:px-0 md:pb-4 md:pt-2-translate-y-2"
+      className="absolute inset-0 z-[100] flex justify-center px-3 pb-24 pt-10 -translate-y-2 sm:px-4 md:px-0 md:pb-4 md:pt-2 md:translate-y-0"
     >
       <div
         className="relative grid h-[72vh] w-full max-w-[1120px] grid-cols-1 overflow-hidden rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[74vh] sm:rounded-[26px] md:h-[80vh] md:grid-cols-[1.02fr_0.98fr] md:rounded-[30px]"
