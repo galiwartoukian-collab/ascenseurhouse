@@ -484,7 +484,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       className="absolute inset-0 z-50 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[78vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
+        className="relative h-[78vh] md:h-[80vh] w-full max-w-[1120px] overflow-y-auto md:overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -507,9 +507,10 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-<div className="relative z-[120] grid h-full ... pointer-events-auto">          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+        <div className="relative z-[120] grid h-full min-h-0 grid-cols-1 pointer-events-auto md:grid-cols-[1.06fr_0.94fr]">
+          <div className="min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
-              <CalendarDays className="h-4 w-4 text-white/70 shrink-0" />
+              <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
             </div>
 
@@ -524,7 +525,8 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
             <form
               action="https://formspree.io/f/mvzvlkkq"
               method="POST"
-className="relative z-[200] mt-5 pointer-events-auto"            >
+              className="relative z-[200] mt-5 pointer-events-auto"
+            >
               <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -668,7 +670,7 @@ function ElevatorScene({
 {!isLobby && (
   <TravelIndicator displayFloor={displayFloor} travelState={travelState} />
 )}
-        <div className="relative h-full w-full overflow-hidden bg-[var(--black)] pointer-events-none">
+        <div className="relative h-full w-full overflow-hidden bg-[var(--black)]">
           <motion.div
   aria-hidden="true"
   className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
