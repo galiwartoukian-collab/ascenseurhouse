@@ -432,7 +432,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             alt={profile.name}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-[center_88%] md:object-cover md:object-center"
+            className="absolute inset-0 h-full w-full object-cover object-[center_78%] md:object-cover md:object-center"
           />
 <div className="absolute inset-0 bg-black/10 md:bg-black/22" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.1),transparent_22%,transparent_78%,rgba(0,0,0,0.16))]" />
