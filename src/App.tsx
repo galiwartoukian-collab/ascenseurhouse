@@ -243,7 +243,7 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-<div className="pointer-events-auto fixed z-[9999] right-1 sm:right-2 md:right-10 bottom-2 sm:bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.82] sm:scale-[0.86] md:scale-[0.94] origin-bottom-right md:origin-right">      <div
+<div className="pointer-events-auto fixed z-[9999] right-1 sm:right-2 md:right-10 bottom-1 sm:bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.72] sm:scale-[0.82] md:scale-[0.94] origin-bottom-right md:origin-right">      <div
 className="relative w-[86px] sm:w-[104px] md:w-[132px] rounded-l-[26px] rounded-r-[16px] md:rounded-[26px] border p-[2px]"        style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
@@ -394,7 +394,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-[100] flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
+      className="absolute inset-0 z-[100] flex justify-center px-3 pb-24 pt-10 sm:px-4 md:px-0 md:pb-4 md:pt-6"
     >
       <div
         className="relative grid h-[72vh] w-full max-w-[1120px] grid-cols-1 overflow-hidden rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[74vh] sm:rounded-[26px] md:h-[80vh] md:grid-cols-[1.02fr_0.98fr] md:rounded-[30px]"
@@ -442,7 +442,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           </div>
         </div>
 
-        <div className="relative flex h-full flex-col justify-start overflow-y-auto px-5 py-5 text-left sm:px-6 sm:py-6 md:justify-center md:px-10 md:py-10">
+        <div className="relative flex h-full flex-col justify-start overflow-visible px-5 py-4 text-left sm:px-6 sm:py-5 md:justify-center md:overflow-y-auto md:px-10 md:py-10">
           <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-white/8" />
 
           <div className="mb-3 flex items-start gap-2 text-white/76">
@@ -478,7 +478,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       className="absolute inset-0 z-50 flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
+        className="relative h-[78vh] w-full max-w-[1120px] grid grid-cols-1 overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:grid-cols-[1.02fr_0.98fr] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
