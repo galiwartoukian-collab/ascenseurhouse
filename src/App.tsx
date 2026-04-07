@@ -243,7 +243,7 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-<div className="pointer-events-auto fixed z-[9999] right-4 md:right-6 bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.7] sm:scale-[0.8] md:scale-[0.94] origin-bottom-right md:origin-right">      <div
+<div className="pointer-events-auto fixed z-[9999] right-8 md:right-10 bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.7] sm:scale-[0.8] md:scale-[0.94] origin-bottom-right md:origin-right">      <div
 className="relative w-[94px] sm:w-[114px] md:w-[132px] rounded-[26px] border p-[2px]"        style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
