@@ -84,6 +84,7 @@ const FLOOR_DOOR_DURATION = 0.58;
 
 import logo from "./assets/logo.png";
 import araImage from "./assets/ara.jpeg";
+import blissImage from "./assets/blisseliss.jpg";
 
 const profiles: Profile[] = [
   {
@@ -114,8 +115,7 @@ const profiles: Profile[] = [
     floorLabel: "Floor 03",
     role: "Manager",
     genre: "Bookings / Talent Curation / Event Direction",
-    image:
-      "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1200&q=80",
+   image: blissImage,
     bio: "Bliss Eliss oversees the experience behind the scenes, handling bookings, artist coordination, and the overall shape of each night with precision and style.",
   },
 ];
