@@ -402,7 +402,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
+      className="absolute inset-0 z-[100] flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
     >
       <div
         className="relative h-[72vh] sm:h-[74vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr]"
@@ -507,8 +507,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-        <div className="relative z-10 grid h-full min-h-0 grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
-          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+<div className="relative z-[120] grid h-full ... pointer-events-auto">          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 text-white/70 shrink-0" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
@@ -525,8 +524,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
             <form
               action="https://formspree.io/f/mvzvlkkq"
               method="POST"
-              className="relative z-[60] mt-5 pointer-events-auto"
-            >
+className="relative z-[200] mt-5 pointer-events-auto"            >
               <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -670,7 +668,7 @@ function ElevatorScene({
 {!isLobby && (
   <TravelIndicator displayFloor={displayFloor} travelState={travelState} />
 )}
-        <div className="relative h-full w-full overflow-hidden bg-[var(--black)]">
+        <div className="relative h-full w-full overflow-hidden bg-[var(--black)] pointer-events-none">
           <motion.div
   aria-hidden="true"
   className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
