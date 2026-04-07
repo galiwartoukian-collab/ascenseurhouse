@@ -1,11 +1,7 @@
-// In your real Vite/React project, replace the two fallback consts below with:
-// import logo from "./assets/logo.png";
-// import araImage from "./assets/ara.jpeg";
-// This canvas preview keeps inline fallbacks so it still builds here.
 import React from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { CalendarDays, Mail, Music2, Phone } from "lucide-react";
-import './index.css'
+import "./index.css";
 
 type View = "lobby" | "profile" | "booking";
 type TravelState = "idle" | "closing" | "traveling" | "opening";
@@ -81,7 +77,6 @@ const SCROLL_TRACK_HEIGHT_VH = 360;
 const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
 
-
 import logo from "./assets/logo.png";
 import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
@@ -115,7 +110,7 @@ const profiles: Profile[] = [
     floorLabel: "Floor 03",
     role: "Manager",
     genre: "Bookings / Talent Curation / Event Direction",
-   image: blissImage,
+    image: blissImage,
     bio: "Bliss Eliss oversees the experience behind the scenes, handling bookings, artist coordination, and the overall shape of each night with precision and style.",
   },
 ];
@@ -208,7 +203,7 @@ function MetalButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={`Go to ${label}`}
-      className="group relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full border text-sm font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+      className="group relative h-8 w-8 rounded-full border text-sm font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-10 sm:w-10 md:h-12 md:w-12"
       style={{
         borderColor: active ? "rgba(122,12,12,0.42)" : "rgba(255,255,255,0.08)",
         background: active
@@ -248,10 +243,10 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-auto fixed z-[9999] right-2 bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.7] sm:scale-[0.8] md:scale-[0.94] origin-bottom-right md:origin-right">
+    <div className="pointer-events-auto fixed bottom-3 right-2 z-[9999] origin-bottom-right scale-[0.7] sm:scale-[0.8] md:bottom-auto md:top-1/2 md:origin-right md:-translate-y-1/2 md:scale-[0.94]">
       <div
-  className="relative w-[90px] sm:w-[110px] md:w-[126px] rounded-[26px] border p-[2px]"
-  style={{
+        className="relative w-[90px] rounded-[26px] border p-[2px] sm:w-[110px] md:w-[126px]"
+        style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
           boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
@@ -271,17 +266,17 @@ function ElevatorPanel({
           }}
         >
           <div className="mb-4 text-center">
-  <div className="text-[9px] uppercase tracking-[0.32em] text-white/32">Ascenseur</div>
-  <div
-    className="mt-2 rounded-md border px-3 py-2"
-    style={{
-      borderColor: "rgba(255,255,255,0.06)",
-      background: "#060708",
-    }}
-  >
-    <div className="text-[10px] uppercase tracking-[0.24em] text-white/26">Control Panel</div>
-  </div>
-</div>
+            <div className="text-[9px] uppercase tracking-[0.32em] text-white/32">Ascenseur</div>
+            <div
+              className="mt-2 rounded-md border px-3 py-2"
+              style={{
+                borderColor: "rgba(255,255,255,0.06)",
+                background: "#060708",
+              }}
+            >
+              <div className="text-[10px] uppercase tracking-[0.24em] text-white/26">Control Panel</div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-2 gap-3">
             <MetalButton
@@ -341,21 +336,20 @@ function TravelIndicator({
   }, [isTraveling, tickerValues]);
 
   return (
-<div className="pointer-events-none absolute left-1/2 top-14 md:top-17 z-40 -translate-x-1/2 scale-[0.88] sm:scale-100">
-  <motion.div
-    initial={false}
-    animate={{
-      borderColor: isTraveling ? "rgba(164,32,32,0.42)" : "rgba(255,255,255,0.1)",
-      boxShadow: isTraveling
-        ? "0 10px 30px rgba(0,0,0,0.45), 0 0 26px rgba(122,12,12,0.24), inset 0 1px 0 rgba(255,255,255,0.06)"
-        : "0 10px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05)",
-    }}
-    transition={{ duration: 0.24 }}
-    className="relative overflow-hidden rounded-[12px] border px-3 py-2 backdrop-blur-md"
-    style={{ background: "rgba(10,10,10,0.92)", minWidth: 104 }}
-  >
+    <div className="pointer-events-none absolute left-1/2 top-14 z-40 -translate-x-1/2 scale-[0.88] sm:scale-100 md:top-17">
+      <motion.div
+        initial={false}
+        animate={{
+          borderColor: isTraveling ? "rgba(164,32,32,0.42)" : "rgba(255,255,255,0.1)",
+          boxShadow: isTraveling
+            ? "0 10px 30px rgba(0,0,0,0.45), 0 0 26px rgba(122,12,12,0.24), inset 0 1px 0 rgba(255,255,255,0.06)"
+            : "0 10px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05)",
+        }}
+        transition={{ duration: 0.24 }}
+        className="relative overflow-hidden rounded-[12px] border px-3 py-2 backdrop-blur-md"
+        style={{ background: "rgba(10,10,10,0.92)", minWidth: 104 }}
+      >
         <motion.div
-        
           aria-hidden="true"
           initial={false}
           animate={{ opacity: isTraveling ? 1 : 0, x: isTraveling ? ["-130%", "130%"] : "-130%" }}
@@ -372,7 +366,7 @@ function TravelIndicator({
             transition={{ duration: 1.1, repeat: isTraveling ? Infinity : 0 }}
             className="inline-block h-1.5 w-1.5 rounded-full bg-white"
           />
-          
+
           <span className="text-[9px] uppercase tracking-[0.36em] text-white/40">Level</span>
           <div className="relative h-5 w-[3.6rem] overflow-hidden text-center font-mono text-[0.95rem] font-semibold tracking-[0.18em] text-white/90">
             <AnimatePresence mode="wait">
@@ -402,39 +396,41 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-[100] flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
+      className="absolute inset-0 z-[100] flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[72vh] sm:h-[74vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr]"
+        className="relative grid h-[72vh] w-full max-w-[1120px] grid-cols-1 overflow-hidden rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[74vh] sm:rounded-[26px] md:h-[80vh] md:grid-cols-[1.02fr_0.98fr] md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.84)",
           boxShadow:
             "0 28px 80px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(122,12,12,0.08)",
         }}
-      ><motion.div
-  aria-hidden="true"
-  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
->
-  <motion.div
-    className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"
-    style={{
-      background:
-        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
-    }}
-    animate={{ x: ["-25%", "140%", "-25%"] }}
-    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-  />
-</motion.div>
-        <div className="relative h-72 sm:h-80 md:h-full overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] md:rounded-l-[30px] md:rounded-t-none">
+      >
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
+        >
+          <motion.div
+            className="absolute top-0 h-full w-[28%] opacity-20 blur-xl md:w-[38%] md:opacity-35 md:blur-3xl"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+            }}
+            animate={{ x: ["-25%", "140%", "-25%"] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+
+        <div className="relative h-72 overflow-hidden rounded-t-[22px] sm:h-80 sm:rounded-t-[26px] md:h-full md:rounded-l-[30px] md:rounded-t-none">
           <img
             src={profile.image}
             alt={profile.name}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover object-[center_68%] md:object-cover md:object-center"
+            className="absolute inset-0 h-full w-full object-cover object-[center_68%] md:object-center"
           />
-<div className="absolute inset-0 bg-black/10 md:bg-black/22" />
+          <div className="absolute inset-0 bg-black/10 md:bg-black/22" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.1),transparent_22%,transparent_78%,rgba(0,0,0,0.16))]" />
           <div
             className="absolute inset-0"
@@ -448,7 +444,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           </div>
         </div>
 
-        <div className="relative flex flex-col justify-start md:justify-center h-full overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 md:px-10 md:py-10 text-left">
+        <div className="relative flex h-full flex-col justify-start overflow-y-auto px-5 py-5 text-left sm:px-6 sm:py-6 md:justify-center md:px-10 md:py-10">
           <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-white/8" />
 
           <div className="mb-3 flex items-start gap-2 text-white/76">
@@ -460,11 +456,11 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             {profile.name}
           </h2>
 
-          <div className="mt-4 self-start inline-block w-fit rounded-full border border-white/12 bg-black/45 px-3 py-1.5 text-xs text-white/92 sm:text-sm">
+          <div className="mt-4 inline-block w-fit self-start rounded-full border border-white/12 bg-black/45 px-3 py-1.5 text-xs text-white/92 sm:text-sm">
             {profile.genre}
           </div>
 
-          <p className="mt-4 md:mt-6 max-w-full md:max-w-[38ch] text-sm leading-6 md:leading-7 text-white/68 sm:text-[15px]">
+          <p className="mt-4 max-w-full text-sm leading-6 text-white/68 sm:text-[15px] md:mt-6 md:max-w-[38ch] md:leading-7">
             {profile.bio}
           </p>
         </div>
@@ -481,10 +477,10 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-50 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
+      className="absolute inset-0 z-50 flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[78vh] md:h-[80vh] w-full max-w-[1120px] overflow-y-auto md:overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
+        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -497,7 +493,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
           className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
         >
           <motion.div
-            className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"
+            className="absolute top-0 h-full w-[28%] opacity-20 blur-xl md:w-[38%] md:opacity-35 md:blur-3xl"
             style={{
               background:
                 "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
@@ -508,7 +504,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
         </motion.div>
 
         <div className="relative z-[120] grid h-full min-h-0 grid-cols-1 pointer-events-auto md:grid-cols-[1.06fr_0.94fr]">
-          <div className="min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:px-10 md:py-10">
+          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
@@ -534,7 +530,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
                   type="text"
                   name="name"
                   required
-                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
                   style={{
                     borderColor: "rgba(255,255,255,0.08)",
                     background: "rgba(255,255,255,0.03)",
@@ -545,7 +541,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
                 <input
                   type="text"
                   name="company"
-                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
                   style={{
                     borderColor: "rgba(255,255,255,0.08)",
                     background: "rgba(255,255,255,0.03)",
@@ -557,7 +553,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
                   type="email"
                   name="email"
                   required
-                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
                   style={{
                     borderColor: "rgba(255,255,255,0.08)",
                     background: "rgba(255,255,255,0.03)",
@@ -568,7 +564,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
                 <input
                   type="tel"
                   name="phone"
-                  className="w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05]"
+                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
                   style={{
                     borderColor: "rgba(255,255,255,0.08)",
                     background: "rgba(255,255,255,0.03)",
@@ -579,7 +575,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
                 <textarea
                   name="message"
                   required
-                  className="min-h-[130px] w-full rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition focus:border-white/20 focus:bg-white/[0.05] sm:col-span-2"
+                  className="min-h-[130px] w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05] sm:col-span-2"
                   style={{
                     borderColor: "rgba(255,255,255,0.08)",
                     background: "rgba(255,255,255,0.03)",
@@ -639,6 +635,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
     </motion.div>
   );
 }
+
 function ElevatorScene({
   view,
   selectedProfile,
@@ -667,24 +664,21 @@ function ElevatorScene({
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 border-b border-white/8 bg-[#0d0d0d]" />
         <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-7 w-full border-t border-white/8 bg-[#060606]" />
 
-{!isLobby && (
-  <TravelIndicator displayFloor={displayFloor} travelState={travelState} />
-)}
+        {!isLobby && <TravelIndicator displayFloor={displayFloor} travelState={travelState} />}
+
         <div className="relative h-full w-full overflow-hidden bg-[var(--black)]">
-          <motion.div
-  aria-hidden="true"
-  className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
->
-  <motion.div
-    className="absolute top-0 h-full w-[26%] sm:w-[32%] md:w-[45%] blur-xl md:blur-3xl opacity-16 sm:opacity-22 md:opacity-40"
-    style={{
-      background:
-        "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.2) 20%, rgba(122,12,12,0.65) 50%, rgba(122,12,12,0.2) 80%, transparent 100%)",
-    }}
-    animate={{ x: ["-40%", "140%", "-40%"] }}
-    transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-  />
-</motion.div>
+          <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            <motion.div
+              className="absolute top-0 h-full w-[26%] opacity-16 blur-xl sm:w-[32%] sm:opacity-22 md:w-[45%] md:opacity-40 md:blur-3xl"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.2) 20%, rgba(122,12,12,0.65) 50%, rgba(122,12,12,0.2) 80%, transparent 100%)",
+              }}
+              animate={{ x: ["-40%", "140%", "-40%"] }}
+              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+
           <motion.div
             aria-hidden="true"
             initial={false}
@@ -698,17 +692,17 @@ function ElevatorScene({
             initial={false}
             animate={{ opacity: showTravelSweep ? 1 : 0, y: showTravelSweep ? ["-110%", "110%"] : "-110%" }}
             transition={{ duration: 0.8, repeat: showTravelSweep ? Infinity : 0, ease: "linear" }}
-            className="pointer-events-none absolute left-1/2 top-0 z-20 h-[34%] sm:h-[40%] md:h-[46%] w-[34%] sm:w-[42%] md:w-[52%] -translate-x-1/2 blur-xl md:blur-2xl"
+            className="pointer-events-none absolute left-1/2 top-0 z-20 h-[34%] w-[34%] -translate-x-1/2 blur-xl sm:h-[40%] sm:w-[42%] md:h-[46%] md:w-[52%] md:blur-2xl"
             style={{ background: "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.14) 48%, transparent 100%)" }}
           />
 
           <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10 opacity-25" />
 
           <div
-  className={`absolute inset-x-0 inset-y-[10%] z-30 flex justify-center px-3 sm:px-6 ${
-    view === "lobby" ? "pointer-events-none items-center text-center" : "pointer-events-auto items-start text-left"
-  }`}
->
+            className={`absolute inset-x-0 inset-y-[10%] z-30 flex justify-center px-3 sm:px-6 ${
+              view === "lobby" ? "pointer-events-none items-center text-center" : "pointer-events-auto items-start text-left"
+            }`}
+          >
             <AnimatePresence mode="wait">
               {isLobby ? (
                 <motion.div
@@ -1067,29 +1061,23 @@ export default function App() {
           "--glass": "rgba(255,255,255,0.04)",
         } as React.CSSProperties
       }
-    ><div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
-  <div className="relative">
-    <div
-      className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 blur-2xl opacity-60"
-      style={{
-        background:
-          "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
-        boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
-      }}
-    />
-    <button
-      type="button"
-      onClick={goLobby}
-      className="relative z-[10002] cursor-pointer"
     >
-      <img
-        src={logo}
-        alt="Ascenseur House"
-        className="h-10 md:h-12 w-auto object-contain opacity-90"
-      />
-    </button>
-  </div>
-</div>
+      <div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
+        <div className="relative">
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 opacity-60 blur-2xl"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
+              boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
+            }}
+          />
+          <button type="button" onClick={goLobby} className="relative z-[10002] cursor-pointer">
+            <img src={logo} alt="Ascenseur House" className="h-10 w-auto object-contain opacity-90 md:h-12" />
+          </button>
+        </div>
+      </div>
+
       <AnimatePresence>
         {activeFloor !== "00" && travelState === "idle" && (
           <motion.div
@@ -1112,35 +1100,36 @@ export default function App() {
       </AnimatePresence>
 
       <div className="sticky top-0 h-screen overflow-hidden">
-     <ElevatorScene
-  view={view}
-  selectedProfile={selectedProfile}
-  displayFloor={displayFloor}
-  travelState={travelState}
-  lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
-/>
+        <ElevatorScene
+          view={view}
+          selectedProfile={selectedProfile}
+          displayFloor={displayFloor}
+          travelState={travelState}
+          lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
+        />
       </div>
 
-      <ScrollController
-        currentStop={currentStop}
-        isTransitioning={isTransitioning}
-        isAutoScrollingRef={isAutoScrollingRef}
-        containerRef={scrollAreaRef}
-        onEnterLobby={goLobby}
-        onEnterProfile={openProfile}
-        onEnterBooking={openBooking}
-        onLobbyProgress={(progress) => {
-          if (forceClosedLobby) return;
-          if (progress > 0) setHasLeftLobby(true);
-          setLobbyDoorProgress(progress);
-        }}
-      />
+      {view !== "booking" && (
+        <ScrollController
+          currentStop={currentStop}
+          isTransitioning={isTransitioning}
+          isAutoScrollingRef={isAutoScrollingRef}
+          containerRef={scrollAreaRef}
+          onEnterLobby={goLobby}
+          onEnterProfile={openProfile}
+          onEnterBooking={openBooking}
+          onLobbyProgress={(progress) => {
+            if (forceClosedLobby) return;
+            if (progress > 0) setHasLeftLobby(true);
+            setLobbyDoorProgress(progress);
+          }}
+        />
+      )}
     </div>
   );
 }
 
 if (typeof window !== "undefined") {
-
   console.assert(getStopFromFloor("00") === "lobby", "00 should map to lobby");
   console.assert(getStopFromFloor("01") === "ara", "01 should map to ara");
   console.assert(getStopFromFloor("02") === "anais", "02 should map to anais");
