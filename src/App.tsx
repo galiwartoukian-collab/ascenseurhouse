@@ -698,7 +698,9 @@ function ElevatorScene({
 
           <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10 opacity-25" />
 
-          <div className="absolute inset-x-0 inset-y-[10%] z-30 flex items-center justify-center px-6 text-center pointer-events-none">
+          <div className={`absolute inset-x-0 inset-y-[10%] z-30 flex items-center justify-center px-6 text-center ${
+  view === "lobby" ? "pointer-events-none" : ""
+}`}>
             <AnimatePresence mode="wait">
               {isLobby ? (
                 <motion.div
