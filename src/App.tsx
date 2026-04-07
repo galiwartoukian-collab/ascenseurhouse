@@ -250,7 +250,8 @@ function ElevatorPanel({
   return (
     <div className="pointer-events-auto fixed z-[9999] right-2 bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.7] sm:scale-[0.8] md:scale-[0.94] origin-bottom-right md:origin-right">
       <div
-className="relative w-[90px] sm:w-[110px] md:w-[126px] rounded-[26px] border p-[2px]"        style={{
+  className="relative w-[90px] sm:w-[110px] md:w-[126px] rounded-[26px] border p-[2px]"
+  style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
           boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
@@ -340,19 +341,19 @@ function TravelIndicator({
   }, [isTraveling, tickerValues]);
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-17 z-40 -translate-x-1/2">
-      <motion.div
-        initial={false}
-        animate={{
-          borderColor: isTraveling ? "rgba(164,32,32,0.42)" : "rgba(255,255,255,0.1)",
-          boxShadow: isTraveling
-            ? "0 10px 30px rgba(0,0,0,0.45), 0 0 26px rgba(122,12,12,0.24), inset 0 1px 0 rgba(255,255,255,0.06)"
-            : "0 10px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05)",
-        }}
-        transition={{ duration: 0.24 }}
-        className="relative overflow-hidden rounded-[12px] border px-3 py-2 backdrop-blur-md"
-        style={{ background: "rgba(10,10,10,0.92)", minWidth: 124 }}
-      >
+<div className="pointer-events-none absolute left-1/2 top-14 md:top-17 z-40 -translate-x-1/2 scale-[0.88] sm:scale-100">
+  <motion.div
+    initial={false}
+    animate={{
+      borderColor: isTraveling ? "rgba(164,32,32,0.42)" : "rgba(255,255,255,0.1)",
+      boxShadow: isTraveling
+        ? "0 10px 30px rgba(0,0,0,0.45), 0 0 26px rgba(122,12,12,0.24), inset 0 1px 0 rgba(255,255,255,0.06)"
+        : "0 10px 30px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.05)",
+    }}
+    transition={{ duration: 0.24 }}
+    className="relative overflow-hidden rounded-[12px] border px-3 py-2 backdrop-blur-md"
+    style={{ background: "rgba(10,10,10,0.92)", minWidth: 104 }}
+  >
         <motion.div
         
           aria-hidden="true"
@@ -401,10 +402,10 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-10 flex justify-center pt-6"
+      className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[30px] border shadow-2xl backdrop-blur-sm grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr]"
+        className="relative h-[72vh] sm:h-[74vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.84)",
@@ -413,10 +414,10 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
         }}
       ><motion.div
   aria-hidden="true"
-  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
 >
   <motion.div
-    className="absolute top-0 h-full w-[38%] blur-3xl opacity-35"
+    className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"
     style={{
       background:
         "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
@@ -425,13 +426,13 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
   />
 </motion.div>
-        <div className="relative h-48 sm:h-56 md:h-full overflow-hidden rounded-t-[30px] md:rounded-l-[30px] md:rounded-t-none">
+        <div className="relative h-44 sm:h-56 md:h-full overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] md:rounded-l-[30px] md:rounded-t-none">
           <img
             src={profile.image}
             alt={profile.name}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/22" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.1),transparent_22%,transparent_78%,rgba(0,0,0,0.16))]" />
@@ -455,7 +456,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             <span className="text-[10px] uppercase tracking-[0.22em]">{profile.role}</span>
           </div>
 
-          <h2 className="text-3xl font-semibold leading-none text-[var(--text)] sm:text-4xl md:text-[3.35rem]">
+          <h2 className="text-2xl font-semibold leading-none text-[var(--text)] sm:text-4xl md:text-[3.35rem]">
             {profile.name}
           </h2>
 
@@ -480,9 +481,9 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-className="absolute inset-0 z-10 flex justify-center pt-6" >
+className="absolute inset-0 z-10 flex justify-center px-3 pt-16 pb-4 sm:px-4 md:px-0 md:pt-6" >
       <div
-        className="relative h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[30px] border shadow-2xl backdrop-blur-sm"
+        className="relative h-[72vh] sm:h-[74vh] md:h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px] border shadow-2xl backdrop-blur-sm"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -491,11 +492,10 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
         }}
       ><motion.div
   aria-hidden="true"
-  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[30px]"
+  className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
 >
   <motion.div
-    className="absolute top-0 h-full w-[38%] blur-3xl opacity-35"
-    style={{
+className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-20 md:opacity-35"    style={{
       background:
         "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
     }}
@@ -504,13 +504,13 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
   />
 </motion.div>
         <div className="grid h-full grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
-          <div className="overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 md:px-10 md:py-10">
+          <div className="overflow-y-auto min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 text-white/70" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
             </div>
 
-            <h2 className="text-3xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
+            <h2 className="text-2xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
               Book Ascenseur House
             </h2>
 
@@ -518,7 +518,7 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
               Private events, artist bookings, venue partnerships, and curated experiences.
             </p>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
               <input
                 className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
                 style={{
@@ -574,7 +574,7 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
           </div>
 
           <div
-            className="flex h-full flex-col justify-between border-l px-6 py-7 sm:px-7 sm:py-8 md:px-8 md:py-10"
+            className="flex h-full min-h-0 flex-col justify-between border-t md:border-t-0 md:border-l px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-10"
             style={{
               borderColor: "rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
@@ -648,7 +648,7 @@ function ElevatorScene({
   className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
 >
   <motion.div
-    className="absolute top-0 h-full w-[45%] blur-3xl opacity-40"
+    className="absolute top-0 h-full w-[26%] sm:w-[32%] md:w-[45%] blur-xl md:blur-3xl opacity-16 sm:opacity-22 md:opacity-40"
     style={{
       background:
         "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.2) 20%, rgba(122,12,12,0.65) 50%, rgba(122,12,12,0.2) 80%, transparent 100%)",
@@ -662,7 +662,7 @@ function ElevatorScene({
             initial={false}
             animate={{ opacity: cinematicGlow ? 0.04 : 0.01, scale: cinematicGlow ? 1 : 0.995 }}
             transition={{ duration: 0.45, ease: CABIN_GLOW_EASE }}
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),rgba(255,255,255,0.01)_34%,transparent_64%)] blur-3xl"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),rgba(255,255,255,0.01)_34%,transparent_64%)] blur-xl md:blur-3xl"
           />
 
           <motion.div
@@ -670,7 +670,7 @@ function ElevatorScene({
             initial={false}
             animate={{ opacity: showTravelSweep ? 1 : 0, y: showTravelSweep ? ["-110%", "110%"] : "-110%" }}
             transition={{ duration: 0.8, repeat: showTravelSweep ? Infinity : 0, ease: "linear" }}
-            className="pointer-events-none absolute left-1/2 top-0 z-20 h-[46%] w-[52%] -translate-x-1/2 blur-2xl"
+            className="pointer-events-none absolute left-1/2 top-0 z-20 h-[34%] sm:h-[40%] md:h-[46%] w-[34%] sm:w-[42%] md:w-[52%] -translate-x-1/2 blur-xl md:blur-2xl"
             style={{ background: "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.14) 48%, transparent 100%)" }}
           />
 
