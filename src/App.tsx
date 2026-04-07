@@ -556,7 +556,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       className="absolute inset-0 z-50 flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[78vh] w-full max-w-[1120px] grid grid-cols-1 overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:grid-cols-[1.02fr_0.98fr] md:overflow-hidden md:rounded-[30px]"
+        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
