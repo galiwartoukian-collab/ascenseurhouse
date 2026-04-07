@@ -208,7 +208,7 @@ function MetalButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={`Go to ${label}`}
-      className="group relative h-12 w-12 rounded-full border text-sm font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
+      className="group relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full border text-sm font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50"
       style={{
         borderColor: active ? "rgba(122,12,12,0.42)" : "rgba(255,255,255,0.08)",
         background: active
@@ -248,10 +248,9 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-auto fixed right-5 top-1/2 z-[9999] origin-right -translate-y-1/2 scale-[0.94]">
+    <div className="pointer-events-auto fixed z-[9999] right-2 bottom-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 scale-[0.7] sm:scale-[0.8] md:scale-[0.94] origin-bottom-right md:origin-right">
       <div
-        className="relative w-[126px] rounded-[26px] border p-[2px]"
-        style={{
+className="relative w-[90px] sm:w-[110px] md:w-[126px] rounded-[26px] border p-[2px]"        style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
           boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
@@ -405,7 +404,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       className="absolute inset-0 z-10 flex justify-center pt-6"
     >
       <div
-        className="relative h-[74vh] w-[min(84vw,1120px)] overflow-visible rounded-[30px] border shadow-2xl backdrop-blur-sm md:grid md:grid-cols-[1.02fr_0.98fr]"
+        className="relative h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[30px] border shadow-2xl backdrop-blur-sm grid grid-cols-1 md:grid-cols-[1.02fr_0.98fr]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.84)",
@@ -426,7 +425,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
   />
 </motion.div>
-        <div className="relative min-h-[240px] overflow-hidden rounded-l-[30px] md:min-h-full">
+        <div className="relative h-48 sm:h-56 md:h-full overflow-hidden rounded-t-[30px] md:rounded-l-[30px] md:rounded-t-none">
           <img
             src={profile.image}
             alt={profile.name}
@@ -448,7 +447,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           </div>
         </div>
 
-        <div className="relative flex h-full flex-col justify-center px-6 py-7 sm:px-7 sm:py-8 md:px-10 md:py-10 text-left">
+        <div className="relative flex flex-col justify-start md:justify-center h-full overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 md:px-10 md:py-10 text-left">
           <div className="pointer-events-none absolute inset-y-0 left-0 w-px bg-white/8" />
 
           <div className="mb-3 flex items-start gap-2 text-white/76">
@@ -464,7 +463,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             {profile.genre}
           </div>
 
-          <p className="mt-6 max-w-[38ch] text-sm leading-7 text-white/68 sm:text-[15px]">
+          <p className="mt-4 md:mt-6 max-w-full md:max-w-[38ch] text-sm leading-6 md:leading-7 text-white/68 sm:text-[15px]">
             {profile.bio}
           </p>
         </div>
@@ -483,7 +482,7 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
 className="absolute inset-0 z-10 flex justify-center pt-6" >
       <div
-        className="relative h-[74vh] w-[min(84vw,1120px)] overflow-visible rounded-[30px] border shadow-2xl backdrop-blur-sm"
+        className="relative h-[80vh] w-full max-w-[1120px] overflow-hidden rounded-[30px] border shadow-2xl backdrop-blur-sm"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -504,8 +503,8 @@ className="absolute inset-0 z-10 flex justify-center pt-6" >
     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
   />
 </motion.div>
-        <div className="grid h-full md:grid-cols-[1.06fr_0.94fr]">
-          <div className="overflow-y-auto px-6 py-7 sm:px-7 sm:py-8 md:px-10 md:py-10">
+        <div className="grid h-full grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
+          <div className="overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 md:px-10 md:py-10">
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 text-white/70" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
