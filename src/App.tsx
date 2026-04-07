@@ -503,8 +503,8 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
   />
 </motion.div>
-        <div className="grid h-full grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
-  <div className="overflow-y-auto min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+        <div className="grid h-full min-h-0 grid-cols-1 overflow-y-auto md:grid-cols-[1.06fr_0.94fr] md:overflow-hidden">
+  <div className="min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:px-10 md:py-10">
   <div className="mb-3 flex items-start gap-2 text-white/78">
     <CalendarDays className="h-4 w-4 text-white/70" />
     <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
@@ -518,11 +518,11 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
     Private events, artist bookings, venue partnerships, and curated experiences.
   </p>
 
-  <form
-    action="https://formspree.io/f/mvzvlkkq"
-    method="POST"
-    className="mt-5"
-  >
+<form
+  action="https://formspree.io/f/mvzvlkkq"
+  method="POST"
+  className="mt-5 pointer-events-auto"
+>
     <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -571,7 +571,7 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
       <textarea
         name="message"
         required
-        className="min-h-[140px] rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition sm:col-span-2"
+        className="min-h-[110px] md:min-h-[140px] rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition sm:col-span-2"
         style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "rgba(255,255,255,0.03)",
@@ -596,7 +596,7 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
 </div>
 
           <div
-            className="flex h-full min-h-0 flex-col justify-between border-t md:border-t-0 md:border-l px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-10"
+            className="flex h-auto md:h-full min-h-0 flex-col justify-between border-t md:border-t-0 md:border-l px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-10"
             style={{
               borderColor: "rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
@@ -699,7 +699,7 @@ function ElevatorScene({
           <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10 opacity-25" />
 
           <div className={`absolute inset-x-0 inset-y-[10%] z-30 flex items-center justify-center px-6 text-center ${
-  view === "lobby" ? "pointer-events-none" : ""
+  view === "lobby" ? "pointer-events-none" : "pointer-events-auto"
 }`}>
             <AnimatePresence mode="wait">
               {isLobby ? (
