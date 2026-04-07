@@ -426,16 +426,15 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
     transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
   />
 </motion.div>
-        <div className="relative h-44 sm:h-56 md:h-full overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] md:rounded-l-[30px] md:rounded-t-none">
-          <div className="absolute inset-0 bg-black/40 md:hidden" />
+        <div className="relative h-72 sm:h-80 md:h-full overflow-hidden rounded-t-[22px] sm:rounded-t-[26px] md:rounded-l-[30px] md:rounded-t-none">
           <img
             src={profile.image}
             alt={profile.name}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-contain md:object-cover object-center"
+            className="absolute inset-0 h-full w-full object-cover object-center md:object-cover"
           />
-          <div className="absolute inset-0 bg-black/15 md:bg-black/22" />
+<div className="absolute inset-0 bg-black/10 md:bg-black/22" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.1),transparent_22%,transparent_78%,rgba(0,0,0,0.16))]" />
           <div
             className="absolute inset-0"
