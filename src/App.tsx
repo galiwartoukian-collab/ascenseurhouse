@@ -504,74 +504,96 @@ className="absolute top-0 h-full w-[28%] md:w-[38%] blur-xl md:blur-3xl opacity-
   />
 </motion.div>
         <div className="grid h-full grid-cols-1 md:grid-cols-[1.06fr_0.94fr]">
-          <div className="overflow-y-auto min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
-            <div className="mb-3 flex items-start gap-2 text-white/78">
-              <CalendarDays className="h-4 w-4 text-white/70" />
-              <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
-            </div>
+  <div className="overflow-y-auto min-h-0 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+  <div className="mb-3 flex items-start gap-2 text-white/78">
+    <CalendarDays className="h-4 w-4 text-white/70" />
+    <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
+  </div>
 
-            <h2 className="text-2xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
-              Book Ascenseur House
-            </h2>
+  <h2 className="text-2xl font-semibold text-[var(--text)] sm:text-4xl md:text-[3.15rem]">
+    Book Ascenseur House
+  </h2>
 
-            <p className="mt-4 max-w-[42ch] text-sm leading-7 text-white/68 sm:text-[15px]">
-              Private events, artist bookings, venue partnerships, and curated experiences.
-            </p>
+  <p className="mt-4 max-w-[42ch] text-sm leading-7 text-white/68 sm:text-[15px]">
+    Private events, artist bookings, venue partnerships, and curated experiences.
+  </p>
 
-            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <input
-                className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
-                }}
-                placeholder="Your Name"
-              />
-              <input
-                className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
-                }}
-                placeholder="Company / Venue"
-              />
-              <input
-                className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
-                }}
-                placeholder="Email"
-              />
-              <input
-                className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
-                }}
-                placeholder="Phone"
-              />
-              <textarea
-                className="min-h-[140px] rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition sm:col-span-2"
-                style={{
-                  borderColor: "rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
-                }}
-                placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
-              />
-            </div>
+  <form
+    action="https://formspree.io/f/mvzvlkkq"
+    method="POST"
+    className="mt-5"
+  >
+    <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
-            <UIButton
-              type="button"
-              className="mt-6 border text-white"
-              style={{
-                borderColor: "rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.06)",
-              }}
-            >
-              Send Inquiry
-            </UIButton>
-          </div>
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <input
+        type="text"
+        name="name"
+        required
+        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
+        style={{
+          borderColor: "rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+        placeholder="Your Name"
+      />
+      <input
+        type="text"
+        name="company"
+        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
+        style={{
+          borderColor: "rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+        placeholder="Company / Venue"
+      />
+      <input
+        type="email"
+        name="email"
+        required
+        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
+        style={{
+          borderColor: "rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+        placeholder="Email"
+      />
+      <input
+        type="tel"
+        name="phone"
+        className="rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition"
+        style={{
+          borderColor: "rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+        placeholder="Phone"
+      />
+      <textarea
+        name="message"
+        required
+        className="min-h-[140px] rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] placeholder:text-white/24 outline-none transition sm:col-span-2"
+        style={{
+          borderColor: "rgba(255,255,255,0.08)",
+          background: "rgba(255,255,255,0.03)",
+        }}
+        placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
+      />
+
+      <div className="sm:col-span-2">
+        <UIButton
+          type="submit"
+          className="mt-1 border text-white"
+          style={{
+            borderColor: "rgba(255,255,255,0.12)",
+            background: "rgba(255,255,255,0.06)",
+          }}
+        >
+          Send Inquiry
+        </UIButton>
+      </div>
+    </div>
+  </form>
+</div>
 
           <div
             className="flex h-full min-h-0 flex-col justify-between border-t md:border-t-0 md:border-l px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-10"
