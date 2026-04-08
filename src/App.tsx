@@ -1185,22 +1185,23 @@ export default function App() {
         />
       </div>
 
-      {view !== "booking" && (
-        <ScrollController
-          currentStop={currentStop}
-          isTransitioning={isTransitioning}
-          isAutoScrollingRef={isAutoScrollingRef}
-          containerRef={scrollAreaRef}
-          onEnterLobby={goLobby}
-          onEnterProfile={openProfile}
-          onEnterBooking={openBooking}
-          onLobbyProgress={(progress) => {
-            if (forceClosedLobby) return;
-            if (progress > 0) setHasLeftLobby(true);
-            setLobbyDoorProgress(progress);
-          }}
-        />
-      )}
+<>
+  <ScrollController
+    currentStop={currentStop}
+    isTransitioning={isTransitioning}
+    isAutoScrollingRef={isAutoScrollingRef}
+    containerRef={scrollAreaRef}
+    onEnterLobby={goLobby}
+    onEnterProfile={openProfile}
+    onEnterBooking={openBooking}
+    onLobbyProgress={(progress) => {
+      if (forceClosedLobby) return;
+      if (progress > 0) setHasLeftLobby(true);
+      setLobbyDoorProgress(progress);
+    }}
+  />
+</>
+    
     </div>
   );
 }
