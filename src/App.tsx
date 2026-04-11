@@ -32,6 +32,7 @@ type ElevatorSceneProps = {
   displayFloor: FloorCode;
   travelState: TravelState;
   lobbyDoorProgress: number;
+  onExitBookingUp: () => void;
 };
 
 type ElevatorPanelProps = {
@@ -504,7 +505,66 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
   );
 }
 
-function BookingInsideCabin({ visible }: { visible: boolean }) {
+function BookingInsideCabin({
+  visible,
+  onExitUp,
+}: {
+  visible: boolean;
+  onExitUp: () => void;
+}) {
+    const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
+  const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
+  const touchStartYRef = React.useRef<number | null>(null);
+
+  const shouldExitFromScroll = (el: HTMLDivElement | null, deltaY: number) => {
+    if (!el) return false;
+    const atTop = el.scrollTop <= 0;
+    return atTop && deltaY < -10;
+  };
+
+  const handleMobileWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (shouldExitFromScroll(mobileScrollRef.current, e.deltaY)) {
+      e.preventDefault();
+      onExitUp();
+    }
+  };
+
+  const handleDesktopWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (shouldExitFromScroll(desktopFormScrollRef.current, e.deltaY)) {
+      e.preventDefault();
+      onExitUp();
+    }
+  };
+
+  const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartYRef.current = e.touches[0]?.clientY ?? null;
+  };
+
+  const handleMobileTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartYRef.current == null) return;
+    const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
+    const deltaY = currentY - touchStartYRef.current;
+
+    if (shouldExitFromScroll(mobileScrollRef.current, -deltaY)) {
+      onExitUp();
+      touchStartYRef.current = null;
+    }
+  };
+
+  const handleDesktopTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartYRef.current = e.touches[0]?.clientY ?? null;
+  };
+
+  const handleDesktopTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartYRef.current == null) return;
+    const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
+    const deltaY = currentY - touchStartYRef.current;
+
+    if (shouldExitFromScroll(desktopFormScrollRef.current, -deltaY)) {
+      onExitUp();
+      touchStartYRef.current = null;
+    }
+  };
   return (
     <motion.div
       key="booking"
@@ -515,7 +575,11 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
       className="absolute inset-0 z-50 flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
       <div
-        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
+        ref={mobileScrollRef}
+        onWheelCapture={handleMobileWheelCapture}
+        onTouchStart={handleMobileTouchStart}
+        onTouchMove={handleMobileTouchMove}
+        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -539,7 +603,13 @@ function BookingInsideCabin({ visible }: { visible: boolean }) {
         </motion.div>
 
         <div className="relative z-[120] grid h-full min-h-0 grid-cols-1 pointer-events-auto md:grid-cols-[1.06fr_0.94fr]">
-          <div className="min-h-0 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10">
+          <div
+  ref={desktopFormScrollRef}
+  onWheelCapture={handleDesktopWheelCapture}
+  onTouchStart={handleDesktopTouchStart}
+  onTouchMove={handleDesktopTouchMove}
+  className="min-h-0 overflow-visible px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:overscroll-contain md:px-10 md:py-10"
+>
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
               <span className="text-[10px] uppercase tracking-[0.22em]">Private Inquiry</span>
@@ -677,6 +747,7 @@ function ElevatorScene({
   displayFloor,
   travelState,
   lobbyDoorProgress,
+  onExitBookingUp,
 }: ElevatorSceneProps) {
   const isLobby = view === "lobby";
   const doorsOpen = !isLobby && (travelState === "opening" || travelState === "idle");
@@ -761,7 +832,7 @@ function ElevatorScene({
                   {view === "profile" && selectedProfile && (
                     <ProfileInsideCabin profile={selectedProfile} visible={contentVisible} />
                   )}
-                  {view === "booking" && <BookingInsideCabin visible={contentVisible} />}
+                  {view === "booking" && <BookingInsideCabin visible={contentVisible} onExitUp={onExitBookingUp} />}
                 </>
               )}
             </AnimatePresence>
@@ -1141,6 +1212,7 @@ export default function App() {
           displayFloor={displayFloor}
           travelState={travelState}
           lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
+          onExitBookingUp={goToBliss}
         />
       </div>
 
