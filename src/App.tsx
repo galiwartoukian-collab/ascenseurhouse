@@ -243,83 +243,42 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-auto fixed z-[9999] right-1 bottom-1 sm:right-2 sm:bottom-3 md:right-10 md:bottom-auto md:top-1/2 md:-translate-y-1/2 origin-bottom-right md:origin-right">
-      {/* MOBILE */}
-      <div className="relative md:hidden">
+    <div className="pointer-events-auto fixed z-[9999] right-0 md:right-10 md:bottom-auto md:top-1/2 md:-translate-y-1/2 origin-right">
+      {/* MOBILE - OPTION B / MIDDLE RIGHT */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 md:hidden">
         <div
-  className="absolute bottom-0 right-0 h-[24px] w-[64px] rounded-tl-[14px] rounded-br-[18px] border"
-  style={{
-    borderColor: "rgba(255,255,255,0.08)",
-    background: "#0c0d10",
-    boxShadow: "0 8px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04)",
-  }}
-/>
-
-        <div
-  className="relative ml-auto mb-[10px] w-[86px] rounded-[20px] border p-[2px]"
-          style={{
-            borderColor: "rgba(255,255,255,0.08)",
-            background: "#111214",
-            boxShadow: "0 18px 42px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
-          }}
+          className="rounded-l-[18px] border border-r-0 border-white/10 bg-[#0f1114]/96 px-1.5 py-2 shadow-[0_16px_30px_rgba(0,0,0,0.38)]"
         >
-          <div className="pointer-events-none absolute left-2 top-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
-          <div className="pointer-events-none absolute right-2 top-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
-          <div className="pointer-events-none absolute bottom-2 left-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
-          <div className="pointer-events-none absolute bottom-2 right-2 h-2 w-2 rounded-full border border-white/10 bg-[#1b1c1f]" />
-
-<div
-  className="relative overflow-hidden rounded-[16px] border px-2.5 pb-2.5 pt-3"
-            style={{
-              borderColor: "rgba(255,255,255,0.07)",
-              background: "#0a0b0d",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.03)",
-            }}
-          >
-            <div className="mb-2 text-center">
-  <div className="text-[6px] uppercase tracking-[0.22em] text-white/32">Ascenseur</div>
-  <div
-    className="mt-2 rounded-md border px-1.5 py-1.5"
-    style={{
-      borderColor: "rgba(255,255,255,0.06)",
-      background: "#060708",
-    }}
-  >
-    <div className="text-[7px] uppercase tracking-[0.16em] text-white/26">Control Panel</div>
-  </div>
-</div>
-
-            <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-2">
-              <MetalButton
-                label="1"
-                active={activeFloor === "01" || targetFloor === "01"}
-                disabled={disabled}
-                onClick={onGoToAra}
-              />
-              <MetalButton
-                label="2"
-                active={activeFloor === "02" || targetFloor === "02"}
-                disabled={disabled}
-                onClick={onGoToAnais}
-              />
-              <MetalButton
-                label="3"
-                active={activeFloor === "03" || targetFloor === "03"}
-                disabled={disabled}
-                onClick={onGoToBliss}
-              />
-              <MetalButton
-                label="B"
-                active={activeFloor === "B" || targetFloor === "B"}
-                disabled={disabled}
-                onClick={onGoToBooking}
-              />
-            </div>
+          <div className="grid grid-cols-1 gap-2">
+            <MetalButton
+              label="1"
+              active={activeFloor === "01" || targetFloor === "01"}
+              disabled={disabled}
+              onClick={onGoToAra}
+            />
+            <MetalButton
+              label="2"
+              active={activeFloor === "02" || targetFloor === "02"}
+              disabled={disabled}
+              onClick={onGoToAnais}
+            />
+            <MetalButton
+              label="3"
+              active={activeFloor === "03" || targetFloor === "03"}
+              disabled={disabled}
+              onClick={onGoToBliss}
+            />
+            <MetalButton
+              label="B"
+              active={activeFloor === "B" || targetFloor === "B"}
+              disabled={disabled}
+              onClick={onGoToBooking}
+            />
           </div>
         </div>
       </div>
 
-      {/* DESKTOP */}
+      {/* DESKTOP - KEEP CURRENT PANEL */}
       <div
         className="relative hidden w-[132px] rounded-[26px] border p-[2px] md:block"
         style={{
@@ -378,7 +337,7 @@ function ElevatorPanel({
               active={activeFloor === "B" || targetFloor === "B"}
               disabled={disabled}
               onClick={onGoToBooking}
-            />
+              />
           </div>
         </div>
       </div>
@@ -1185,7 +1144,6 @@ export default function App() {
         />
       </div>
 
-<>
 <ScrollController
   currentStop={currentStop}
   isTransitioning={isTransitioning}
@@ -1200,7 +1158,6 @@ export default function App() {
     setLobbyDoorProgress(progress);
   }}
 />
-</>
     
     </div>
   );
