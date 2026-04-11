@@ -203,7 +203,7 @@ function MetalButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={`Go to ${label}`}
-      className="group relative h-6.5 w-6.5 rounded-full border text-[12px] font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
+      className="group relative h-6 w-6 rounded-full border text-[11px] font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
       style={{
         borderColor: active ? "rgba(122,12,12,0.42)" : "rgba(255,255,255,0.08)",
         background: active
@@ -1144,20 +1144,22 @@ export default function App() {
         />
       </div>
 
-<ScrollController
-  currentStop={currentStop}
-  isTransitioning={isTransitioning}
-  isAutoScrollingRef={isAutoScrollingRef}
-  containerRef={scrollAreaRef}
-  onEnterLobby={goLobby}
-  onEnterProfile={openProfile}
-  onEnterBooking={openBooking}
-  onLobbyProgress={(progress) => {
-    if (forceClosedLobby) return;
-    if (progress > 0) setHasLeftLobby(true);
-    setLobbyDoorProgress(progress);
-  }}
-/>
+{view !== "booking" && (
+  <ScrollController
+    currentStop={currentStop}
+    isTransitioning={isTransitioning}
+    isAutoScrollingRef={isAutoScrollingRef}
+    containerRef={scrollAreaRef}
+    onEnterLobby={goLobby}
+    onEnterProfile={openProfile}
+    onEnterBooking={openBooking}
+    onLobbyProgress={(progress) => {
+      if (forceClosedLobby) return;
+      if (progress > 0) setHasLeftLobby(true);
+      setLobbyDoorProgress(progress);
+    }}
+  />
+)}
     
     </div>
   );
