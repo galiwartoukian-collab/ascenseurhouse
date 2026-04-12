@@ -512,25 +512,14 @@ function BookingInsideCabin({
   visible: boolean;
   onExitUp: () => void;
 }) {
-    const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
+  const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
 
-  const shouldExitFromScroll = (el: HTMLDivElement | null, deltaY: number) => {
-    if (!el) return false;
-    const atTop = el.scrollTop <= 0;
-    return atTop && deltaY < -10;
-  };
-
   const handleMobileWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
-    if (shouldExitFromScroll(mobileScrollRef.current, e.deltaY)) {
-      e.preventDefault();
-      onExitUp();
-    }
-  };
-
-  const handleDesktopWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
-    if (shouldExitFromScroll(desktopFormScrollRef.current, e.deltaY)) {
+    const el = mobileScrollRef.current;
+    if (!el) return;
+    if (el.scrollTop <= 0 && e.deltaY < 0) {
       e.preventDefault();
       onExitUp();
     }
@@ -541,13 +530,24 @@ function BookingInsideCabin({
   };
 
   const handleMobileTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (touchStartYRef.current == null) return;
+    const el = mobileScrollRef.current;
+    if (!el || touchStartYRef.current == null) return;
+
     const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
     const deltaY = currentY - touchStartYRef.current;
 
-    if (shouldExitFromScroll(mobileScrollRef.current, -deltaY)) {
+    if (el.scrollTop <= 0 && deltaY > 14) {
       onExitUp();
       touchStartYRef.current = null;
+    }
+  };
+
+  const handleDesktopWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = desktopFormScrollRef.current;
+    if (!el) return;
+    if (el.scrollTop <= 0 && e.deltaY < 0) {
+      e.preventDefault();
+      onExitUp();
     }
   };
 
@@ -556,11 +556,13 @@ function BookingInsideCabin({
   };
 
   const handleDesktopTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (touchStartYRef.current == null) return;
+    const el = desktopFormScrollRef.current;
+    if (!el || touchStartYRef.current == null) return;
+
     const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
     const deltaY = currentY - touchStartYRef.current;
 
-    if (shouldExitFromScroll(desktopFormScrollRef.current, -deltaY)) {
+    if (el.scrollTop <= 0 && deltaY > 14) {
       onExitUp();
       touchStartYRef.current = null;
     }
@@ -574,12 +576,12 @@ function BookingInsideCabin({
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 z-50 flex justify-center px-3 pb-4 pt-16 sm:px-4 md:px-0 md:pt-6"
     >
-      <div
+            <div
         ref={mobileScrollRef}
         onWheelCapture={handleMobileWheelCapture}
         onTouchStart={handleMobileTouchStart}
         onTouchMove={handleMobileTouchMove}
-        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
+        className="relative h-[78vh] w-full max-w-[1120px] overflow-hidden overscroll-contain rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -602,13 +604,13 @@ function BookingInsideCabin({
           />
         </motion.div>
 
-        <div className="relative z-[120] grid h-full min-h-0 grid-cols-1 pointer-events-auto md:grid-cols-[1.06fr_0.94fr]">
+        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto md:grid md:h-full md:min-h-0 md:grid-cols-[1.06fr_0.94fr]">
           <div
   ref={desktopFormScrollRef}
   onWheelCapture={handleDesktopWheelCapture}
   onTouchStart={handleDesktopTouchStart}
   onTouchMove={handleDesktopTouchMove}
-  className="min-h-0 overflow-visible px-4 py-4 sm:px-6 sm:py-6 md:overflow-y-auto md:overscroll-contain md:px-10 md:py-10"
+  className="min-h-0 px-4 py-4 pb-6 sm:px-6 sm:py-6 overflow-y-auto md:overflow-visible md:px-10 md:py-10"
 >
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
@@ -688,7 +690,7 @@ function BookingInsideCabin({
                   placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
                 />
 
-                <div className="sm:col-span-2">
+                <div className="pt-2 sm:col-span-2">
                   <UIButton
                     type="submit"
                     className="mt-1 border text-white"
@@ -705,7 +707,7 @@ function BookingInsideCabin({
           </div>
 
           <div
-            className="border-t px-4 py-4 sm:px-6 sm:py-6 md:min-h-0 md:overflow-y-auto md:border-l md:border-t-0 md:px-8 md:py-10"
+            className="shrink-0 border-t px-4 py-4 sm:px-6 sm:py-6 md:min-h-0 md:overflow-y-auto md:border-l md:border-t-0 md:px-8 md:py-10"
             style={{
               borderColor: "rgba(255,255,255,0.08)",
               background: "rgba(255,255,255,0.02)",
@@ -1216,22 +1218,20 @@ export default function App() {
         />
       </div>
 
-{view !== "booking" && (
-  <ScrollController
-    currentStop={currentStop}
-    isTransitioning={isTransitioning}
-    isAutoScrollingRef={isAutoScrollingRef}
-    containerRef={scrollAreaRef}
-    onEnterLobby={goLobby}
-    onEnterProfile={openProfile}
-    onEnterBooking={openBooking}
-    onLobbyProgress={(progress) => {
-      if (forceClosedLobby) return;
-      if (progress > 0) setHasLeftLobby(true);
-      setLobbyDoorProgress(progress);
-    }}
-  />
-)}
+<ScrollController
+  currentStop={currentStop}
+  isTransitioning={isTransitioning}
+  isAutoScrollingRef={isAutoScrollingRef}
+  containerRef={scrollAreaRef}
+  onEnterLobby={goLobby}
+  onEnterProfile={openProfile}
+  onEnterBooking={openBooking}
+  onLobbyProgress={(progress) => {
+    if (forceClosedLobby) return;
+    if (progress > 0) setHasLeftLobby(true);
+    setLobbyDoorProgress(progress);
+  }}
+/>
     
     </div>
   );
