@@ -515,6 +515,7 @@ function BookingInsideCabin({
   const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
+  const touchStartedOnInteractiveRef = React.useRef(false);
 
   const handleMobileWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
     const el = mobileScrollRef.current;
@@ -526,12 +527,17 @@ function BookingInsideCabin({
   };
 
   const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement | null;
+    touchStartedOnInteractiveRef.current = Boolean(
+      target?.closest("input, textarea, select, button, a, label")
+    );
     touchStartYRef.current = e.touches[0]?.clientY ?? null;
   };
 
   const handleMobileTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     const el = mobileScrollRef.current;
     if (!el || touchStartYRef.current == null) return;
+    if (touchStartedOnInteractiveRef.current) return;
 
     const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
     const deltaY = currentY - touchStartYRef.current;
@@ -552,12 +558,17 @@ function BookingInsideCabin({
   };
 
   const handleDesktopTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement | null;
+    touchStartedOnInteractiveRef.current = Boolean(
+      target?.closest("input, textarea, select, button, a, label")
+    );
     touchStartYRef.current = e.touches[0]?.clientY ?? null;
   };
 
   const handleDesktopTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
     const el = desktopFormScrollRef.current;
     if (!el || touchStartYRef.current == null) return;
+    if (touchStartedOnInteractiveRef.current) return;
 
     const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
     const deltaY = currentY - touchStartYRef.current;
@@ -581,7 +592,7 @@ function BookingInsideCabin({
         onWheelCapture={handleMobileWheelCapture}
         onTouchStart={handleMobileTouchStart}
         onTouchMove={handleMobileTouchMove}
-        className="relative h-[78vh] w-full max-w-[1120px] overflow-hidden overscroll-contain rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
+        className="relative h-[78vh] w-full max-w-[1120px] overflow-y-auto overscroll-contain rounded-[22px] border shadow-2xl backdrop-blur-sm sm:h-[80vh] sm:rounded-[26px] md:h-[80vh] md:overflow-hidden md:rounded-[30px]"
         style={{
           borderColor: "rgba(255,255,255,0.1)",
           background: "rgba(8,8,8,0.86)",
@@ -610,7 +621,7 @@ function BookingInsideCabin({
   onWheelCapture={handleDesktopWheelCapture}
   onTouchStart={handleDesktopTouchStart}
   onTouchMove={handleDesktopTouchMove}
-  className="min-h-0 px-4 py-4 pb-6 sm:px-6 sm:py-6 overflow-y-auto md:overflow-visible md:px-10 md:py-10"
+  className="min-h-0 overflow-visible px-4 py-4 pb-6 sm:px-6 sm:py-6 md:overflow-visible md:px-10 md:py-10"
 >
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
