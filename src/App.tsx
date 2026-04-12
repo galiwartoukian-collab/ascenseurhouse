@@ -73,11 +73,6 @@ const TRANSITION_TO_IDLE_MS = 1180;
 
 const LOBBY_OPEN_PROGRESS = 0.06;
 const LOBBY_TO_FIRST_LOCK_PROGRESS = 0.12;
-const FLOOR_1_THRESHOLD = 0.2;
-const FLOOR_2_THRESHOLD = 0.38;
-const FLOOR_3_THRESHOLD = 0.56;
-const FLOOR_4_THRESHOLD = 0.74;
-const FLOOR_5_THRESHOLD = 0.88;
 const SCROLL_TRACK_HEIGHT_VH = 360;
 const MOBILE_BREAKPOINT_PX = 768;
 const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
@@ -143,6 +138,17 @@ const profilesByStop: Record<Extract<Stop, "ara" | "anais" | "talar" | "bliss">,
   talar: profiles[2],
   bliss: profiles[3],
 };
+
+function getDesiredStopFromProgress(progress: number): Stop {
+  for (let index = 0; index < STOP_ORDER.length - 1; index += 1) {
+    const current = STOP_ORDER[index];
+    const next = STOP_ORDER[index + 1];
+    const midpoint = (getStopProgress(current) + getStopProgress(next)) / 2;
+    if (progress < midpoint) return current;
+  }
+
+  return STOP_ORDER[STOP_ORDER.length - 1];
+}
 
 function getStopProgress(stop: Stop): number {
   switch (stop) {
@@ -1092,38 +1098,25 @@ function ScrollController({
 
       if (isTransitioning) return;
 
-      let desiredStop: Stop = "lobby";
-      if (latest < lockProgress) desiredStop = "lobby";
-      else if (latest < FLOOR_1_THRESHOLD) desiredStop = "about";
-      else if (latest < FLOOR_2_THRESHOLD) desiredStop = "ara";
-      else if (latest < FLOOR_3_THRESHOLD) desiredStop = "anais";
-      else if (latest < FLOOR_4_THRESHOLD) desiredStop = "talar";
-      else if (latest < FLOOR_5_THRESHOLD) desiredStop = "bliss";
-      else desiredStop = "booking";
+      const desiredStop = latest < lockProgress ? "lobby" : getDesiredStopFromProgress(latest);
+      if (desiredStop === currentStop) return;
 
-      const currentIndex = STOP_ORDER.indexOf(currentStop);
-      const desiredIndex = STOP_ORDER.indexOf(desiredStop);
-      if (currentIndex === desiredIndex) return;
-
-      const nextIndex = desiredIndex > currentIndex ? currentIndex + 1 : currentIndex - 1;
-      const nextStop = STOP_ORDER[nextIndex];
-
-      if (nextStop === "lobby") {
+      if (desiredStop === "lobby") {
         onEnterLobby();
         return;
       }
 
-      if (nextStop === "booking") {
+      if (desiredStop === "booking") {
         onEnterBooking();
         return;
       }
 
-      if (nextStop === "about") {
+      if (desiredStop === "about") {
         onEnterAbout();
         return;
       }
 
-      onEnterProfile(profilesByStop[nextStop]);
+      onEnterProfile(profilesByStop[desiredStop]);
     },
     [currentStop, isMobile, isTransitioning, onEnterAbout, onEnterBooking, onEnterLobby, onEnterProfile, onLobbyProgress]
   );
