@@ -487,6 +487,8 @@ function TravelIndicator({
 }
 
 function AboutInsideCabin({ visible }: { visible: boolean }) {
+  const microLabels = ["Sound Direction", "Atmosphere", "Visual Identity", "Curated Floors"] as const;
+
   return (
     <motion.div
       key="about"
@@ -520,33 +522,68 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-        <div className="relative z-10 max-w-[72ch] text-left">
-          <p className="mb-3 text-xs uppercase tracking-[0.24em] text-white/58">Floor A</p>
-          <h2 className="text-2xl font-semibold leading-tight text-[var(--text)] sm:text-4xl md:text-[3.2rem]">
-            About Ascenseur House
+        <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
+          <img
+            src={logo}
+            alt=""
+            aria-hidden="true"
+            className="h-auto w-[140%] max-w-none opacity-[0.045] saturate-0 md:w-[122%]"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-[74ch] text-left">
+          <p className="mb-2 text-[11px] uppercase tracking-[0.3em] text-white/55 sm:mb-3">Floor A</p>
+          <h2 className="text-[2rem] font-semibold leading-[1.02] text-[var(--text)] sm:text-[2.65rem] md:text-[3.35rem]">
+            Ascenseur House
           </h2>
-          <p className="mt-4 text-xs uppercase tracking-[0.2em] text-white/70 sm:text-sm">
+          <p className="mt-3 text-[11px] uppercase tracking-[0.24em] text-white/72 sm:text-sm">
             Curated to Elevate
           </p>
 
-          <p className="mt-5 text-sm leading-7 text-white/72 sm:text-[15px]">
-            Ascenseur House is a curated space where sound, atmosphere, and movement come together
-            across levels.
+          <p className="mt-6 max-w-[68ch] text-[15px] leading-7 text-white/80 sm:text-base">
+            Ascenseur House is a multi-level experience where sound, atmosphere, and presence are
+            intentionally shaped.
           </p>
-          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
-            Each floor introduces a distinct energy, shaped by the DJs who define it. From open
-            format to late-night house, every set is intentional—designed to build, evolve, and
-            elevate.
+
+          <div className="mt-6 space-y-4 text-sm leading-7 text-white/74 sm:mt-7 sm:text-[15px]">
+            <p>
+              <span className="block text-base font-medium leading-7 text-white/88 sm:text-[1.05rem]">
+                Each floor carries its own energy.
+              </span>
+              Defined by the DJs who inhabit it, every level builds on the last—moving from open
+              format to late-night house, from arrival to immersion. Nothing is random. Every
+              transition is deliberate.
+            </p>
+            <p>
+              <span className="block text-base font-medium leading-7 text-white/88 sm:text-[1.05rem]">
+                The room is more than music.
+              </span>
+              Light, movement, and visual direction work in sync to create a space that feels
+              cohesive from the first moment to the final track. What you see and what you hear are
+              designed to move together.
+            </p>
+            <p className="text-[15px] leading-7 text-white/84 sm:text-base">
+              <span className="block text-base font-medium leading-7 text-white sm:text-[1.1rem]">
+                This is not just a lineup.
+              </span>
+              It is a progression.
+            </p>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-8">
+            {microLabels.map((label) => (
+              <span
+                key={label}
+                className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.045] px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/72 sm:text-[11px]"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          <p className="mt-7 inline-flex w-fit rounded-full border border-[rgba(122,12,12,0.45)] bg-[rgba(122,12,12,0.16)] px-4 py-2 text-sm tracking-[0.08em] text-white/95 shadow-[0_0_34px_rgba(122,12,12,0.2)] sm:mt-9 sm:text-base">
+            Ascend through sound.
           </p>
-          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
-            This is not just a lineup.
-            <br />
-            It is a progression.
-          </p>
-          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
-            Move through each level to experience a different side of the room.
-          </p>
-          <p className="mt-6 text-base italic text-white/88 sm:text-lg">Ascend through sound.</p>
         </div>
       </div>
     </motion.div>
