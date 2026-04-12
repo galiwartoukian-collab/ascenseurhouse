@@ -522,15 +522,6 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-        <div className="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center">
-          <img
-            src={logo}
-            alt=""
-            aria-hidden="true"
-            className="h-auto w-[140%] max-w-none opacity-[0.045] saturate-0 md:w-[122%]"
-          />
-        </div>
-
         <div className="relative z-10 max-w-[74ch] text-left">
           <p className="mb-2 text-[11px] uppercase tracking-[0.3em] text-white/55 sm:mb-3">Floor A</p>
           <h2 className="text-[2rem] font-semibold leading-[1.02] text-[var(--text)] sm:text-[2.65rem] md:text-[3.35rem]">
