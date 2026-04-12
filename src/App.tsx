@@ -74,6 +74,11 @@ const FLOOR_1_THRESHOLD = 0.22;
 const FLOOR_2_THRESHOLD = 0.48;
 const FLOOR_3_THRESHOLD = 0.74;
 const SCROLL_TRACK_HEIGHT_VH = 360;
+const MOBILE_BREAKPOINT_PX = 768;
+const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
+const MOBILE_LOBBY_TO_FIRST_LOCK_PROGRESS = 0.16;
+const MOBILE_PROGRESS_EPSILON = 0.003;
+const MOBILE_SCROLL_LERP_FACTOR = 0.22;
 
 const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
@@ -909,7 +914,86 @@ function ScrollController({
     offset: ["start start", "end end"],
   });
 
+  const [isMobile, setIsMobile] = React.useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 0.02}px)`).matches;
+  });
   const lastAutoScrollProgressRef = React.useRef<number | null>(null);
+  const pendingProgressRef = React.useRef<number | null>(null);
+  const animationFrameRef = React.useRef<number | null>(null);
+  const lastProgressRef = React.useRef(0);
+  const lastLobbyProgressRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const query = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 0.02}px)`);
+
+    const handleViewportChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+
+    setIsMobile(query.matches);
+    query.addEventListener("change", handleViewportChange);
+    return () => query.removeEventListener("change", handleViewportChange);
+  }, []);
+
+  const processScrollProgress = React.useCallback(
+    (latest: number) => {
+      const openProgress = isMobile ? MOBILE_LOBBY_OPEN_PROGRESS : LOBBY_OPEN_PROGRESS;
+      const lockProgress = isMobile ? MOBILE_LOBBY_TO_FIRST_LOCK_PROGRESS : LOBBY_TO_FIRST_LOCK_PROGRESS;
+      const rawProgress = Math.max(0, Math.min(latest / openProgress, 1));
+      const easedProgress = isMobile
+        ? rawProgress * rawProgress * (3 - 2 * rawProgress)
+        : 1 - Math.pow(1 - rawProgress, 3);
+      const lobbyProgress = latest >= lockProgress ? 1 : easedProgress;
+
+      if (
+        !isMobile ||
+        lastLobbyProgressRef.current === null ||
+        Math.abs(lobbyProgress - lastLobbyProgressRef.current) >= MOBILE_PROGRESS_EPSILON
+      ) {
+        lastLobbyProgressRef.current = lobbyProgress;
+        onLobbyProgress(lobbyProgress);
+      }
+
+      if (isTransitioning) return;
+
+      let desiredStop: Stop = "lobby";
+      if (latest < lockProgress) desiredStop = "lobby";
+      else if (latest < FLOOR_1_THRESHOLD) desiredStop = "ara";
+      else if (latest < FLOOR_2_THRESHOLD) desiredStop = "anais";
+      else if (latest < FLOOR_3_THRESHOLD) desiredStop = "bliss";
+      else desiredStop = "booking";
+
+      const currentIndex = STOP_ORDER.indexOf(currentStop);
+      const desiredIndex = STOP_ORDER.indexOf(desiredStop);
+      if (currentIndex === desiredIndex) return;
+
+      const nextIndex = desiredIndex > currentIndex ? currentIndex + 1 : currentIndex - 1;
+      const nextStop = STOP_ORDER[nextIndex];
+
+      if (nextStop === "lobby") {
+        onEnterLobby();
+        return;
+      }
+
+      if (nextStop === "booking") {
+        onEnterBooking();
+        return;
+      }
+
+      onEnterProfile(profilesByStop[nextStop]);
+    },
+    [currentStop, isMobile, isTransitioning, onEnterBooking, onEnterLobby, onEnterProfile, onLobbyProgress]
+  );
+
+  React.useEffect(() => {
+    return () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
     if (isAutoScrollingRef.current) {
@@ -923,39 +1007,61 @@ function ScrollController({
       lastAutoScrollProgressRef.current = null;
     }
 
-    const rawProgress = Math.max(0, Math.min(latest / LOBBY_OPEN_PROGRESS, 1));
-    const easedProgress = 1 - Math.pow(1 - rawProgress, 3);
-    const lobbyProgress = latest >= LOBBY_TO_FIRST_LOCK_PROGRESS ? 1 : easedProgress;
-    onLobbyProgress(lobbyProgress);
-
-    if (isTransitioning) return;
-
-    let desiredStop: Stop = "lobby";
-    if (latest < LOBBY_TO_FIRST_LOCK_PROGRESS) desiredStop = "lobby";
-    else if (latest < FLOOR_1_THRESHOLD) desiredStop = "ara";
-    else if (latest < FLOOR_2_THRESHOLD) desiredStop = "anais";
-    else if (latest < FLOOR_3_THRESHOLD) desiredStop = "bliss";
-    else desiredStop = "booking";
-
-    const currentIndex = STOP_ORDER.indexOf(currentStop);
-    const desiredIndex = STOP_ORDER.indexOf(desiredStop);
-    if (currentIndex === desiredIndex) return;
-
-    const nextIndex = desiredIndex > currentIndex ? currentIndex + 1 : currentIndex - 1;
-    const nextStop = STOP_ORDER[nextIndex];
-
-    if (nextStop === "lobby") {
-      onEnterLobby();
+    if (!isMobile) {
+      processScrollProgress(latest);
       return;
     }
 
-    if (nextStop === "booking") {
-      onEnterBooking();
-      return;
-    }
+    pendingProgressRef.current = latest;
 
-    onEnterProfile(profilesByStop[nextStop]);
+    if (animationFrameRef.current !== null) return;
+
+    animationFrameRef.current = window.requestAnimationFrame(() => {
+      animationFrameRef.current = null;
+      const pending = pendingProgressRef.current;
+      if (pending === null) return;
+
+      const smoothed = lastProgressRef.current + (pending - lastProgressRef.current) * MOBILE_SCROLL_LERP_FACTOR;
+      lastProgressRef.current = smoothed;
+      processScrollProgress(smoothed);
+
+      if (Math.abs(pending - smoothed) > MOBILE_PROGRESS_EPSILON) {
+        pendingProgressRef.current = pending;
+        animationFrameRef.current = window.requestAnimationFrame(() => {
+          animationFrameRef.current = null;
+          const queued = pendingProgressRef.current;
+          if (queued === null) return;
+          const nextSmoothed =
+            lastProgressRef.current + (queued - lastProgressRef.current) * MOBILE_SCROLL_LERP_FACTOR;
+          lastProgressRef.current = nextSmoothed;
+          processScrollProgress(nextSmoothed);
+        });
+        return;
+      }
+
+      pendingProgressRef.current = null;
+    });
   });
+
+  React.useEffect(() => {
+    if (isMobile) return;
+    if (animationFrameRef.current !== null) {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+    pendingProgressRef.current = null;
+  }, [isMobile]);
+
+  React.useEffect(() => {
+    if (!isMobile) {
+      lastProgressRef.current = 0;
+      return;
+    }
+
+    if (pendingProgressRef.current !== null) {
+      lastProgressRef.current = pendingProgressRef.current;
+    }
+  }, [isMobile]);
 
   return (
     <div
