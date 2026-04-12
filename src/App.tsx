@@ -5,13 +5,13 @@ import "./index.css";
 
 type View = "lobby" | "profile" | "booking";
 type TravelState = "idle" | "closing" | "traveling" | "opening";
-type Stop = "lobby" | "about" | "ara" | "anais" | "bliss" | "booking";
-type FloorCode = "00" | "A" | "01" | "02" | "03" | "B";
+type Stop = "lobby" | "about" | "ara" | "anais" | "talar" | "bliss" | "booking";
+type FloorCode = "00" | "A" | "01" | "02" | "03" | "04" | "B";
 
 type Profile = {
-  id: "ara" | "anais" | "bliss";
+  id: "ara" | "anais" | "talar" | "bliss";
   name: string;
-  floorNumber: "01" | "02" | "03";
+  floorNumber: "01" | "02" | "03" | "04";
   floorLabel: string;
   role: string;
   genre: string;
@@ -42,6 +42,7 @@ type ElevatorPanelProps = {
   onGoToAbout: () => void;
   onGoToAra: () => void;
   onGoToAnais: () => void;
+  onGoToTalar: () => void;
   onGoToBliss: () => void;
   onGoToBooking: () => void;
 };
@@ -62,7 +63,7 @@ const DOOR_EASE: [number, number, number, number] = [0.77, 0, 0.175, 1];
 const LOBBY_DOOR_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_GLOW_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_SHAKE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "bliss", "booking"] as const;
+const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "talar", "bliss", "booking"] as const;
 
 const AUTO_SCROLL_UNLOCK_MS = 820;
 const TRANSITION_TO_TRAVEL_MS = 190;
@@ -76,6 +77,7 @@ const FLOOR_1_THRESHOLD = 0.2;
 const FLOOR_2_THRESHOLD = 0.38;
 const FLOOR_3_THRESHOLD = 0.56;
 const FLOOR_4_THRESHOLD = 0.74;
+const FLOOR_5_THRESHOLD = 0.88;
 const SCROLL_TRACK_HEIGHT_VH = 360;
 const MOBILE_BREAKPOINT_PX = 768;
 const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
@@ -89,6 +91,7 @@ const FLOOR_DOOR_DURATION = 0.58;
 import logo from "./assets/logo.png";
 import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
+import placeholderProfileImage from "./assets/react.svg";
 
 const profiles: Profile[] = [
   {
@@ -113,10 +116,20 @@ const profiles: Profile[] = [
     bio: "Anais leans into rhythm and atmosphere, building elegant sets with soulful percussion, melodic lift, and a pulse that feels cinematic without losing the dancefloor.",
   },
   {
-    id: "bliss",
-    name: "Bliss Eliss",
+    id: "talar",
+    name: "Talar",
     floorNumber: "03",
     floorLabel: "Floor 03",
+    role: "Aesthetic Setter / Social Direction",
+    genre: "Visual Identity / Atmosphere / Digital Presence",
+    image: placeholderProfileImage,
+    bio: "Talar shapes the visual language of Ascenseur House.\n\nFrom lighting cues to digital presence, every detail is considered—how the room feels, how it moves, and how it lives beyond the night. The atmosphere doesn’t happen by chance. It is directed, refined, and continuously evolving.\n\nHer work defines the tone before the first track plays and carries it long after.\n\nSet the tone. Define the moment.",
+  },
+  {
+    id: "bliss",
+    name: "Bliss Eliss",
+    floorNumber: "04",
+    floorLabel: "Floor 04",
     role: "Manager",
     genre: "Bookings / Talent Curation / Event Direction",
     image: blissImage,
@@ -124,10 +137,11 @@ const profiles: Profile[] = [
   },
 ];
 
-const profilesByStop: Record<Extract<Stop, "ara" | "anais" | "bliss">, Profile> = {
+const profilesByStop: Record<Extract<Stop, "ara" | "anais" | "talar" | "bliss">, Profile> = {
   ara: profiles[0],
   anais: profiles[1],
-  bliss: profiles[2],
+  talar: profiles[2],
+  bliss: profiles[3],
 };
 
 function getStopProgress(stop: Stop): number {
@@ -140,10 +154,12 @@ function getStopProgress(stop: Stop): number {
       return 0.3;
     case "anais":
       return 0.48;
-    case "bliss":
+    case "talar":
       return 0.66;
+    case "bliss":
+      return 0.79;
     case "booking":
-      return 0.86;
+      return 0.93;
   }
 }
 
@@ -158,13 +174,15 @@ function getStopFromFloor(floor: FloorCode): Stop {
     case "02":
       return "anais";
     case "03":
+      return "talar";
+    case "04":
       return "bliss";
     case "B":
       return "booking";
   }
 }
 
-function getStopFromProfile(profile: Profile): Extract<Stop, "ara" | "anais" | "bliss"> {
+function getStopFromProfile(profile: Profile): Extract<Stop, "ara" | "anais" | "talar" | "bliss"> {
   return profile.id;
 }
 
@@ -253,6 +271,7 @@ function ElevatorPanel({
   onGoToAbout,
   onGoToAra,
   onGoToAnais,
+  onGoToTalar,
   onGoToBliss,
   onGoToBooking,
 }: ElevatorPanelProps) {
@@ -285,6 +304,12 @@ function ElevatorPanel({
             <MetalButton
               label="3"
               active={activeFloor === "03" || targetFloor === "03"}
+              disabled={disabled}
+              onClick={onGoToTalar}
+            />
+            <MetalButton
+              label="4"
+              active={activeFloor === "04" || targetFloor === "04"}
               disabled={disabled}
               onClick={onGoToBliss}
             />
@@ -356,6 +381,12 @@ function ElevatorPanel({
               label="3"
               active={activeFloor === "03" || targetFloor === "03"}
               disabled={disabled}
+              onClick={onGoToTalar}
+            />
+            <MetalButton
+              label="4"
+              active={activeFloor === "04" || targetFloor === "04"}
+              disabled={disabled}
               onClick={onGoToBliss}
             />
             <MetalButton
@@ -381,7 +412,7 @@ function TravelIndicator({
   const isTraveling = travelState === "traveling";
   const label = displayFloor === "B" ? "BOOK" : displayFloor;
   const [tickerIndex, setTickerIndex] = React.useState(0);
-  const tickerValues = React.useMemo(() => ["00", "A", "01", "02", "03", "B"], []);
+  const tickerValues = React.useMemo(() => ["00", "A", "01", "02", "03", "04", "B"], []);
 
   React.useEffect(() => {
     if (!isTraveling) {
@@ -517,6 +548,17 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
 }
 
 function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: boolean }) {
+  const [currentImageSrc, setCurrentImageSrc] = React.useState(profile.image);
+
+  React.useEffect(() => {
+    setCurrentImageSrc(profile.image);
+  }, [profile.image]);
+
+  const bioParagraphs = React.useMemo(
+    () => profile.bio.split("\n\n").filter((paragraph) => paragraph.trim().length > 0),
+    [profile.bio]
+  );
+
   return (
     <motion.div
       key={profile.id}
@@ -552,10 +594,11 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
 
         <div className="relative h-72 overflow-hidden rounded-t-[22px] sm:h-80 sm:rounded-t-[26px] md:h-full md:rounded-l-[30px] md:rounded-t-none">
           <img
-            src={profile.image}
+            src={currentImageSrc}
             alt={profile.name}
             loading="lazy"
             decoding="async"
+            onError={() => setCurrentImageSrc(placeholderProfileImage)}
             className="absolute inset-0 h-full w-full object-cover object-[center_68%] md:object-center"
           />
           <div className="absolute inset-0 bg-black/10 md:bg-black/22" />
@@ -588,9 +631,11 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             {profile.genre}
           </div>
 
-          <p className="mt-4 max-w-full text-sm leading-6 text-white/68 sm:text-[15px] md:mt-6 md:max-w-[38ch] md:leading-7">
-            {profile.bio}
-          </p>
+          <div className="mt-4 max-w-full space-y-4 text-sm leading-6 text-white/68 sm:text-[15px] md:mt-6 md:max-w-[38ch] md:leading-7">
+            {bioParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -1052,7 +1097,8 @@ function ScrollController({
       else if (latest < FLOOR_1_THRESHOLD) desiredStop = "about";
       else if (latest < FLOOR_2_THRESHOLD) desiredStop = "ara";
       else if (latest < FLOOR_3_THRESHOLD) desiredStop = "anais";
-      else if (latest < FLOOR_4_THRESHOLD) desiredStop = "bliss";
+      else if (latest < FLOOR_4_THRESHOLD) desiredStop = "talar";
+      else if (latest < FLOOR_5_THRESHOLD) desiredStop = "bliss";
       else desiredStop = "booking";
 
       const currentIndex = STOP_ORDER.indexOf(currentStop);
@@ -1341,12 +1387,21 @@ export default function App() {
     });
   }, [goToStop]);
 
+  const goToTalar = React.useCallback(() => {
+    goToStop({
+      stop: "talar",
+      view: "profile",
+      floor: "03",
+      profile: profiles[2],
+    });
+  }, [goToStop]);
+
   const goToBliss = React.useCallback(() => {
     goToStop({
       stop: "bliss",
       view: "profile",
-      floor: "03",
-      profile: profiles[2],
+      floor: "04",
+      profile: profiles[3],
     });
   }, [goToStop]);
 
@@ -1422,6 +1477,7 @@ export default function App() {
               onGoToAbout={goToAbout}
               onGoToAra={goToAra}
               onGoToAnais={goToAnais}
+              onGoToTalar={goToTalar}
               onGoToBliss={goToBliss}
               onGoToBooking={goToBooking}
             />
@@ -1467,12 +1523,15 @@ if (typeof window !== "undefined") {
   console.assert(getStopFromFloor("A") === "about", "A should map to about");
   console.assert(getStopFromFloor("01") === "ara", "01 should map to ara");
   console.assert(getStopFromFloor("02") === "anais", "02 should map to anais");
-  console.assert(getStopFromFloor("03") === "bliss", "03 should map to bliss");
+  console.assert(getStopFromFloor("03") === "talar", "03 should map to talar");
+  console.assert(getStopFromFloor("04") === "bliss", "04 should map to bliss");
   console.assert(getStopFromFloor("B") === "booking", "B should map to booking");
 
   console.assert(getStopProgress("lobby") === 0, "lobby progress should be 0");
   console.assert(getStopProgress("about") < getStopProgress("ara"), "about should come before ara");
   console.assert(getStopProgress("ara") < getStopProgress("anais"), "ara should come before anais");
+  console.assert(getStopProgress("anais") < getStopProgress("talar"), "anais should come before talar");
+  console.assert(getStopProgress("talar") < getStopProgress("bliss"), "talar should come before bliss");
   console.assert(getStopProgress("anais") < getStopProgress("bliss"), "anais should come before bliss");
   console.assert(getStopProgress("bliss") < getStopProgress("booking"), "bliss should come before booking");
   console.assert(getStopProgress("booking") <= 1, "booking progress should stay within scroll range");
@@ -1480,7 +1539,8 @@ if (typeof window !== "undefined") {
 
   console.assert(getStopFromProfile(profiles[0]) === "ara", "Ara profile should resolve to ara stop");
   console.assert(getStopFromProfile(profiles[1]) === "anais", "Anais profile should resolve to anais stop");
-  console.assert(getStopFromProfile(profiles[2]) === "bliss", "Bliss profile should resolve to bliss stop");
+  console.assert(getStopFromProfile(profiles[2]) === "talar", "Talar profile should resolve to talar stop");
+  console.assert(getStopFromProfile(profiles[3]) === "bliss", "Bliss profile should resolve to bliss stop");
 
   console.assert(LOBBY_OPEN_PROGRESS >= 0.05, "lobby doors should have enough runway to open smoothly");
   console.assert(
