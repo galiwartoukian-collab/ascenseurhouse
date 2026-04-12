@@ -5,8 +5,8 @@ import "./index.css";
 
 type View = "lobby" | "profile" | "booking";
 type TravelState = "idle" | "closing" | "traveling" | "opening";
-type Stop = "lobby" | "ara" | "anais" | "bliss" | "booking";
-type FloorCode = "00" | "01" | "02" | "03" | "B";
+type Stop = "lobby" | "about" | "ara" | "anais" | "bliss" | "booking";
+type FloorCode = "00" | "A" | "01" | "02" | "03" | "B";
 
 type Profile = {
   id: "ara" | "anais" | "bliss";
@@ -39,6 +39,7 @@ type ElevatorPanelProps = {
   activeFloor: FloorCode;
   targetFloor: FloorCode;
   disabled: boolean;
+  onGoToAbout: () => void;
   onGoToAra: () => void;
   onGoToAnais: () => void;
   onGoToBliss: () => void;
@@ -51,6 +52,7 @@ type ScrollControllerProps = {
   isAutoScrollingRef: React.RefObject<boolean>;
   containerRef: React.RefObject<HTMLDivElement | null>;
   onEnterLobby: () => void;
+  onEnterAbout: () => void;
   onEnterProfile: (profile: Profile) => void;
   onEnterBooking: () => void;
   onLobbyProgress: (progress: number) => void;
@@ -60,7 +62,7 @@ const DOOR_EASE: [number, number, number, number] = [0.77, 0, 0.175, 1];
 const LOBBY_DOOR_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_GLOW_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_SHAKE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const STOP_ORDER: readonly Stop[] = ["lobby", "ara", "anais", "bliss", "booking"] as const;
+const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "bliss", "booking"] as const;
 
 const AUTO_SCROLL_UNLOCK_MS = 820;
 const TRANSITION_TO_TRAVEL_MS = 190;
@@ -70,9 +72,10 @@ const TRANSITION_TO_IDLE_MS = 1180;
 
 const LOBBY_OPEN_PROGRESS = 0.06;
 const LOBBY_TO_FIRST_LOCK_PROGRESS = 0.12;
-const FLOOR_1_THRESHOLD = 0.22;
-const FLOOR_2_THRESHOLD = 0.48;
-const FLOOR_3_THRESHOLD = 0.74;
+const FLOOR_1_THRESHOLD = 0.2;
+const FLOOR_2_THRESHOLD = 0.38;
+const FLOOR_3_THRESHOLD = 0.56;
+const FLOOR_4_THRESHOLD = 0.74;
 const SCROLL_TRACK_HEIGHT_VH = 360;
 const MOBILE_BREAKPOINT_PX = 768;
 const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
@@ -131,14 +134,16 @@ function getStopProgress(stop: Stop): number {
   switch (stop) {
     case "lobby":
       return 0;
-    case "ara":
+    case "about":
       return 0.12;
+    case "ara":
+      return 0.3;
     case "anais":
-      return 0.38;
+      return 0.48;
     case "bliss":
-      return 0.64;
+      return 0.66;
     case "booking":
-      return 0.88;
+      return 0.86;
   }
 }
 
@@ -146,6 +151,8 @@ function getStopFromFloor(floor: FloorCode): Stop {
   switch (floor) {
     case "00":
       return "lobby";
+    case "A":
+      return "about";
     case "01":
       return "ara";
     case "02":
@@ -243,6 +250,7 @@ function ElevatorPanel({
   activeFloor,
   targetFloor,
   disabled,
+  onGoToAbout,
   onGoToAra,
   onGoToAnais,
   onGoToBliss,
@@ -256,6 +264,12 @@ function ElevatorPanel({
           className="rounded-l-[18px] border border-r-0 border-white/10 bg-[#0f1114]/96 px-1.5 py-2 shadow-[0_16px_30px_rgba(0,0,0,0.38)]"
         >
           <div className="grid grid-cols-1 gap-2">
+            <MetalButton
+              label="A"
+              active={activeFloor === "A" || targetFloor === "A"}
+              disabled={disabled}
+              onClick={onGoToAbout}
+            />
             <MetalButton
               label="1"
               active={activeFloor === "01" || targetFloor === "01"}
@@ -321,6 +335,12 @@ function ElevatorPanel({
 
           <div className="mx-auto grid w-fit grid-cols-2 justify-items-center gap-3">
             <MetalButton
+              label="A"
+              active={activeFloor === "A" || targetFloor === "A"}
+              disabled={disabled}
+              onClick={onGoToAbout}
+            />
+            <MetalButton
               label="1"
               active={activeFloor === "01" || targetFloor === "01"}
               disabled={disabled}
@@ -361,7 +381,7 @@ function TravelIndicator({
   const isTraveling = travelState === "traveling";
   const label = displayFloor === "B" ? "BOOK" : displayFloor;
   const [tickerIndex, setTickerIndex] = React.useState(0);
-  const tickerValues = React.useMemo(() => ["00", "01", "02", "03", "B"], []);
+  const tickerValues = React.useMemo(() => ["00", "A", "01", "02", "03", "B"], []);
 
   React.useEffect(() => {
     if (!isTraveling) {
@@ -426,6 +446,73 @@ function TravelIndicator({
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function AboutInsideCabin({ visible }: { visible: boolean }) {
+  return (
+    <motion.div
+      key="about"
+      initial={{ opacity: 0, scale: 0.975, y: 28 }}
+      animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
+      exit={{ opacity: 0, scale: 0.985, y: -12 }}
+      transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+      className="absolute inset-0 z-[100] flex justify-center px-3 pb-24 pt-10 -translate-y-2 sm:px-4 md:px-0 md:pb-4 md:pt-2 md:translate-y-0"
+    >
+      <div
+        className="relative flex h-[72vh] w-full max-w-[1120px] flex-col justify-center overflow-hidden rounded-[22px] border px-5 py-6 shadow-2xl backdrop-blur-sm sm:h-[74vh] sm:rounded-[26px] sm:px-7 md:h-[80vh] md:rounded-[30px] md:px-10 md:py-10"
+        style={{
+          borderColor: "rgba(255,255,255,0.1)",
+          background: "rgba(8,8,8,0.84)",
+          boxShadow:
+            "0 28px 80px rgba(0,0,0,0.56), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 0 1px rgba(122,12,12,0.08)",
+        }}
+      >
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px] sm:rounded-[26px] md:rounded-[30px]"
+        >
+          <motion.div
+            className="absolute top-0 h-full w-[28%] opacity-20 blur-xl md:w-[38%] md:opacity-35 md:blur-3xl"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+            }}
+            animate={{ x: ["-25%", "140%", "-25%"] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+
+        <div className="relative z-10 max-w-[72ch] text-left">
+          <p className="mb-3 text-xs uppercase tracking-[0.24em] text-white/58">Floor A</p>
+          <h2 className="text-2xl font-semibold leading-tight text-[var(--text)] sm:text-4xl md:text-[3.2rem]">
+            About Ascenseur House
+          </h2>
+          <p className="mt-4 text-xs uppercase tracking-[0.2em] text-white/70 sm:text-sm">
+            Curated to Elevate
+          </p>
+
+          <p className="mt-5 text-sm leading-7 text-white/72 sm:text-[15px]">
+            Ascenseur House is a curated space where sound, atmosphere, and movement come together
+            across levels.
+          </p>
+          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
+            Each floor introduces a distinct energy, shaped by the DJs who define it. From open
+            format to late-night house, every set is intentional—designed to build, evolve, and
+            elevate.
+          </p>
+          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
+            This is not just a lineup.
+            <br />
+            It is a progression.
+          </p>
+          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
+            Move through each level to experience a different side of the room.
+          </p>
+          <p className="mt-6 text-base italic text-white/88 sm:text-lg">Ascend through sound.</p>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -850,6 +937,7 @@ function ElevatorScene({
                   {view === "profile" && selectedProfile && (
                     <ProfileInsideCabin profile={selectedProfile} visible={contentVisible} />
                   )}
+                  {view === "profile" && !selectedProfile && <AboutInsideCabin visible={contentVisible} />}
                   {view === "booking" && <BookingInsideCabin visible={contentVisible} onExitUp={onExitBookingUp} />}
                 </>
               )}
@@ -905,6 +993,7 @@ function ScrollController({
   isAutoScrollingRef,
   containerRef,
   onEnterLobby,
+  onEnterAbout,
   onEnterProfile,
   onEnterBooking,
   onLobbyProgress,
@@ -960,9 +1049,10 @@ function ScrollController({
 
       let desiredStop: Stop = "lobby";
       if (latest < lockProgress) desiredStop = "lobby";
-      else if (latest < FLOOR_1_THRESHOLD) desiredStop = "ara";
-      else if (latest < FLOOR_2_THRESHOLD) desiredStop = "anais";
-      else if (latest < FLOOR_3_THRESHOLD) desiredStop = "bliss";
+      else if (latest < FLOOR_1_THRESHOLD) desiredStop = "about";
+      else if (latest < FLOOR_2_THRESHOLD) desiredStop = "ara";
+      else if (latest < FLOOR_3_THRESHOLD) desiredStop = "anais";
+      else if (latest < FLOOR_4_THRESHOLD) desiredStop = "bliss";
       else desiredStop = "booking";
 
       const currentIndex = STOP_ORDER.indexOf(currentStop);
@@ -982,9 +1072,14 @@ function ScrollController({
         return;
       }
 
+      if (nextStop === "about") {
+        onEnterAbout();
+        return;
+      }
+
       onEnterProfile(profilesByStop[nextStop]);
     },
-    [currentStop, isMobile, isTransitioning, onEnterBooking, onEnterLobby, onEnterProfile, onLobbyProgress]
+    [currentStop, isMobile, isTransitioning, onEnterAbout, onEnterBooking, onEnterLobby, onEnterProfile, onLobbyProgress]
   );
 
   React.useEffect(() => {
@@ -1267,6 +1362,15 @@ export default function App() {
   const currentStop = getStopFromFloor(activeFloor);
   const isTransitioning = travelState !== "idle";
 
+  const goToAbout = React.useCallback(() => {
+    goToStop({
+      stop: "about",
+      view: "profile",
+      floor: "A",
+      profile: null,
+    });
+  }, [goToStop]);
+
   return (
     <div
       className="relative bg-[var(--black)]"
@@ -1315,6 +1419,7 @@ export default function App() {
               activeFloor={activeFloor}
               targetFloor={targetFloor}
               disabled={isTransitioning}
+              onGoToAbout={goToAbout}
               onGoToAra={goToAra}
               onGoToAnais={goToAnais}
               onGoToBliss={goToBliss}
@@ -1342,6 +1447,7 @@ export default function App() {
     isAutoScrollingRef={isAutoScrollingRef}
     containerRef={scrollAreaRef}
     onEnterLobby={goLobby}
+    onEnterAbout={goToAbout}
     onEnterProfile={openProfile}
     onEnterBooking={openBooking}
     onLobbyProgress={(progress) => {
@@ -1358,17 +1464,19 @@ export default function App() {
 
 if (typeof window !== "undefined") {
   console.assert(getStopFromFloor("00") === "lobby", "00 should map to lobby");
+  console.assert(getStopFromFloor("A") === "about", "A should map to about");
   console.assert(getStopFromFloor("01") === "ara", "01 should map to ara");
   console.assert(getStopFromFloor("02") === "anais", "02 should map to anais");
   console.assert(getStopFromFloor("03") === "bliss", "03 should map to bliss");
   console.assert(getStopFromFloor("B") === "booking", "B should map to booking");
 
   console.assert(getStopProgress("lobby") === 0, "lobby progress should be 0");
+  console.assert(getStopProgress("about") < getStopProgress("ara"), "about should come before ara");
   console.assert(getStopProgress("ara") < getStopProgress("anais"), "ara should come before anais");
   console.assert(getStopProgress("anais") < getStopProgress("bliss"), "anais should come before bliss");
   console.assert(getStopProgress("bliss") < getStopProgress("booking"), "bliss should come before booking");
   console.assert(getStopProgress("booking") <= 1, "booking progress should stay within scroll range");
-  console.assert(getStopProgress("ara") < 0.2, "ara should be close to the top");
+  console.assert(getStopProgress("about") < 0.2, "about should be close to the top");
 
   console.assert(getStopFromProfile(profiles[0]) === "ara", "Ara profile should resolve to ara stop");
   console.assert(getStopFromProfile(profiles[1]) === "anais", "Anais profile should resolve to anais stop");
