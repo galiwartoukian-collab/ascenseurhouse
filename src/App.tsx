@@ -841,7 +841,7 @@ function ElevatorScene({
           </div>
 
           <motion.div
-            className="pointer-events-none absolute inset-y-[9%] left-0 z-20 w-1/2 border-r border-white/8"
+            className="pointer-events-none absolute inset-y-0 left-0 z-20 w-1/2 border-r border-white/8"
             animate={{ x: isLobby ? `-${lobbyDoorOffset}` : doorsOpen ? "-102%" : "0%" }}
             transition={{
               duration: isLobby ? LOBBY_DOOR_DURATION : FLOOR_DOOR_DURATION,
@@ -860,7 +860,7 @@ function ElevatorScene({
           </motion.div>
 
           <motion.div
-            className="pointer-events-none absolute inset-y-[9%] right-0 z-20 w-1/2 border-l border-white/8"
+            className="pointer-events-none absolute inset-y-0 right-0 z-20 w-1/2 border-l border-white/8"
             animate={{ x: isLobby ? lobbyDoorOffset : doorsOpen ? "102%" : "0%" }}
             transition={{
               duration: isLobby ? LOBBY_DOOR_DURATION : FLOOR_DOOR_DURATION,
