@@ -32,3 +32,103 @@ body,
 body {
   overflow-x: hidden;
 }
+
+.disco-overlay {
+  position: fixed;
+  inset: -12%;
+  z-index: 35;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.42;
+  mix-blend-mode: screen;
+}
+
+.disco-overlay span {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.disco-overlay__speckles {
+  background-image:
+    radial-gradient(circle at 12% 22%, rgba(255, 245, 210, 0.08) 0 1.2%, transparent 3.3%),
+    radial-gradient(circle at 74% 18%, rgba(224, 246, 255, 0.07) 0 1.1%, transparent 3.1%),
+    radial-gradient(circle at 34% 44%, rgba(255, 230, 230, 0.065) 0 1%, transparent 2.8%),
+    radial-gradient(circle at 86% 56%, rgba(255, 255, 255, 0.07) 0 1.25%, transparent 3.4%),
+    radial-gradient(circle at 22% 76%, rgba(255, 233, 188, 0.06) 0 0.9%, transparent 2.6%),
+    radial-gradient(circle at 62% 84%, rgba(208, 240, 255, 0.06) 0 1.1%, transparent 2.9%);
+  background-size: 220px 220px, 280px 280px, 240px 240px, 320px 320px, 220px 220px, 280px 280px;
+  filter: blur(0.2px);
+  animation: disco-spin 64s linear infinite, disco-drift 42s ease-in-out infinite alternate;
+}
+
+.disco-overlay__sweep {
+  background:
+    conic-gradient(
+      from 0deg at 50% 50%,
+      transparent 0deg 58deg,
+      rgba(255, 250, 220, 0.065) 74deg 97deg,
+      transparent 116deg 180deg,
+      rgba(213, 240, 255, 0.06) 198deg 224deg,
+      transparent 244deg 360deg
+    );
+  filter: blur(42px);
+  transform-origin: 50% 50%;
+  animation: disco-spin 72s linear infinite reverse, disco-pulse 18s ease-in-out infinite;
+}
+
+.disco-overlay__halo {
+  background:
+    radial-gradient(52% 36% at 50% 26%, rgba(255, 251, 222, 0.11), transparent 72%),
+    radial-gradient(44% 32% at 28% 66%, rgba(210, 238, 255, 0.09), transparent 74%),
+    radial-gradient(42% 34% at 72% 74%, rgba(255, 223, 208, 0.08), transparent 74%);
+  filter: blur(30px);
+  animation: disco-breathe 22s ease-in-out infinite alternate;
+}
+
+@keyframes disco-spin {
+  from {
+    transform: rotate(0deg) scale(1.03);
+  }
+  to {
+    transform: rotate(360deg) scale(1.08);
+  }
+}
+
+@keyframes disco-drift {
+  0% {
+    transform: translate3d(-3%, -2%, 0);
+  }
+  100% {
+    transform: translate3d(4%, 3%, 0);
+  }
+}
+
+@keyframes disco-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes disco-breathe {
+  from {
+    opacity: 0.32;
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    opacity: 0.62;
+    transform: translate3d(2%, 1%, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disco-overlay__speckles,
+  .disco-overlay__sweep,
+  .disco-overlay__halo {
+    animation: none;
+  }
+}
