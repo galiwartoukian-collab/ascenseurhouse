@@ -498,7 +498,7 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 z-[100] overflow-hidden"
     >
-      <div className="relative flex h-full w-full flex-col justify-center overflow-hidden bg-[#060607] px-6 py-10 sm:px-8 md:px-14 md:py-14">
+      <div className="relative flex h-full w-full flex-col justify-center overflow-hidden bg-[#060607] px-6 pb-24 pt-20 sm:px-8 md:px-14 md:pb-14 md:pt-16">
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -524,7 +524,9 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-        <div className="relative z-10 text-left">
+        <div className="pointer-events-none absolute left-0 right-0 top-[5.4rem] h-px bg-white/10 md:top-[5.8rem]" />
+
+        <div className="relative z-10 max-w-[78ch] text-left">
           <p className="mb-2 text-[11px] uppercase tracking-[0.3em] text-white/55 sm:mb-3">Floor A</p>
           <h2 className="text-[2.4rem] font-semibold leading-[0.98] text-[var(--text)] sm:text-[3rem] md:text-[4rem]">
             Ascenseur House
@@ -533,7 +535,7 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
             Curated to Elevate
           </p>
 
-          <p className="mt-6 text-[15px] leading-7 text-white/70 sm:text-base">
+          <p className="mt-6 max-w-[70ch] text-[15px] leading-7 text-white/70 sm:text-base">
             Ascenseur House is a multi-level experience where sound, atmosphere, and presence are
             intentionally shaped.
           </p>
@@ -574,7 +576,7 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
             ))}
           </div>
 
-          <p className="mt-7 inline-flex w-fit bg-[rgba(122,12,12,0.16)] px-4 py-2 text-sm tracking-[0.12em] uppercase text-white/95 sm:mt-9 sm:text-base">
+          <p className="mt-7 inline-flex w-fit border border-[rgba(122,12,12,0.45)] bg-[rgba(122,12,12,0.16)] px-4 py-2 text-sm tracking-[0.12em] uppercase text-white/95 sm:mt-9 sm:text-base">
             Ascend through sound.
           </p>
         </div>
@@ -604,7 +606,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 z-[100] overflow-hidden"
     >
-      <div className="relative flex h-full w-full overflow-hidden bg-[#060606]">
+      <div className="relative grid h-full w-full grid-cols-1 overflow-hidden bg-[#060606] md:grid-cols-[1.08fr_0.92fr]">
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -629,7 +631,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </motion.div>
 
-        <div className="absolute inset-0 overflow-hidden md:relative md:h-full md:w-[56%] md:shrink-0">
+        <div className="relative h-[42vh] overflow-hidden md:h-full">
           <img
             src={currentImageSrc}
             alt={profile.name}
@@ -638,8 +640,8 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             onError={() => setCurrentImageSrc(placeholderProfileImage)}
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/52 md:bg-black/22" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.62)_0%,rgba(0,0,0,0.28)_36%,rgba(0,0,0,0.84)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_42%,rgba(0,0,0,0.9)_100%)]" />
+          <div className="absolute inset-0 bg-black/44 md:bg-black/24" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0)_38%,rgba(0,0,0,0.86)_100%)]" />
           <div
             className="absolute inset-0"
             style={{
@@ -647,13 +649,15 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
                 "radial-gradient(circle at 22% 55%, rgba(122,12,12,0.18) 0%, rgba(122,12,12,0.08) 26%, transparent 58%)",
             }}
           />
-          <div className="absolute left-4 top-4 bg-black/46 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/88 md:left-6 md:top-6">
+          <div className="absolute left-4 top-4 border border-white/12 bg-black/56 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/88 md:left-6 md:top-6">
             {profile.floorLabel}
           </div>
           <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-px bg-white/10 md:block" />
         </div>
 
-        <div className="relative z-10 flex h-full w-full flex-col justify-end overflow-visible px-6 py-10 text-left sm:px-8 md:ml-auto md:w-[44%] md:justify-center md:overflow-y-auto md:px-12 md:py-14">
+        <div className="relative flex h-full flex-col justify-start overflow-visible px-6 py-6 text-left sm:px-8 md:justify-center md:overflow-y-auto md:px-12 md:py-14">
+          <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-white/10 md:hidden" />
+          <div className="pointer-events-none absolute left-0 right-0 top-8 hidden h-px bg-white/10 md:block" />
 
           <div className="mb-4 mt-3 flex items-start gap-2 text-white/76 md:mt-0">
             <Music2 className="h-4 w-4 text-white/70" />
@@ -664,11 +668,11 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             {profile.name}
           </h2>
 
-          <div className="mt-4 inline-block w-fit self-start bg-black/45 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-white/92 sm:text-sm">
+          <div className="mt-4 inline-block w-fit self-start border border-white/12 bg-black/45 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-white/92 sm:text-sm">
             {profile.genre}
           </div>
 
-          <div className="mt-5 max-w-full space-y-4 text-sm leading-6 text-white/70 sm:text-[15px] md:mt-7 md:leading-7">
+          <div className="mt-5 max-w-full space-y-4 text-sm leading-6 text-white/70 sm:text-[15px] md:mt-7 md:max-w-[40ch] md:leading-7">
             {bioParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -793,13 +797,15 @@ function BookingInsideCabin({
           />
         </motion.div>
 
-        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto md:grid md:h-full md:min-h-0 md:grid-cols-[1.06fr_0.94fr]">
+        <div className="pointer-events-none absolute left-0 right-0 top-[5.2rem] h-px bg-white/10 md:top-10" />
+
+        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto pt-16 md:grid md:h-full md:min-h-0 md:grid-cols-[1.06fr_0.94fr] md:pt-0">
           <div
   ref={desktopFormScrollRef}
   onWheelCapture={handleDesktopWheelCapture}
   onTouchStart={handleDesktopTouchStart}
   onTouchMove={handleDesktopTouchMove}
-  className="min-h-0 overflow-visible px-6 py-10 sm:px-8 md:overflow-visible md:px-12 md:py-14"
+  className="min-h-0 overflow-visible px-6 py-4 pb-8 sm:px-8 md:overflow-visible md:px-12 md:py-14"
 >
             <div className="mb-3 flex items-start gap-2 text-white/78">
               <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
@@ -895,7 +901,13 @@ function BookingInsideCabin({
             </form>
           </div>
 
-          <div className="shrink-0 px-6 py-8 sm:px-8 md:min-h-0 md:overflow-y-auto md:px-10 md:py-14">
+          <div
+            className="shrink-0 border-t px-6 py-6 sm:px-8 md:min-h-0 md:overflow-y-auto md:border-l md:border-t-0 md:px-10 md:py-14"
+            style={{
+              borderColor: "rgba(255,255,255,0.08)",
+              background: "rgba(255,255,255,0.015)",
+            }}
+          >
             <p className="text-[10px] uppercase tracking-[0.22em] text-white/42">Direct Contact</p>
 
             <div className="mt-5 space-y-4 text-sm text-white/78">
@@ -910,7 +922,7 @@ function BookingInsideCabin({
               </div>
             </div>
 
-            <div className="mt-6 bg-black/26 p-4 text-sm leading-7 text-white/62">
+            <div className="mt-6 border border-white/10 bg-black/30 p-4 text-sm leading-7 text-white/62">
               A quieter, more concierge-style side panel lives here. The goal is less booking form, more private arrangements desk.
             </div>
           </div>
