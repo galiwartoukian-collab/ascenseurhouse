@@ -1467,12 +1467,6 @@ export default function App() {
         } as React.CSSProperties
       }
     >
-      <div className="disco-overlay" aria-hidden="true">
-        <span className="disco-overlay__speckles" />
-        <span className="disco-overlay__sweep" />
-        <span className="disco-overlay__halo" />
-      </div>
-
       <div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
         <div className="relative">
           <div
