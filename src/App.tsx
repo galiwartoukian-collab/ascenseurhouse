@@ -567,12 +567,12 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
 
           <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-8">
             {microLabels.map((label) => (
-              <span
-                key={label}
-                className="inline-flex items-center rounded-full border border-white/15 bg-white/[0.045] px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/72 sm:text-[11px]"
-              >
-                {label}
-              </span>
+                <span
+                  key={label}
+                  className="inline-flex items-center rounded-full bg-white/[0.08] px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/72 sm:text-[11px]"
+                >
+                  {label}
+                </span>
             ))}
           </div>
 
@@ -638,7 +638,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             loading="lazy"
             decoding="async"
             onError={() => setCurrentImageSrc(placeholderProfileImage)}
-            className="absolute inset-0 h-full w-full object-cover object-[center_68%] md:object-center"
+            className="absolute inset-0 h-full w-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/44 md:bg-black/24" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0)_38%,rgba(0,0,0,0.86)_100%)]" />
@@ -996,8 +996,10 @@ function ElevatorScene({
           <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10 opacity-25" />
 
           <div
-            className={`absolute inset-x-0 inset-y-[10%] z-30 flex justify-center px-3 sm:px-6 ${
-              view === "lobby" ? "pointer-events-none items-center text-center" : "pointer-events-auto items-start text-left"
+            className={`absolute inset-x-0 z-30 flex justify-center px-3 sm:px-6 ${
+              view === "lobby"
+                ? "inset-y-[10%] pointer-events-none items-center text-center"
+                : "inset-y-0 pointer-events-auto items-start px-0 sm:px-0 text-left"
             }`}
           >
             <AnimatePresence mode="wait">
