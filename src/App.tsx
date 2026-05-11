@@ -707,20 +707,20 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
         </div>
 
         <div className="pointer-events-auto relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-7 pb-24 pt-8 text-left sm:px-10 md:justify-center md:px-14 md:py-16 lg:px-16 xl:px-20">
-          <div className="mb-5 inline-flex w-fit items-center gap-3 bg-black/28 px-4 py-3 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
+          <div className="mb-4 inline-flex w-fit items-center gap-3 bg-black/28 px-3.5 py-2.5 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
             <Music2 className="h-4 w-4 text-white/78" />
-            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] sm:text-xs">{profile.role}</span>
+            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.38em] sm:text-[0.68rem]">{profile.role}</span>
           </div>
 
-          <h2 className="text-[4.4rem] font-black uppercase leading-[0.82] tracking-[-0.055em] text-[var(--text)] sm:text-[5.8rem] md:text-[6.6rem] lg:text-[7.6rem] xl:text-[8.4rem]">
+          <h2 className="text-[3.9rem] font-black uppercase leading-[0.82] tracking-[-0.055em] text-[var(--text)] sm:text-[5.1rem] md:text-[5.9rem] lg:text-[6.8rem] xl:text-[7.5rem]">
             {profile.name}
           </h2>
 
-          <div className="mt-5 inline-block w-fit self-start border border-white/12 bg-black/38 px-4 py-2 text-sm font-bold uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-base md:text-lg">
+          <div className="mt-4 inline-block w-fit self-start border border-white/12 bg-black/38 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-sm md:text-base">
             {profile.genre}
           </div>
 
-          <div className="mt-7 max-w-[46rem] space-y-5 text-xl leading-[1.22] tracking-[-0.025em] text-white/86 sm:text-2xl md:mt-8 md:text-[1.6rem] lg:text-[1.78rem]">
+          <div className="mt-5 max-w-[46rem] space-y-4 text-lg leading-[1.18] tracking-[-0.025em] text-white/86 sm:text-xl md:mt-6 md:text-[1.35rem] lg:text-[1.5rem]">
             {bioParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
