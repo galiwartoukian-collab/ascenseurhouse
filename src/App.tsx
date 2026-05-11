@@ -563,25 +563,25 @@ function AboutInsideCabin({
             </h2>
           </div>
 
-          <div className="relative mx-auto flex w-full max-w-[94rem] flex-1 flex-col items-center px-5 pb-10 pt-[clamp(2.3rem,4.2vw,4.6rem)] sm:px-8 sm:pb-12 md:px-12 md:pb-14">
-            <p className="text-[clamp(1.08rem,1.75vw,2.05rem)] font-medium uppercase leading-none tracking-[0.38em] text-white sm:tracking-[0.5em] md:tracking-[0.58em]">
+          <div className="relative mx-auto flex w-full max-w-[94rem] flex-1 flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] px-5 pb-8 pt-[clamp(1.55rem,3.1vw,3.45rem)] text-center sm:px-8 sm:pb-10 md:px-12 md:pb-12">
+            <p className="text-center text-[clamp(1.08rem,1.75vw,2.05rem)] font-medium uppercase leading-none tracking-[0.38em] text-white sm:tracking-[0.5em] md:tracking-[0.58em]">
               CURATED TO ELEVATE
             </p>
 
-            <p className="mt-3 max-w-[74rem] text-[clamp(1rem,1.38vw,1.62rem)] font-light leading-snug tracking-[0.005em] text-white/85 sm:mt-3">
+            <p className="max-w-[74rem] text-center text-[clamp(1rem,1.38vw,1.62rem)] font-light leading-snug tracking-[0.005em] text-white/85">
               Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
             </p>
 
-            <p className="mt-2 max-w-[58rem] text-[clamp(0.96rem,1.2vw,1.35rem)] font-light leading-snug text-white/80 sm:mt-3">
+            <p className="max-w-[58rem] text-center text-[clamp(0.96rem,1.2vw,1.35rem)] font-light leading-snug text-white/80">
               This isn’t just a lineup, theres levels to this shit
             </p>
 
-            <div className="mt-5 flex w-full flex-col items-center sm:mt-6 md:mt-7">
-              <h3 className="text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
+            <div className="flex w-full flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] text-center">
+              <h3 className="text-center text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
                 DJS
               </h3>
 
-              <div className="mt-4 grid w-full max-w-[54rem] grid-cols-2 justify-items-center gap-x-5 gap-y-5 sm:mt-5 sm:grid-cols-4 sm:gap-x-6 md:gap-x-7 lg:gap-x-8">
+              <div className="grid w-full max-w-[54rem] grid-cols-2 justify-items-center gap-x-5 gap-y-5 sm:grid-cols-4 sm:gap-x-6 md:gap-x-7 lg:gap-x-8">
                 {djButtons.map((dj) => (
                   <button
                     key={dj.name}
@@ -1557,21 +1557,23 @@ export default function App() {
         } as React.CSSProperties
       }
     >
-      <div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
-        <div className="relative">
-          <div
-            className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 opacity-60 blur-2xl"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
-              boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
-            }}
-          />
-          <button type="button" onClick={goLobby} className="relative z-[10002] cursor-pointer">
-            <img src={logo} alt="Ascenseur House" className="h-10 w-auto object-contain opacity-90 md:h-12" />
-          </button>
+      {activeFloor !== "00" && (
+        <div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
+          <div className="relative">
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 opacity-60 blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(122,12,12,0.45) 0%, rgba(122,12,12,0.25) 35%, rgba(122,12,12,0.08) 65%, transparent 100%)",
+                boxShadow: "0 0 30px rgba(122,12,12,0.35), 0 0 60px rgba(122,12,12,0.2)",
+              }}
+            />
+            <button type="button" onClick={goLobby} className="relative z-[10002] cursor-pointer">
+              <img src={logo} alt="Ascenseur House" className="h-10 w-auto object-contain opacity-90 md:h-12" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <AnimatePresence>
         {activeFloor !== "00" && activeFloor !== "A" && travelState === "idle" && (
