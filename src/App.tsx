@@ -83,6 +83,7 @@ const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
 
 import logo from "./assets/logo.png";
+import aboutHeaderImage from "./assets/header.png";
 import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
 import placeholderProfileImage from "./assets/react.svg";
@@ -482,8 +483,6 @@ function TravelIndicator({
 }
 
 function AboutInsideCabin({ visible }: { visible: boolean }) {
-  const microLabels = ["Sound Direction", "Atmosphere", "Visual Identity", "Curated Floors"] as const;
-
   return (
     <motion.div
       key="about"
@@ -493,86 +492,47 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 z-[100] overflow-hidden"
     >
-      <div className="relative flex h-full w-full flex-col justify-center overflow-hidden bg-[#060607] px-6 pb-24 pt-20 sm:px-8 md:px-14 md:pb-14 md:pt-16">
-        <motion.div
+      <section className="relative h-full w-full overflow-hidden bg-black text-white">
+        <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(122,12,12,0.17),transparent_44%),radial-gradient(circle_at_78%_85%,rgba(122,12,12,0.1),transparent_48%),linear-gradient(145deg,#090909_0%,#131316_48%,#060607_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.88)_0%,rgba(0,0,0,0.72)_38%,rgba(0,0,0,0.5)_65%,rgba(0,0,0,0.82)_100%)]" />
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(circle at 35% 42%, rgba(122,12,12,0.18) 0%, rgba(122,12,12,0.1) 26%, transparent 64%)",
-            }}
-          />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/72 to-transparent" />
-          <motion.div
-            className="absolute top-0 h-full w-[30%] opacity-20 blur-xl md:w-[42%] md:opacity-30 md:blur-3xl"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
-            }}
-            animate={{ x: ["-25%", "140%", "-25%"] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </motion.div>
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(122,12,12,0.34),transparent_35%),radial-gradient(circle_at_50%_100%,rgba(122,12,12,0.42),transparent_48%),linear-gradient(180deg,#020202_0%,#050000_58%,#000_100%)]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-[8%] top-[45%] h-[42vh] rounded-full bg-[rgba(122,12,12,0.22)] blur-[90px]"
+        />
 
-        <div className="relative z-10 max-w-[78ch] text-left">
-          <h2 className="text-[2.4rem] font-semibold leading-[0.98] text-[var(--text)] sm:text-[3rem] md:text-[4rem]">
-            Ascenseur House
-          </h2>
-          <p className="mt-3 text-[11px] uppercase tracking-[0.24em] text-white/72 sm:text-sm">
-            Curated to Elevate
-          </p>
-
-          <p className="mt-6 max-w-[70ch] text-[15px] leading-7 text-white/70 sm:text-base">
-            Ascenseur House is a multi-level experience where sound, atmosphere, and presence are
-            intentionally shaped.
-          </p>
-
-          <div className="mt-6 space-y-4 text-sm leading-7 text-white/70 sm:mt-7 sm:text-[15px]">
-            <p>
-              <span className="block text-base font-medium leading-7 text-white/88 sm:text-[1.05rem]">
-                Each floor carries its own energy.
-              </span>
-              Defined by the DJs who inhabit it, every level builds on the last—moving from open
-              format to late-night house, from arrival to immersion. Nothing is random. Every
-              transition is deliberate.
-            </p>
-            <p>
-              <span className="block text-base font-medium leading-7 text-white/88 sm:text-[1.05rem]">
-                The room is more than music.
-              </span>
-              Light, movement, and visual direction work in sync to create a space that feels
-              cohesive from the first moment to the final track. What you see and what you hear are
-              designed to move together.
-            </p>
-            <p className="text-[15px] leading-7 text-white/78 sm:text-base">
-              <span className="block text-base font-medium leading-7 text-white sm:text-[1.1rem]">
-                This is not just a lineup.
-              </span>
-              It is a progression.
-            </p>
+        <div className="relative z-10 flex min-h-full flex-col items-center text-center">
+          <div className="relative h-[42vh] min-h-[250px] w-full sm:h-[44vh] md:h-[46vh]">
+            <img
+              src={aboutHeaderImage}
+              alt="Ascenseur House atmosphere"
+              className="h-full w-full object-cover"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.7)_100%)]"
+            />
+            <h2 className="absolute inset-x-0 bottom-[-0.22em] mx-auto px-2 text-center text-[clamp(3.6rem,13.8vw,14.5rem)] font-black uppercase leading-[0.78] tracking-[-0.08em] text-white">
+              ASCENSEUR HOUSE
+            </h2>
           </div>
 
-          <div className="mt-7 flex flex-wrap gap-2.5 sm:mt-8">
-            {microLabels.map((label) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center rounded-full bg-white/[0.08] px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/72 sm:text-[11px]"
-                >
-                  {label}
-                </span>
-            ))}
-          </div>
+          <div className="relative flex w-full flex-1 flex-col items-center px-5 pb-16 pt-[clamp(3.75rem,6vw,7.25rem)] sm:px-8 md:px-12 md:pb-20">
+            <p className="max-w-[92rem] text-[clamp(1.05rem,1.78vw,2rem)] font-light leading-snug tracking-[0.01em] text-white/86">
+              Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped
+            </p>
 
-          <p className="mt-7 inline-flex w-fit border border-[rgba(122,12,12,0.45)] bg-[rgba(122,12,12,0.16)] px-4 py-2 text-sm tracking-[0.12em] uppercase text-white/95 sm:mt-9 sm:text-base">
-            Ascend through sound.
-          </p>
+            <p className="mt-10 text-[clamp(1.25rem,2.1vw,2.55rem)] font-medium uppercase leading-none tracking-[0.5em] text-white sm:mt-12 md:mt-14 md:tracking-[0.64em]">
+              CURATED TO ELEVATE
+            </p>
+
+            <p className="mt-7 max-w-[58rem] text-[clamp(1rem,1.7vw,1.72rem)] font-light leading-snug text-white/80 sm:mt-8">
+              This isn’t just a lineup, theres levels to this shit
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </motion.div>
   );
 }
