@@ -1066,14 +1066,25 @@ function ElevatorScene({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -24 }}
                   transition={{ duration: 0.24 }}
-                  className="pointer-events-auto mx-auto max-w-3xl text-center"
+                  className="pointer-events-auto mx-auto flex w-full max-w-[92rem] flex-col items-center px-4 text-center sm:px-6"
                 >
-                  <p className="mb-4 text-xs uppercase tracking-[0.24em] text-white/45">Curated to Elevate</p>
-                  <h1 className="text-5xl font-bold leading-tight text-[var(--text)] sm:text-6xl md:text-7xl">
+                  <img
+                    src={logo}
+                    alt="Ascenseur House"
+                    className="mb-[clamp(0.85rem,1.4vw,1.35rem)] h-[clamp(5.4rem,9.1vw,9.25rem)] w-auto object-contain opacity-95 drop-shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                  />
+                  <h1
+                    className="origin-center scale-x-[0.74] whitespace-nowrap text-center text-[clamp(3.05rem,14.4vw,4.45rem)] font-black uppercase leading-[0.74] tracking-[-0.055em] text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.32)] sm:scale-x-[0.82] sm:text-[clamp(5.6rem,10.35vw,10rem)] md:scale-x-[0.86] md:text-[clamp(6.85rem,9.85vw,10.35rem)]"
+                    style={{
+                      fontFamily:
+                        '"Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", Impact, sans-serif',
+                      fontStretch: "condensed",
+                    }}
+                  >
                     ASCENSEUR HOUSE
                   </h1>
-                  <p className="ml-0 mt-5 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-                    Step into an ascenseur, an experience on every level
+                  <p className="mt-[clamp(0.72rem,1vw,1.05rem)] text-[clamp(0.96rem,1.72vw,1.82rem)] font-medium uppercase leading-none tracking-[0.52em] text-white/92 sm:tracking-[0.62em] md:tracking-[0.72em]">
+                    CURATED TO ELEVATE
                   </p>
                 </motion.div>
               ) : (
