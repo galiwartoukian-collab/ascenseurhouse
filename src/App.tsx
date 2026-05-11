@@ -98,19 +98,16 @@ import aboutHeaderImage from "./assets/header.png";
 import araButtonImage from "./assets/eb.jpg";
 import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
+import instaIcon from "./assets/insta.png";
+import tiktokIcon from "./assets/tiktok.png";
+import soundcloudIcon from "./assets/soundcloud.png";
 import placeholderProfileImage from "./assets/react.svg";
 
-const socialIconModules = import.meta.glob("./assets/{insta,tiktok,soundcloud}.png", {
-  eager: true,
-  query: "?url",
-  import: "default",
-}) as Record<string, string>;
-
 const socialIcons = {
-  instagram: socialIconModules["./assets/insta.png"],
-  tiktok: socialIconModules["./assets/tiktok.png"],
-  soundcloud: socialIconModules["./assets/soundcloud.png"],
-} satisfies Record<keyof ProfileSocials, string | undefined>;
+  instagram: instaIcon,
+  tiktok: tiktokIcon,
+  soundcloud: soundcloudIcon,
+} satisfies Record<keyof ProfileSocials, string>;
 
 const profiles: Profile[] = [
   {
@@ -620,19 +617,15 @@ function ProfileSocialButton({
   href?: string;
 }) {
   const iconSrc = socialIcons[platform];
-  const label = platform === "soundcloud" ? "SoundCloud" : platform.charAt(0).toUpperCase() + platform.slice(1);
+  const label = platform === "soundcloud" ? "SoundCloud" : platform === "tiktok" ? "TikTok" : "Instagram";
   const content = (
     <>
-      {iconSrc ? (
-        <img src={iconSrc} alt="" className="h-6 w-6 object-contain sm:h-7 sm:w-7" loading="lazy" decoding="async" />
-      ) : (
-        <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/70">{label.slice(0, 2)}</span>
-      )}
+      <img src={iconSrc} alt={label} className="h-6 w-6 object-contain sm:h-7 sm:w-7" loading="lazy" decoding="async" />
       <span className="sr-only">{href ? `Open ${label}` : `${label} link coming soon`}</span>
     </>
   );
   const className =
-    "group flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
+    "group pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
 
   if (href) {
     return (
@@ -661,7 +654,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
     [profile.bio]
   );
 
-  const socialPlatforms: Array<keyof ProfileSocials> = ["instagram", "soundcloud", "tiktok"];
+  const socialPlatforms: Array<keyof ProfileSocials> = ["instagram", "tiktok", "soundcloud"];
 
   return (
     <motion.div
@@ -670,7 +663,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-[100] overflow-hidden"
+      className="pointer-events-auto absolute inset-0 z-[100] overflow-hidden"
     >
       <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#050101] md:grid md:grid-cols-[0.47fr_0.53fr]">
         <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -713,7 +706,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </div>
 
-        <div className="relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-7 pb-24 pt-8 text-left sm:px-10 md:justify-center md:px-14 md:py-16 lg:px-16 xl:px-20">
+        <div className="pointer-events-auto relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-7 pb-24 pt-8 text-left sm:px-10 md:justify-center md:px-14 md:py-16 lg:px-16 xl:px-20">
           <div className="mb-5 inline-flex w-fit items-center gap-3 bg-black/28 px-4 py-3 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
             <Music2 className="h-4 w-4 text-white/78" />
             <span className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] sm:text-xs">{profile.role}</span>
