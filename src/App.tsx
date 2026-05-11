@@ -627,7 +627,7 @@ function ProfileSocialButton({
     </>
   );
   const className =
-    "group pointer-events-auto relative z-[2] flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
+    "group pointer-events-auto relative z-[121] flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
 
   if (href) {
     return (
@@ -688,19 +688,19 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </motion.div>
 
-        <div className="relative h-[44vh] min-h-[18rem] overflow-hidden md:h-full md:min-h-0">
+        <div className="pointer-events-none relative h-[44vh] min-h-[18rem] overflow-hidden md:h-full md:min-h-0">
           <img
             src={currentImageSrc}
             alt={profile.name}
             loading="lazy"
             decoding="async"
             onError={() => setCurrentImageSrc(placeholderProfileImage)}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/28 md:bg-black/12" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_54%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.05)_58%,rgba(0,0,0,0.9)_100%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-black/28 md:bg-black/12" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_54%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.05)_58%,rgba(0,0,0,0.9)_100%)]" />
           <div
-            className="absolute inset-0"
+            className="pointer-events-none absolute inset-0"
             style={{
               background:
                 "radial-gradient(circle at 24% 58%, rgba(122,12,12,0.16) 0%, rgba(122,12,12,0.08) 30%, transparent 62%)",
@@ -708,7 +708,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </div>
 
-        <div className="pointer-events-auto relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
+        <div className="pointer-events-auto relative z-40 flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
           <div className="mb-3.5 inline-flex w-fit items-center gap-2.5 bg-black/28 px-3 py-2 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
             <Music2 className="h-3.5 w-3.5 text-white/78" />
             <span className="text-[0.58rem] font-semibold uppercase tracking-[0.36em] sm:text-[0.62rem]">{profile.role}</span>
@@ -728,7 +728,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             ))}
           </div>
 
-          <div className="pointer-events-auto relative z-[3] mt-8 flex items-center gap-4 sm:gap-5">
+          <div className="pointer-events-auto relative z-[120] mt-8 flex items-center gap-4 sm:gap-5">
             {socialPlatforms.map((platform) => (
               <ProfileSocialButton key={platform} platform={platform} href={profile.socials?.[platform]} />
             ))}
@@ -751,7 +751,7 @@ function BookingInsideCabin({
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartedOnInteractiveRef = React.useRef(false);
 
-  const handleMobileWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
+  const handleMobileWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const el = mobileScrollRef.current;
     if (!el) return;
     if (el.scrollTop <= 0 && e.deltaY < 0) {
@@ -782,7 +782,7 @@ function BookingInsideCabin({
     }
   };
 
-  const handleDesktopWheelCapture = (e: React.WheelEvent<HTMLDivElement>) => {
+  const handleDesktopWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const el = desktopFormScrollRef.current;
     if (!el) return;
     if (el.scrollTop <= 0 && e.deltaY < 0) {
@@ -791,27 +791,6 @@ function BookingInsideCabin({
     }
   };
 
-  const handleDesktopTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLElement | null;
-    touchStartedOnInteractiveRef.current = Boolean(
-      target?.closest("input, textarea, select, button, a, label")
-    );
-    touchStartYRef.current = e.touches[0]?.clientY ?? null;
-  };
-
-  const handleDesktopTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    const el = desktopFormScrollRef.current;
-    if (!el || touchStartYRef.current == null) return;
-    if (touchStartedOnInteractiveRef.current) return;
-
-    const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
-    const deltaY = currentY - touchStartYRef.current;
-
-    if (el.scrollTop <= 0 && deltaY > 14) {
-      onExitUp();
-      touchStartYRef.current = null;
-    }
-  };
   return (
     <motion.div
       key="booking"
@@ -823,7 +802,7 @@ function BookingInsideCabin({
     >
       <div
         ref={mobileScrollRef}
-        onWheelCapture={handleMobileWheelCapture}
+        onWheel={handleMobileWheel}
         onTouchStart={handleMobileTouchStart}
         onTouchMove={handleMobileTouchMove}
         className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-contain bg-[#060607] md:overflow-hidden"
@@ -854,15 +833,13 @@ function BookingInsideCabin({
         </motion.div>
 
 
-        <div className="pointer-events-auto relative z-10 flex min-h-full flex-col pt-20 md:h-full md:min-h-0 md:pt-0">
+        <div className="pointer-events-auto relative z-30 flex min-h-full flex-col pt-20 md:h-full md:min-h-0 md:pt-0">
           <div
             ref={desktopFormScrollRef}
-            onWheelCapture={handleDesktopWheelCapture}
-            onTouchStart={handleDesktopTouchStart}
-            onTouchMove={handleDesktopTouchMove}
-            className="pointer-events-auto min-h-0 w-full overflow-visible px-6 py-7 pb-14 pr-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 md:pr-48 lg:px-14 lg:pr-56"
+            onWheel={handleDesktopWheel}
+            className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 pr-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 md:pr-48 lg:px-14 lg:pr-56"
           >
-            <div className="pointer-events-auto mx-auto flex w-full max-w-[64rem] flex-col items-center px-0 text-center">
+            <div className="mx-auto flex w-full max-w-[64rem] flex-col items-center px-0 text-center">
               <div className="mb-4 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-2.5 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
                 <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
                 <span className="text-[10px] uppercase tracking-[0.34em]">Private Inquiry</span>
@@ -879,16 +856,16 @@ function BookingInsideCabin({
               <form
                 action="https://formspree.io/f/mvzvlkkq"
                 method="POST"
-                className="pointer-events-auto relative z-20 mt-6 w-full max-w-[58rem]"
+                className="pointer-events-auto relative z-40 mt-6 w-full max-w-[58rem]"
               >
                 <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
-                <div className="pointer-events-auto grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 md:gap-5">
+                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 md:gap-5">
                   <input
                     type="text"
                     name="name"
                     required
-                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -900,7 +877,7 @@ function BookingInsideCabin({
                   <input
                     type="text"
                     name="company"
-                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -913,7 +890,7 @@ function BookingInsideCabin({
                     type="email"
                     name="email"
                     required
-                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -925,7 +902,7 @@ function BookingInsideCabin({
                   <input
                     type="tel"
                     name="phone"
-                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -937,7 +914,7 @@ function BookingInsideCabin({
                   <textarea
                     name="message"
                     required
-                    className="pointer-events-auto min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
+                    className="min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -946,10 +923,10 @@ function BookingInsideCabin({
                     placeholder="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                   />
 
-                  <div className="pointer-events-auto flex flex-col items-center gap-4 pt-1 sm:col-span-2">
+                  <div className="flex flex-col items-center gap-4 pt-1 sm:col-span-2">
                     <UIButton
                       type="submit"
-                      className="pointer-events-auto cursor-pointer border px-7 py-3.5 text-white sm:px-9"
+                      className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
                       style={{
                         borderColor: "rgba(255,255,255,0.14)",
                         background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(122,12,12,0.22))",
@@ -1009,7 +986,7 @@ function ElevatorScene({
 
         {!isLobby && <TravelIndicator displayFloor={displayFloor} travelState={travelState} />}
 
-        <div className="relative h-full w-full overflow-hidden bg-[var(--black)]">
+        <div className="relative isolate h-full w-full overflow-hidden bg-[var(--black)]">
           <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
             <motion.div
               className="absolute top-0 h-full w-[26%] opacity-16 blur-xl sm:w-[32%] sm:opacity-22 md:w-[45%] md:opacity-40 md:blur-3xl"
