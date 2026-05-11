@@ -12,7 +12,6 @@ type Profile = {
   id: "ara" | "anais" | "talar" | "bliss";
   name: string;
   floorNumber: "01" | "02" | "03" | "04";
-  floorLabel: string;
   role: string;
   genre: string;
   image: string;
@@ -93,7 +92,6 @@ const profiles: Profile[] = [
     id: "ara",
     name: "Ara",
     floorNumber: "01",
-    floorLabel: "Floor 01",
     role: "Resident DJ",
     genre: "House / Open Format",
     image: araImage,
@@ -103,7 +101,6 @@ const profiles: Profile[] = [
     id: "anais",
     name: "Anais",
     floorNumber: "02",
-    floorLabel: "Floor 02",
     role: "Resident DJ",
     genre: "Afro House / Melodic House",
     image:
@@ -114,7 +111,6 @@ const profiles: Profile[] = [
     id: "talar",
     name: "Talar",
     floorNumber: "03",
-    floorLabel: "Floor 03",
     role: "Aesthetic Setter / Social Direction",
     genre: "Visual Identity / Atmosphere / Digital Presence",
     image: placeholderProfileImage,
@@ -124,7 +120,6 @@ const profiles: Profile[] = [
     id: "bliss",
     name: "Bliss Eliss",
     floorNumber: "04",
-    floorLabel: "Floor 04",
     role: "Manager",
     genre: "Bookings / Talent Curation / Event Direction",
     image: blissImage,
@@ -524,10 +519,7 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
           />
         </motion.div>
 
-        <div className="pointer-events-none absolute left-0 right-0 top-[5.4rem] h-px bg-white/10 md:top-[5.8rem]" />
-
         <div className="relative z-10 max-w-[78ch] text-left">
-          <p className="mb-2 text-[11px] uppercase tracking-[0.3em] text-white/55 sm:mb-3">Floor A</p>
           <h2 className="text-[2.4rem] font-semibold leading-[0.98] text-[var(--text)] sm:text-[3rem] md:text-[4rem]">
             Ascenseur House
           </h2>
@@ -649,16 +641,10 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
                 "radial-gradient(circle at 22% 55%, rgba(122,12,12,0.18) 0%, rgba(122,12,12,0.08) 26%, transparent 58%)",
             }}
           />
-          <div className="absolute left-4 top-4 border border-white/12 bg-black/56 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/88 md:left-6 md:top-6">
-            {profile.floorLabel}
-          </div>
           <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-px bg-white/10 md:block" />
         </div>
 
         <div className="relative flex h-full flex-col justify-start overflow-visible px-6 py-6 text-left sm:px-8 md:justify-center md:overflow-y-auto md:px-12 md:py-14">
-          <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-white/10 md:hidden" />
-          <div className="pointer-events-none absolute left-0 right-0 top-8 hidden h-px bg-white/10 md:block" />
-
           <div className="mb-4 mt-3 flex items-start gap-2 text-white/76 md:mt-0">
             <Music2 className="h-4 w-4 text-white/70" />
             <span className="text-[10px] uppercase tracking-[0.28em]">{profile.role}</span>
@@ -796,8 +782,6 @@ function BookingInsideCabin({
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
-
-        <div className="pointer-events-none absolute left-0 right-0 top-[5.2rem] h-px bg-white/10 md:top-10" />
 
         <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto pt-16 md:grid md:h-full md:min-h-0 md:grid-cols-[1.06fr_0.94fr] md:pt-0">
           <div
