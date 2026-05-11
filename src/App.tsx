@@ -8,6 +8,12 @@ type TravelState = "idle" | "closing" | "traveling" | "opening";
 type Stop = "lobby" | "about" | "ara" | "anais" | "talar" | "bliss" | "booking";
 type FloorCode = "00" | "A" | "01" | "02" | "03" | "04" | "B";
 
+type ProfileSocials = {
+  instagram?: string;
+  tiktok?: string;
+  soundcloud?: string;
+};
+
 type Profile = {
   id: "ara" | "anais" | "talar" | "bliss";
   name: string;
@@ -16,6 +22,7 @@ type Profile = {
   genre: string;
   image: string;
   bio: string;
+  socials?: ProfileSocials;
 };
 
 type FloorTarget = {
@@ -93,6 +100,18 @@ import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
 import placeholderProfileImage from "./assets/react.svg";
 
+const socialIconModules = import.meta.glob("./assets/{insta,tiktok,soundcloud}.png", {
+  eager: true,
+  query: "?url",
+  import: "default",
+}) as Record<string, string>;
+
+const socialIcons = {
+  instagram: socialIconModules["./assets/insta.png"],
+  tiktok: socialIconModules["./assets/tiktok.png"],
+  soundcloud: socialIconModules["./assets/soundcloud.png"],
+} satisfies Record<keyof ProfileSocials, string | undefined>;
+
 const profiles: Profile[] = [
   {
     id: "ara",
@@ -101,7 +120,12 @@ const profiles: Profile[] = [
     role: "Resident DJ",
     genre: "House / Open Format",
     image: araImage,
-    bio: "Ara brings a polished late-night energy with smooth transitions, confident pacing, and sets that keep the room moving from the first pour to the last light.",
+    bio: "Ara is a bi-coastal DJ blending house music and Middle Eastern remixes with the energy of late nights in LA and NYC. Inspired by the Ascenseur House aesthetic, his sets move through different levels of bass, tempo, and tension, building from dark late-night sounds into high-energy moments that keep the room moving.",
+    socials: {
+      instagram: "https://www.instagram.com/arahartounian?igsh=NTc4MTIwNjQ2YQ==",
+      tiktok: "https://www.tiktok.com/@aleppoara?_r=1&_t=ZT-96GNZLZe5tN",
+      soundcloud: "https://on.soundcloud.com/1j3fyk9eTVGEHrPnKG",
+    },
   },
   {
     id: "anais",
@@ -588,6 +612,43 @@ function AboutInsideCabin({
   );
 }
 
+function ProfileSocialButton({
+  platform,
+  href,
+}: {
+  platform: keyof ProfileSocials;
+  href?: string;
+}) {
+  const iconSrc = socialIcons[platform];
+  const label = platform === "soundcloud" ? "SoundCloud" : platform.charAt(0).toUpperCase() + platform.slice(1);
+  const content = (
+    <>
+      {iconSrc ? (
+        <img src={iconSrc} alt="" className="h-6 w-6 object-contain sm:h-7 sm:w-7" loading="lazy" decoding="async" />
+      ) : (
+        <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-white/70">{label.slice(0, 2)}</span>
+      )}
+      <span className="sr-only">{href ? `Open ${label}` : `${label} link coming soon`}</span>
+    </>
+  );
+  const className =
+    "group flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
+
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} aria-label={`Open ${label}`}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button type="button" className={`${className} cursor-default opacity-55`} aria-label={`${label} link coming soon`} disabled>
+      {content}
+    </button>
+  );
+}
+
 function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: boolean }) {
   const [currentImageSrc, setCurrentImageSrc] = React.useState(profile.image);
 
@@ -600,6 +661,8 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
     [profile.bio]
   );
 
+  const socialPlatforms: Array<keyof ProfileSocials> = ["instagram", "soundcloud", "tiktok"];
+
   return (
     <motion.div
       key={profile.id}
@@ -609,32 +672,28 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       className="absolute inset-0 z-[100] overflow-hidden"
     >
-      <div className="relative grid h-full w-full grid-cols-1 overflow-hidden bg-[#060606] md:grid-cols-[1.08fr_0.92fr]">
-        <motion.div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.44)_42%,rgba(0,0,0,0.84)_100%)]" />
+      <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#050101] md:grid md:grid-cols-[0.47fr_0.53fr]">
+        <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,0,0,0.46)_0%,rgba(70,0,0,0.52)_42%,rgba(0,0,0,0.92)_76%,rgba(42,0,0,0.6)_100%)]" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(circle at 34% 45%, rgba(122,12,12,0.18) 0%, rgba(122,12,12,0.08) 28%, transparent 62%)",
+                "radial-gradient(circle at 70% 48%, rgba(122,12,12,0.34) 0%, rgba(122,12,12,0.14) 33%, transparent 68%)",
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black via-black/68 to-transparent" />
           <motion.div
-            className="absolute top-0 h-full w-[28%] opacity-16 blur-xl md:w-[38%] md:opacity-30 md:blur-3xl"
+            className="absolute top-0 h-full w-[30%] opacity-20 blur-xl md:w-[36%] md:opacity-30 md:blur-3xl"
             style={{
               background:
-                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.12) 16%, rgba(122,12,12,0.5) 50%, rgba(122,12,12,0.12) 84%, transparent 100%)",
             }}
             animate={{ x: ["-25%", "140%", "-25%"] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
 
-        <div className="relative h-[42vh] overflow-hidden md:h-full">
+        <div className="relative h-[44vh] min-h-[18rem] overflow-hidden md:h-full md:min-h-0">
           <img
             src={currentImageSrc}
             alt={profile.name}
@@ -643,35 +702,40 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             onError={() => setCurrentImageSrc(placeholderProfileImage)}
             className="absolute inset-0 h-full w-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-black/44 md:bg-black/24" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.38)_0%,rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0)_38%,rgba(0,0,0,0.86)_100%)]" />
+          <div className="absolute inset-0 bg-black/28 md:bg-black/12" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_54%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.05)_58%,rgba(0,0,0,0.9)_100%)]" />
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(circle at 22% 55%, rgba(122,12,12,0.18) 0%, rgba(122,12,12,0.08) 26%, transparent 58%)",
+                "radial-gradient(circle at 24% 58%, rgba(122,12,12,0.16) 0%, rgba(122,12,12,0.08) 30%, transparent 62%)",
             }}
           />
-          <div className="pointer-events-none absolute right-0 top-0 hidden h-full w-px bg-white/10 md:block" />
         </div>
 
-        <div className="relative flex h-full flex-col justify-start overflow-visible px-6 py-6 text-left sm:px-8 md:justify-center md:overflow-y-auto md:px-12 md:py-14">
-          <div className="mb-4 mt-3 flex items-start gap-2 text-white/76 md:mt-0">
-            <Music2 className="h-4 w-4 text-white/70" />
-            <span className="text-[10px] uppercase tracking-[0.28em]">{profile.role}</span>
+        <div className="relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-7 pb-24 pt-8 text-left sm:px-10 md:justify-center md:px-14 md:py-16 lg:px-16 xl:px-20">
+          <div className="mb-5 inline-flex w-fit items-center gap-3 bg-black/28 px-4 py-3 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
+            <Music2 className="h-4 w-4 text-white/78" />
+            <span className="text-[0.68rem] font-semibold uppercase tracking-[0.38em] sm:text-xs">{profile.role}</span>
           </div>
 
-          <h2 className="text-[2.2rem] font-semibold leading-[0.94] text-[var(--text)] sm:text-[3rem] md:text-[4.3rem]">
+          <h2 className="text-[4.4rem] font-black uppercase leading-[0.82] tracking-[-0.055em] text-[var(--text)] sm:text-[5.8rem] md:text-[6.6rem] lg:text-[7.6rem] xl:text-[8.4rem]">
             {profile.name}
           </h2>
 
-          <div className="mt-4 inline-block w-fit self-start border border-white/12 bg-black/45 px-3 py-1.5 text-[11px] uppercase tracking-[0.16em] text-white/92 sm:text-sm">
+          <div className="mt-5 inline-block w-fit self-start border border-white/12 bg-black/38 px-4 py-2 text-sm font-bold uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-base md:text-lg">
             {profile.genre}
           </div>
 
-          <div className="mt-5 max-w-full space-y-4 text-sm leading-6 text-white/70 sm:text-[15px] md:mt-7 md:max-w-[40ch] md:leading-7">
+          <div className="mt-7 max-w-[46rem] space-y-5 text-xl leading-[1.22] tracking-[-0.025em] text-white/86 sm:text-2xl md:mt-8 md:text-[1.6rem] lg:text-[1.78rem]">
             {bioParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+
+          <div className="mt-9 flex items-center gap-4 sm:gap-5">
+            {socialPlatforms.map((platform) => (
+              <ProfileSocialButton key={platform} platform={platform} href={profile.socials?.[platform]} />
             ))}
           </div>
         </div>
