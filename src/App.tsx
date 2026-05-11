@@ -1,6 +1,6 @@
 import React from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { CalendarDays, Mail, Music2, Phone } from "lucide-react";
+import { CalendarDays, Music2 } from "lucide-react";
 import "./index.css";
 
 type View = "lobby" | "profile" | "booking";
@@ -851,131 +851,121 @@ function BookingInsideCabin({
           />
         </motion.div>
 
-        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto pt-16 md:grid md:h-full md:min-h-0 md:grid-cols-[1.06fr_0.94fr] md:pt-0">
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-[1] hidden w-[38%] bg-[linear-gradient(90deg,transparent_0%,rgba(0,0,0,0.62)_34%,rgba(0,0,0,0.92)_100%)] md:block" />
+        <div className="pointer-events-none absolute inset-y-[12%] left-[64%] z-[2] hidden w-px bg-white/10 shadow-[0_0_34px_rgba(122,12,12,0.42)] md:block" />
+
+        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto pt-20 md:h-full md:min-h-0 md:pt-0">
           <div
-  ref={desktopFormScrollRef}
-  onWheelCapture={handleDesktopWheelCapture}
-  onTouchStart={handleDesktopTouchStart}
-  onTouchMove={handleDesktopTouchMove}
-  className="min-h-0 overflow-visible px-6 py-4 pb-8 sm:px-8 md:overflow-visible md:px-12 md:py-14"
->
-            <div className="mb-3 flex items-start gap-2 text-white/78">
-              <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
-              <span className="text-[10px] uppercase tracking-[0.28em]">Private Inquiry</span>
-            </div>
-
-            <h2 className="text-[2.1rem] font-semibold leading-[0.98] text-[var(--text)] sm:text-[3rem] md:text-[4rem]">
-              Book Ascenseur House
-            </h2>
-
-            <p className="mt-4 max-w-[48ch] text-sm leading-7 text-white/70 sm:text-[15px]">
-              Private events, artist bookings, venue partnerships, and curated experiences.
-            </p>
-
-            <form
-              action="https://formspree.io/f/mvzvlkkq"
-              method="POST"
-              className="relative z-[200] mt-5 pointer-events-auto"
-            >
-              <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                  placeholder="Your Name"
-                />
-
-                <input
-                  type="text"
-                  name="company"
-                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                  placeholder="Company / Venue"
-                />
-
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                  placeholder="Email"
-                />
-
-                <input
-                  type="tel"
-                  name="phone"
-                  className="w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05]"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                  placeholder="Phone"
-                />
-
-                <textarea
-                  name="message"
-                  required
-                  className="min-h-[130px] w-full appearance-none rounded-[18px] border px-4 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-white/24 focus:border-white/20 focus:bg-white/[0.05] sm:col-span-2"
-                  style={{
-                    borderColor: "rgba(255,255,255,0.08)",
-                    background: "rgba(255,255,255,0.03)",
-                  }}
-                  placeholder="Tell us what you are planning, who you want to book, and the feeling you want the night to hold."
-                />
-
-                <div className="pt-2 sm:col-span-2">
-                  <UIButton
-                    type="submit"
-                    className="mt-1 border text-white"
-                    style={{
-                      borderColor: "rgba(255,255,255,0.12)",
-                      background: "rgba(255,255,255,0.06)",
-                    }}
-                  >
-                    Send Inquiry
-                  </UIButton>
-                </div>
-              </div>
-            </form>
-          </div>
-
-          <div
-            className="shrink-0 border-t px-6 py-6 sm:px-8 md:min-h-0 md:overflow-y-auto md:border-l md:border-t-0 md:px-10 md:py-14"
-            style={{
-              borderColor: "rgba(255,255,255,0.08)",
-              background: "rgba(255,255,255,0.015)",
-            }}
+            ref={desktopFormScrollRef}
+            onWheelCapture={handleDesktopWheelCapture}
+            onTouchStart={handleDesktopTouchStart}
+            onTouchMove={handleDesktopTouchMove}
+            className="min-h-0 w-full overflow-visible px-6 py-8 pb-16 sm:px-10 md:h-full md:overflow-y-auto md:px-0 md:pb-20 md:pt-28"
           >
-            <p className="text-[10px] uppercase tracking-[0.22em] text-white/42">Direct Contact</p>
-
-            <div className="mt-5 space-y-4 text-sm text-white/78">
-              <div className="flex items-start gap-3 break-all sm:break-normal">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-white/70" />
-                <span>bookings@ascenseurhouse.com</span>
+            <div className="mx-0 w-full max-w-[78rem] px-0 md:ml-[clamp(3rem,8vw,9rem)] md:mr-[20rem] md:w-auto lg:ml-[clamp(5rem,9vw,11rem)]">
+              <div className="mb-6 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-3 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
+                <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
+                <span className="text-[10px] uppercase tracking-[0.34em]">Private Inquiry</span>
               </div>
 
-              <div className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/70" />
-                <span>(000) 000-0000</span>
-              </div>
-            </div>
+              <h2 className="max-w-[15ch] text-left text-[clamp(2.65rem,7vw,7.65rem)] font-semibold leading-[0.9] tracking-[0.16em] text-[var(--text)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.52)] sm:tracking-[0.2em]">
+                Book Ascenseur House
+              </h2>
 
-            <div className="mt-6 border border-white/10 bg-black/30 p-4 text-sm leading-7 text-white/62">
-              A quieter, more concierge-style side panel lives here. The goal is less booking form, more private arrangements desk.
+              <p className="mt-7 max-w-[56ch] text-left text-base leading-8 text-white/70 sm:text-lg md:text-xl md:leading-9">
+                Private events, artist bookings, venue partnerships, and curated experiences shaped with the atmosphere of Ascenseur House.
+              </p>
+
+              <form
+                action="https://formspree.io/f/mvzvlkkq"
+                method="POST"
+                className="relative z-[200] mt-10 max-w-[70rem] pointer-events-auto"
+              >
+                <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
+
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:gap-6">
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    className="w-full appearance-none rounded-[22px] border px-5 py-4 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-5 sm:text-lg"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.1)",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
+                    }}
+                    placeholder="Name"
+                  />
+
+                  <input
+                    type="text"
+                    name="company"
+                    className="w-full appearance-none rounded-[22px] border px-5 py-4 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-5 sm:text-lg"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.1)",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
+                    }}
+                    placeholder="Company / Venue"
+                  />
+
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    className="w-full appearance-none rounded-[22px] border px-5 py-4 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-5 sm:text-lg"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.1)",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
+                    }}
+                    placeholder="Email"
+                  />
+
+                  <input
+                    type="tel"
+                    name="phone"
+                    className="w-full appearance-none rounded-[22px] border px-5 py-4 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-5 sm:text-lg"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.1)",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
+                    }}
+                    placeholder="Phone Number"
+                  />
+
+                  <textarea
+                    name="message"
+                    required
+                    className="min-h-[180px] w-full appearance-none rounded-[22px] border px-5 py-4 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-5 sm:text-lg md:min-h-[210px]"
+                    style={{
+                      borderColor: "rgba(255,255,255,0.1)",
+                      background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 22px 48px rgba(0,0,0,0.22)",
+                    }}
+                    placeholder="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
+                  />
+
+                  <div className="flex flex-col items-start gap-6 pt-2 sm:col-span-2 md:flex-row md:items-center md:justify-between">
+                    <UIButton
+                      type="submit"
+                      className="border px-7 py-3.5 text-white sm:px-9"
+                      style={{
+                        borderColor: "rgba(255,255,255,0.14)",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(122,12,12,0.22))",
+                      }}
+                    >
+                      Send Inquiry
+                    </UIButton>
+
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/62 sm:text-base">
+                      <span className="uppercase tracking-[0.22em] text-white/38">Direct Contact</span>
+                      <span>(626) 240-6905</span>
+                      <span className="break-all">ascenseurhouse@gmail.com</span>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
