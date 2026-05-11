@@ -126,13 +126,13 @@ const profiles: Profile[] = [
   },
   {
     id: "anais",
-    name: "Anais",
+    name: "Anaïs",
     floorNumber: "02",
     role: "Resident DJ",
     genre: "Afro House / Melodic House",
     image:
       "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80",
-    bio: "Anais leans into rhythm and atmosphere, building elegant sets with soulful percussion, melodic lift, and a pulse that feels cinematic without losing the dancefloor.",
+    bio: "Anaïs leans into rhythm and atmosphere, building elegant sets with soulful percussion, melodic lift, and a pulse that feels cinematic without losing the dancefloor.",
   },
   {
     id: "talar",
@@ -179,15 +179,15 @@ function getStopProgress(stop: Stop): number {
     case "about":
       return 0.12;
     case "ara":
-      return 0.3;
+      return 0.27;
     case "anais":
-      return 0.48;
+      return 0.42;
     case "talar":
-      return 0.66;
+      return 0.57;
     case "bliss":
-      return 0.79;
+      return 0.72;
     case "booking":
-      return 0.93;
+      return 0.9;
   }
 }
 
@@ -523,7 +523,7 @@ function AboutInsideCabin({
 }) {
   const djButtons = [
     { name: "Ara", floor: "Floor 01", image: araButtonImage, onClick: onGoToAra },
-    { name: "Anais", floor: "Floor 02", image: profiles[1].image, onClick: onGoToAnais },
+    { name: "Anaïs", floor: "Floor 02", image: profiles[1].image, onClick: onGoToAnais },
     { name: "Talar", floor: "Floor 03", image: profiles[2].image, onClick: onGoToTalar },
     { name: "Bliss Eliss", floor: "Floor 04", image: profiles[3].image, onClick: onGoToBliss },
   ];
@@ -568,13 +568,15 @@ function AboutInsideCabin({
               CURATED TO ELEVATE
             </p>
 
-            <p className="max-w-[74rem] text-center text-[clamp(1rem,1.38vw,1.62rem)] font-light leading-snug tracking-[0.005em] text-white/85">
-              Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
-            </p>
+            <div className="flex max-w-[74rem] flex-col items-center gap-2 text-center sm:gap-2.5">
+              <p className="text-center text-[clamp(1rem,1.32vw,1.54rem)] font-light leading-[1.22] tracking-[0.005em] text-white/85">
+                Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
+              </p>
 
-            <p className="max-w-[58rem] text-center text-[clamp(0.96rem,1.2vw,1.35rem)] font-light leading-snug text-white/80">
-              This isn’t just a lineup, theres levels to this shit
-            </p>
+              <p className="max-w-[58rem] text-center text-[clamp(0.98rem,1.24vw,1.42rem)] font-light leading-[1.22] text-white/80">
+                This isn’t just a lineup, theres levels to this shit
+              </p>
+            </div>
 
             <div className="flex w-full flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] text-center">
               <h3 className="text-center text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
@@ -625,7 +627,7 @@ function ProfileSocialButton({
     </>
   );
   const className =
-    "group pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
+    "group pointer-events-auto relative z-[2] flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
 
   if (href) {
     return (
@@ -726,7 +728,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             ))}
           </div>
 
-          <div className="mt-8 flex items-center gap-4 sm:gap-5">
+          <div className="pointer-events-auto relative z-[3] mt-8 flex items-center gap-4 sm:gap-5">
             {socialPlatforms.map((platform) => (
               <ProfileSocialButton key={platform} platform={platform} href={profile.socials?.[platform]} />
             ))}
@@ -1050,10 +1052,10 @@ function ElevatorScene({
               {isLobby ? (
                 <motion.div
                   key="lobby"
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -24 }}
-                  transition={{ duration: 0.24 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                   className="pointer-events-auto mx-auto flex w-full max-w-[92rem] flex-col items-center px-4 text-center sm:px-6"
                 >
                   <img
@@ -1601,23 +1603,21 @@ export default function App() {
         />
       </div>
 
-{view !== "booking" && (
-  <ScrollController
-    currentStop={currentStop}
-    isTransitioning={isTransitioning}
-    isAutoScrollingRef={isAutoScrollingRef}
-    containerRef={scrollAreaRef}
-    onEnterLobby={goLobby}
-    onEnterAbout={goToAbout}
-    onEnterProfile={openProfile}
-    onEnterBooking={openBooking}
-    onLobbyProgress={(progress) => {
-      if (forceClosedLobby) return;
-      if (progress > 0) setHasLeftLobby(true);
-      setLobbyDoorProgress(progress);
-    }}
-  />
-)}
+      <ScrollController
+        currentStop={currentStop}
+        isTransitioning={isTransitioning}
+        isAutoScrollingRef={isAutoScrollingRef}
+        containerRef={scrollAreaRef}
+        onEnterLobby={goLobby}
+        onEnterAbout={goToAbout}
+        onEnterProfile={openProfile}
+        onEnterBooking={openBooking}
+        onLobbyProgress={(progress) => {
+          if (forceClosedLobby) return;
+          if (progress > 0) setHasLeftLobby(true);
+          setLobbyDoorProgress(progress);
+        }}
+      />
     
     </div>
   );
