@@ -97,6 +97,7 @@ import logo from "./assets/logo.png";
 import aboutHeaderImage from "./assets/header.png";
 import araButtonImage from "./assets/eb.jpg";
 import araImage from "./assets/ara.jpeg";
+import anaisImage from "./assets/anais.png";
 import blissImage from "./assets/blisseliss.jpg";
 import instaIcon from "./assets/insta.png";
 import tiktokIcon from "./assets/tiktok.png";
@@ -130,8 +131,7 @@ const profiles: Profile[] = [
     floorNumber: "02",
     role: "Resident DJ",
     genre: "Afro House / Melodic House",
-    image:
-      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80",
+    image: anaisImage,
     bio: "Anaïs leans into rhythm and atmosphere, building elegant sets with soulful percussion, melodic lift, and a pulse that feels cinematic without losing the dancefloor.",
   },
   {
