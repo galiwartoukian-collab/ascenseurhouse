@@ -627,7 +627,7 @@ function ProfileSocialButton({
     </>
   );
   const className =
-    "group pointer-events-auto relative z-[121] flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
+    "group pointer-events-auto relative flex h-12 w-12 items-center justify-center rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_14px_28px_rgba(0,0,0,0.35)] transition duration-300 hover:scale-110 hover:shadow-[0_0_18px_rgba(255,255,255,0.2),0_0_34px_rgba(122,12,12,0.36)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white/70 sm:h-14 sm:w-14";
 
   if (href) {
     return (
@@ -728,7 +728,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
             ))}
           </div>
 
-          <div className="pointer-events-auto relative z-[120] mt-8 flex items-center gap-4 sm:gap-5">
+          <div className="pointer-events-auto relative mt-8 flex items-center gap-4 sm:gap-5">
             {socialPlatforms.map((platform) => (
               <ProfileSocialButton key={platform} platform={platform} href={profile.socials?.[platform]} />
             ))}
@@ -746,50 +746,73 @@ function BookingInsideCabin({
   visible: boolean;
   onExitUp: () => void;
 }) {
+  const bookingRootRef = React.useRef<HTMLDivElement | null>(null);
   const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartedOnInteractiveRef = React.useRef(false);
 
-  const handleMobileWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    if (el.scrollTop <= 0 && e.deltaY < 0) {
-      e.preventDefault();
-      onExitUp();
-    }
-  };
+  React.useEffect(() => {
+    const interactiveSelector = "input, textarea, select, button, a, label";
 
-  const handleMobileTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLElement | null;
-    touchStartedOnInteractiveRef.current = Boolean(
-      target?.closest("input, textarea, select, button, a, label")
-    );
-    touchStartYRef.current = e.touches[0]?.clientY ?? null;
-  };
+    const targetIsInsideBooking = (target: EventTarget | null) =>
+      target instanceof Node && Boolean(bookingRootRef.current?.contains(target));
 
-  const handleMobileTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    const el = mobileScrollRef.current;
-    if (!el || touchStartYRef.current == null) return;
-    if (touchStartedOnInteractiveRef.current) return;
+    const targetIsInteractive = (target: EventTarget | null) =>
+      target instanceof Element && Boolean(target.closest(interactiveSelector));
 
-    const currentY = e.touches[0]?.clientY ?? touchStartYRef.current;
-    const deltaY = currentY - touchStartYRef.current;
+    const getActiveScrollElement = () => {
+      if (window.matchMedia(`(min-width: ${MOBILE_BREAKPOINT_PX}px)`).matches) {
+        return desktopFormScrollRef.current;
+      }
 
-    if (el.scrollTop <= 0 && deltaY > 14) {
-      onExitUp();
-      touchStartYRef.current = null;
-    }
-  };
+      return mobileScrollRef.current;
+    };
 
-  const handleDesktopWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    const el = desktopFormScrollRef.current;
-    if (!el) return;
-    if (el.scrollTop <= 0 && e.deltaY < 0) {
-      e.preventDefault();
-      onExitUp();
-    }
-  };
+    const handleWheel = (event: WheelEvent) => {
+      if (!targetIsInsideBooking(event.target) || targetIsInteractive(event.target)) return;
+
+      const el = getActiveScrollElement();
+      if (!el) return;
+
+      if (el.scrollTop <= 0 && event.deltaY < 0) {
+        event.preventDefault();
+        onExitUp();
+      }
+    };
+
+    const handleTouchStart = (event: TouchEvent) => {
+      if (!targetIsInsideBooking(event.target)) return;
+
+      touchStartedOnInteractiveRef.current = targetIsInteractive(event.target);
+      touchStartYRef.current = event.touches[0]?.clientY ?? null;
+    };
+
+    const handleTouchMove = (event: TouchEvent) => {
+      if (!targetIsInsideBooking(event.target) || touchStartedOnInteractiveRef.current) return;
+
+      const el = getActiveScrollElement();
+      if (!el || touchStartYRef.current == null) return;
+
+      const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
+      const deltaY = currentY - touchStartYRef.current;
+
+      if (el.scrollTop <= 0 && deltaY > 14) {
+        onExitUp();
+        touchStartYRef.current = null;
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [onExitUp]);
 
   return (
     <motion.div
@@ -798,13 +821,11 @@ function BookingInsideCabin({
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
+      ref={bookingRootRef}
       className="pointer-events-auto absolute inset-0 isolate z-50 overflow-hidden"
     >
       <div
         ref={mobileScrollRef}
-        onWheel={handleMobileWheel}
-        onTouchStart={handleMobileTouchStart}
-        onTouchMove={handleMobileTouchMove}
         className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-contain bg-[#060607] md:overflow-hidden"
       >
         <motion.div
@@ -836,10 +857,9 @@ function BookingInsideCabin({
         <div className="pointer-events-auto relative z-30 flex min-h-full flex-col pt-20 md:h-full md:min-h-0 md:pt-0">
           <div
             ref={desktopFormScrollRef}
-            onWheel={handleDesktopWheel}
-            className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 pr-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 md:pr-48 lg:px-14 lg:pr-56"
+            className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 lg:px-14"
           >
-            <div className="mx-auto flex w-full max-w-[64rem] flex-col items-center px-0 text-center">
+            <div className="pointer-events-auto relative mx-auto flex w-full max-w-[58rem] flex-col items-center px-0 text-center md:max-w-[min(58rem,calc(100vw-21.5rem))] xl:max-w-[58rem]">
               <div className="mb-4 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-2.5 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
                 <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
                 <span className="text-[10px] uppercase tracking-[0.34em]">Private Inquiry</span>
@@ -1285,7 +1305,7 @@ function ScrollController({
   return (
     <div
       ref={containerRef}
-      className="relative w-full"
+      className="pointer-events-none relative w-full"
       style={{ height: `${SCROLL_TRACK_HEIGHT_VH}vh` }}
       aria-hidden="true"
     />
