@@ -32,6 +32,10 @@ type ElevatorSceneProps = {
   travelState: TravelState;
   lobbyDoorProgress: number;
   onExitBookingUp: () => void;
+  onGoToAra: () => void;
+  onGoToAnais: () => void;
+  onGoToTalar: () => void;
+  onGoToBliss: () => void;
 };
 
 type ElevatorPanelProps = {
@@ -84,6 +88,7 @@ const FLOOR_DOOR_DURATION = 0.58;
 
 import logo from "./assets/logo.png";
 import aboutHeaderImage from "./assets/header.png";
+import araButtonImage from "./assets/eb.jpg";
 import araImage from "./assets/ara.jpeg";
 import blissImage from "./assets/blisseliss.jpg";
 import placeholderProfileImage from "./assets/react.svg";
@@ -482,7 +487,26 @@ function TravelIndicator({
   );
 }
 
-function AboutInsideCabin({ visible }: { visible: boolean }) {
+function AboutInsideCabin({
+  visible,
+  onGoToAra,
+  onGoToAnais,
+  onGoToTalar,
+  onGoToBliss,
+}: {
+  visible: boolean;
+  onGoToAra: () => void;
+  onGoToAnais: () => void;
+  onGoToTalar: () => void;
+  onGoToBliss: () => void;
+}) {
+  const djButtons = [
+    { name: "Ara", floor: "Floor 01", image: araButtonImage, onClick: onGoToAra },
+    { name: "Anais", floor: "Floor 02", image: profiles[1].image, onClick: onGoToAnais },
+    { name: "Talar", floor: "Floor 03", image: aboutHeaderImage, onClick: onGoToTalar },
+    { name: "Bliss Eliss", floor: "Floor 04", image: profiles[3].image, onClick: onGoToBliss },
+  ];
+
   return (
     <motion.div
       key="about"
@@ -490,20 +514,20 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-[100] overflow-hidden"
+      className="absolute inset-0 z-[100] overflow-y-auto overflow-x-hidden"
     >
-      <section className="relative h-full w-full overflow-hidden bg-black text-white">
+      <section className="relative min-h-full w-full overflow-hidden bg-black text-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_56%,rgba(122,12,12,0.34),transparent_35%),radial-gradient(circle_at_50%_100%,rgba(122,12,12,0.42),transparent_48%),linear-gradient(180deg,#020202_0%,#050000_58%,#000_100%)]"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(122,12,12,0.28),transparent_31%),radial-gradient(circle_at_50%_88%,rgba(122,12,12,0.5),transparent_46%),linear-gradient(180deg,#020202_0%,#070000_52%,#000_100%)]"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-[8%] top-[45%] h-[42vh] rounded-full bg-[rgba(122,12,12,0.22)] blur-[90px]"
+          className="pointer-events-none absolute inset-x-[5%] top-[38%] h-[58vh] rounded-full bg-[rgba(122,12,12,0.2)] blur-[100px]"
         />
 
         <div className="relative z-10 flex min-h-full flex-col items-center text-center">
-          <div className="relative h-[42vh] min-h-[250px] w-full sm:h-[44vh] md:h-[46vh]">
+          <div className="relative h-[38vh] min-h-[224px] w-full sm:h-[40vh] md:h-[42vh] lg:h-[43vh]">
             <img
               src={aboutHeaderImage}
               alt="Ascenseur House atmosphere"
@@ -511,25 +535,52 @@ function AboutInsideCabin({ visible }: { visible: boolean }) {
             />
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.7)_100%)]"
+              className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.88)_100%)]"
             />
-            <h2 className="absolute inset-x-0 bottom-[-0.22em] mx-auto px-2 text-center text-[clamp(3.6rem,13.8vw,14.5rem)] font-black uppercase leading-[0.78] tracking-[-0.08em] text-white">
+            <h2 className="absolute inset-x-0 bottom-[-0.24em] mx-auto origin-center scale-x-[0.88] whitespace-normal px-3 text-center text-[clamp(2.95rem,12.35vw,13.3rem)] font-semibold uppercase leading-[0.78] tracking-[-0.045em] text-white sm:scale-x-[0.91] sm:text-[clamp(4.15rem,12.45vw,14rem)] md:scale-x-[0.92] md:whitespace-nowrap md:text-[clamp(5.85rem,10.9vw,13.6rem)] lg:tracking-[-0.035em]">
               ASCENSEUR HOUSE
             </h2>
           </div>
 
-          <div className="relative flex w-full flex-1 flex-col items-center px-5 pb-16 pt-[clamp(3.75rem,6vw,7.25rem)] sm:px-8 md:px-12 md:pb-20">
-            <p className="max-w-[92rem] text-[clamp(1.05rem,1.78vw,2rem)] font-light leading-snug tracking-[0.01em] text-white/86">
-              Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped
-            </p>
-
-            <p className="mt-10 text-[clamp(1.25rem,2.1vw,2.55rem)] font-medium uppercase leading-none tracking-[0.5em] text-white sm:mt-12 md:mt-14 md:tracking-[0.64em]">
+          <div className="relative flex w-full flex-1 flex-col items-center px-5 pb-14 pt-[clamp(2.55rem,4.45vw,5.25rem)] sm:px-8 md:pb-16 md:pl-12 md:pr-[12rem] lg:pr-[14rem] xl:pl-[4.5rem] xl:pr-[15rem]">
+            <p className="text-[clamp(1rem,1.62vw,1.86rem)] font-medium uppercase leading-none tracking-[0.42em] text-white sm:tracking-[0.5em] md:tracking-[0.6em]">
               CURATED TO ELEVATE
             </p>
 
-            <p className="mt-7 max-w-[58rem] text-[clamp(1rem,1.7vw,1.72rem)] font-light leading-snug text-white/80 sm:mt-8">
+            <p className="mt-3 max-w-[74rem] text-[clamp(0.98rem,1.36vw,1.58rem)] font-light leading-snug tracking-[0.005em] text-white/85 sm:mt-4">
+              Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
+            </p>
+
+            <p className="mt-2.5 max-w-[56rem] text-[clamp(0.9rem,1.12vw,1.24rem)] font-light leading-snug text-white/80 sm:mt-3">
               This isn’t just a lineup, theres levels to this shit
             </p>
+
+            <div className="mt-5 flex w-full flex-col items-center sm:mt-6">
+              <h3 className="text-[clamp(1.85rem,2.85vw,2.9rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
+                DJS
+              </h3>
+
+              <div className="mt-4 grid w-full max-w-[61rem] grid-cols-2 justify-items-center gap-x-6 gap-y-5 sm:mt-5 sm:grid-cols-4 sm:gap-x-7 md:gap-x-8 lg:gap-x-9">
+                {djButtons.map((dj) => (
+                  <button
+                    key={dj.name}
+                    type="button"
+                    onClick={dj.onClick}
+                    aria-label={`Go to ${dj.name} on ${dj.floor}`}
+                    className="group flex flex-col items-center gap-2 text-center outline-none"
+                  >
+                    <span className="relative block h-[clamp(6.75rem,13.6vw,10.7rem)] w-[clamp(6.75rem,13.6vw,10.7rem)] overflow-hidden rounded-full bg-black shadow-[0_0_20px_rgba(122,12,12,0.22)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_62px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
+                      <img src={dj.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
+                      <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
+                    </span>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/58 transition group-hover:text-white/80">
+                      {dj.floor}
+                    </span>
+                    <span className="sr-only">{dj.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -883,6 +934,10 @@ function ElevatorScene({
   travelState,
   lobbyDoorProgress,
   onExitBookingUp,
+  onGoToAra,
+  onGoToAnais,
+  onGoToTalar,
+  onGoToBliss,
 }: ElevatorSceneProps) {
   const isLobby = view === "lobby";
   const doorsOpen = !isLobby && (travelState === "opening" || travelState === "idle");
@@ -969,7 +1024,15 @@ function ElevatorScene({
                   {view === "profile" && selectedProfile && (
                     <ProfileInsideCabin profile={selectedProfile} visible={contentVisible} />
                   )}
-                  {view === "profile" && !selectedProfile && <AboutInsideCabin visible={contentVisible} />}
+                  {view === "profile" && !selectedProfile && (
+                    <AboutInsideCabin
+                      visible={contentVisible}
+                      onGoToAra={onGoToAra}
+                      onGoToAnais={onGoToAnais}
+                      onGoToTalar={onGoToTalar}
+                      onGoToBliss={onGoToBliss}
+                    />
+                  )}
                   {view === "booking" && <BookingInsideCabin visible={contentVisible} onExitUp={onExitBookingUp} />}
                 </>
               )}
@@ -1467,6 +1530,10 @@ export default function App() {
           travelState={travelState}
           lobbyDoorProgress={forceClosedLobby ? 0 : hasLeftLobby ? lobbyDoorProgress : 0}
           onExitBookingUp={goToBliss}
+          onGoToAra={goToAra}
+          onGoToAnais={goToAnais}
+          onGoToTalar={goToTalar}
+          onGoToBliss={goToBliss}
         />
       </div>
 
