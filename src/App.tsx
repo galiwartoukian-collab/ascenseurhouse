@@ -706,27 +706,27 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </div>
 
-        <div className="pointer-events-auto relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-7 pb-24 pt-8 text-left sm:px-10 md:justify-center md:px-14 md:py-16 lg:px-16 xl:px-20">
-          <div className="mb-4 inline-flex w-fit items-center gap-3 bg-black/28 px-3.5 py-2.5 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
-            <Music2 className="h-4 w-4 text-white/78" />
-            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.38em] sm:text-[0.68rem]">{profile.role}</span>
+        <div className="pointer-events-auto relative flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
+          <div className="mb-3.5 inline-flex w-fit items-center gap-2.5 bg-black/28 px-3 py-2 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
+            <Music2 className="h-3.5 w-3.5 text-white/78" />
+            <span className="text-[0.58rem] font-semibold uppercase tracking-[0.36em] sm:text-[0.62rem]">{profile.role}</span>
           </div>
 
-          <h2 className="text-[3.9rem] font-black uppercase leading-[0.82] tracking-[-0.055em] text-[var(--text)] sm:text-[5.1rem] md:text-[5.9rem] lg:text-[6.8rem] xl:text-[7.5rem]">
+          <h2 className="text-[3.1rem] font-black uppercase leading-[0.82] tracking-[-0.055em] text-[var(--text)] sm:text-[4rem] md:text-[4.5rem] lg:text-[5.2rem] xl:text-[5.8rem]">
             {profile.name}
           </h2>
 
-          <div className="mt-4 inline-block w-fit self-start border border-white/12 bg-black/38 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-sm md:text-base">
+          <div className="mt-3.5 inline-block w-fit self-start border border-white/12 bg-black/38 px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-[0.7rem] md:text-xs">
             {profile.genre}
           </div>
 
-          <div className="mt-5 max-w-[46rem] space-y-4 text-lg leading-[1.18] tracking-[-0.025em] text-white/86 sm:text-xl md:mt-6 md:text-[1.35rem] lg:text-[1.5rem]">
+          <div className="mt-4 max-w-[38rem] space-y-3 text-[0.95rem] leading-[1.14] tracking-[-0.02em] text-white/86 sm:text-base md:mt-5 md:text-[1.05rem] lg:text-[1.12rem] xl:text-[1.18rem]">
             {bioParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
 
-          <div className="mt-9 flex items-center gap-4 sm:gap-5">
+          <div className="mt-8 flex items-center gap-4 sm:gap-5">
             {socialPlatforms.map((platform) => (
               <ProfileSocialButton key={platform} platform={platform} href={profile.socials?.[platform]} />
             ))}
