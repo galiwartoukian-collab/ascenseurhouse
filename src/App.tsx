@@ -527,7 +527,7 @@ function AboutInsideCabin({
         />
 
         <div className="relative z-10 flex min-h-full flex-col items-center text-center">
-          <div className="relative h-[40vh] min-h-[238px] w-full sm:h-[43vh] md:h-[45vh] lg:h-[46vh]">
+          <div className="relative h-[36vh] min-h-[210px] w-full sm:h-[38vh] md:h-[40vh] lg:h-[41vh]">
             <img
               src={aboutHeaderImage}
               alt="Ascenseur House atmosphere"
@@ -537,39 +537,39 @@ function AboutInsideCabin({
               aria-hidden="true"
               className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.88)_100%)]"
             />
-            <h2 className="absolute inset-x-0 bottom-[-0.18em] mx-auto origin-center scale-x-[0.84] whitespace-normal px-2 text-center text-[clamp(3.05rem,13.2vw,14.9rem)] font-black uppercase leading-[0.75] tracking-[-0.09em] text-white sm:scale-x-[0.88] sm:text-[clamp(4.5rem,13.5vw,15.5rem)] md:scale-x-[0.9] md:whitespace-nowrap md:text-[clamp(6.5rem,12.2vw,15.75rem)]">
+            <h2 className="absolute inset-x-0 bottom-[-0.14em] mx-auto origin-center scale-x-[0.9] whitespace-normal px-4 text-center text-[clamp(2.85rem,12.2vw,13.4rem)] font-black uppercase leading-[0.78] tracking-[-0.045em] text-white sm:scale-x-[0.92] sm:text-[clamp(4.15rem,12.1vw,13.7rem)] md:scale-x-[0.94] md:whitespace-nowrap md:text-[clamp(5.9rem,10.45vw,13.4rem)]">
               ASCENSEUR HOUSE
             </h2>
           </div>
 
-          <div className="relative flex w-full flex-1 flex-col items-center px-5 pb-20 pt-[clamp(3.05rem,5.3vw,6.4rem)] sm:px-8 md:pb-24 md:pl-12 md:pr-[12rem] lg:pr-[14rem] xl:pl-[4.5rem] xl:pr-[15rem]">
-            <p className="text-[clamp(1.18rem,1.95vw,2.35rem)] font-medium uppercase leading-none tracking-[0.46em] text-white sm:tracking-[0.58em] md:tracking-[0.68em]">
+          <div className="relative mx-auto flex w-full max-w-[94rem] flex-1 flex-col items-center px-5 pb-10 pt-[clamp(2.3rem,4.2vw,4.6rem)] sm:px-8 sm:pb-12 md:px-12 md:pb-14">
+            <p className="text-[clamp(1.08rem,1.75vw,2.05rem)] font-medium uppercase leading-none tracking-[0.38em] text-white sm:tracking-[0.5em] md:tracking-[0.58em]">
               CURATED TO ELEVATE
             </p>
 
-            <p className="mt-4 max-w-[90rem] text-[clamp(1.03rem,1.55vw,1.86rem)] font-light leading-snug tracking-[0.005em] text-white/85 sm:mt-5">
+            <p className="mt-3 max-w-[74rem] text-[clamp(1rem,1.38vw,1.62rem)] font-light leading-snug tracking-[0.005em] text-white/85 sm:mt-3">
               Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
             </p>
 
-            <p className="mt-4 max-w-[62rem] text-[clamp(0.98rem,1.36vw,1.55rem)] font-light leading-snug text-white/80 sm:mt-5">
+            <p className="mt-2 max-w-[58rem] text-[clamp(0.96rem,1.2vw,1.35rem)] font-light leading-snug text-white/80 sm:mt-3">
               This isn’t just a lineup, theres levels to this shit
             </p>
 
-            <div className="mt-7 flex w-full flex-col items-center sm:mt-8">
-              <h3 className="text-[clamp(2rem,3.4vw,3.45rem)] font-black uppercase leading-none tracking-[-0.02em] text-white">
+            <div className="mt-5 flex w-full flex-col items-center sm:mt-6 md:mt-7">
+              <h3 className="text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
                 DJS
               </h3>
 
-              <div className="mt-6 grid w-full max-w-[68rem] grid-cols-2 justify-items-center gap-x-5 gap-y-7 sm:mt-7 sm:grid-cols-4 sm:gap-x-6 md:gap-x-8 lg:gap-x-10">
+              <div className="mt-4 grid w-full max-w-[54rem] grid-cols-2 justify-items-center gap-x-5 gap-y-5 sm:mt-5 sm:grid-cols-4 sm:gap-x-6 md:gap-x-7 lg:gap-x-8">
                 {djButtons.map((dj) => (
                   <button
                     key={dj.name}
                     type="button"
                     onClick={dj.onClick}
                     aria-label={`Go to ${dj.name} on ${dj.floor}`}
-                    className="group flex flex-col items-center gap-3 text-center outline-none"
+                    className="group flex flex-col items-center gap-2 text-center outline-none"
                   >
-                    <span className="relative block h-[clamp(7rem,16vw,12.25rem)] w-[clamp(7rem,16vw,12.25rem)] overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
+                    <span className="relative block h-[clamp(5.8rem,12.4vw,9.4rem)] w-[clamp(5.8rem,12.4vw,9.4rem)] overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
                       <img src={dj.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
                       <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
                     </span>
@@ -1500,7 +1500,7 @@ export default function App() {
       </div>
 
       <AnimatePresence>
-        {activeFloor !== "00" && travelState === "idle" && (
+        {activeFloor !== "00" && activeFloor !== "A" && travelState === "idle" && (
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
