@@ -304,9 +304,9 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-auto fixed z-[9999] right-0 md:right-10 md:bottom-auto md:top-1/2 md:-translate-y-1/2 origin-right">
+    <div className="pointer-events-none fixed right-0 z-[9999] origin-right md:bottom-auto md:right-10 md:top-1/2 md:-translate-y-1/2">
       {/* MOBILE - OPTION B / MIDDLE RIGHT */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 md:hidden">
+      <div className="pointer-events-auto fixed right-0 top-1/2 -translate-y-1/2 md:hidden">
         <div
           className="rounded-l-[18px] border border-r-0 border-white/10 bg-[#0f1114]/96 px-1.5 py-2 shadow-[0_16px_30px_rgba(0,0,0,0.38)]"
         >
@@ -353,7 +353,7 @@ function ElevatorPanel({
 
       {/* DESKTOP - KEEP CURRENT PANEL */}
       <div
-        className="relative hidden w-[132px] rounded-[26px] border p-[2px] md:block"
+        className="pointer-events-auto relative hidden w-[132px] rounded-[26px] border p-[2px] md:block"
         style={{
           borderColor: "rgba(255,255,255,0.08)",
           background: "#111214",
@@ -819,31 +819,31 @@ function BookingInsideCabin({
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute inset-0 z-50 overflow-hidden"
+      className="pointer-events-auto absolute inset-0 isolate z-50 overflow-hidden"
     >
       <div
         ref={mobileScrollRef}
         onWheelCapture={handleMobileWheelCapture}
         onTouchStart={handleMobileTouchStart}
         onTouchMove={handleMobileTouchMove}
-        className="relative h-full w-full overflow-y-auto overscroll-contain bg-[#060607] md:overflow-hidden"
+        className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-contain bg-[#060607] md:overflow-hidden"
       >
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
         >
-          <div className="absolute inset-0 bg-[linear-gradient(130deg,#050505_0%,#0d0d10_46%,#050505_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.7)_40%,rgba(0,0,0,0.82)_100%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(130deg,#050505_0%,#0d0d10_46%,#050505_100%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.7)_40%,rgba(0,0,0,0.82)_100%)]" />
           <div
-            className="absolute inset-0"
+            className="pointer-events-none absolute inset-0"
             style={{
               background:
                 "radial-gradient(circle at 32% 58%, rgba(122,12,12,0.14) 0%, rgba(122,12,12,0.06) 26%, transparent 62%)",
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/75 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/75 to-transparent" />
           <motion.div
-            className="absolute top-0 h-full w-[26%] opacity-12 blur-xl md:w-[34%] md:opacity-22 md:blur-3xl"
+            className="pointer-events-none absolute top-0 h-full w-[26%] opacity-12 blur-xl md:w-[34%] md:opacity-22 md:blur-3xl"
             style={{
               background:
                 "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
@@ -854,15 +854,15 @@ function BookingInsideCabin({
         </motion.div>
 
 
-        <div className="relative z-[300] flex min-h-full flex-col pointer-events-auto pt-20 md:h-full md:min-h-0 md:pt-0">
+        <div className="pointer-events-auto relative z-10 flex min-h-full flex-col pt-20 md:h-full md:min-h-0 md:pt-0">
           <div
             ref={desktopFormScrollRef}
             onWheelCapture={handleDesktopWheelCapture}
             onTouchStart={handleDesktopTouchStart}
             onTouchMove={handleDesktopTouchMove}
-            className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 lg:px-14"
+            className="pointer-events-auto min-h-0 w-full overflow-visible px-6 py-7 pb-14 pr-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 md:pr-48 lg:px-14 lg:pr-56"
           >
-            <div className="mx-auto flex w-full max-w-[64rem] flex-col items-center px-0 text-center">
+            <div className="pointer-events-auto mx-auto flex w-full max-w-[64rem] flex-col items-center px-0 text-center">
               <div className="mb-4 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-2.5 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
                 <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
                 <span className="text-[10px] uppercase tracking-[0.34em]">Private Inquiry</span>
@@ -879,16 +879,16 @@ function BookingInsideCabin({
               <form
                 action="https://formspree.io/f/mvzvlkkq"
                 method="POST"
-                className="pointer-events-auto relative z-[200] mt-6 w-full max-w-[58rem]"
+                className="pointer-events-auto relative z-20 mt-6 w-full max-w-[58rem]"
               >
                 <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
-                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 md:gap-5">
+                <div className="pointer-events-auto grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 md:gap-5">
                   <input
                     type="text"
                     name="name"
                     required
-                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -900,7 +900,7 @@ function BookingInsideCabin({
                   <input
                     type="text"
                     name="company"
-                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -913,7 +913,7 @@ function BookingInsideCabin({
                     type="email"
                     name="email"
                     required
-                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -925,7 +925,7 @@ function BookingInsideCabin({
                   <input
                     type="tel"
                     name="phone"
-                    className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                    className="pointer-events-auto w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -937,7 +937,7 @@ function BookingInsideCabin({
                   <textarea
                     name="message"
                     required
-                    className="min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
+                    className="pointer-events-auto min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
                     style={{
                       borderColor: "rgba(255,255,255,0.1)",
                       background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -946,10 +946,10 @@ function BookingInsideCabin({
                     placeholder="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                   />
 
-                  <div className="flex flex-col items-center gap-4 pt-1 sm:col-span-2">
+                  <div className="pointer-events-auto flex flex-col items-center gap-4 pt-1 sm:col-span-2">
                     <UIButton
                       type="submit"
-                      className="border px-7 py-3.5 text-white sm:px-9"
+                      className="pointer-events-auto cursor-pointer border px-7 py-3.5 text-white sm:px-9"
                       style={{
                         borderColor: "rgba(255,255,255,0.14)",
                         background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(122,12,12,0.22))",
