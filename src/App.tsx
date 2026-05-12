@@ -993,7 +993,16 @@ function ElevatorScene({
   const contentVisible = !isLobby && travelState === "idle";
   const cinematicGlow = !isLobby && (travelState === "opening" || travelState === "traveling");
   const cabinShake = travelState === "traveling" ? -1.5 : travelState === "opening" ? 0.4 : 0;
-  const lobbyDoorOffset = `${Math.min(lobbyDoorProgress * 104, 104)}%`;
+  const clampedLobbyDoorProgress = Math.max(0, Math.min(lobbyDoorProgress, 1));
+  const lobbyDoorOffset = `${Math.min(clampedLobbyDoorProgress * 104, 104)}%`;
+  const lobbyContentOpacity =
+    clampedLobbyDoorProgress <= 0.35
+      ? 1 - (clampedLobbyDoorProgress / 0.35) * 0.25
+      : clampedLobbyDoorProgress <= 0.7
+        ? 0.75 - ((clampedLobbyDoorProgress - 0.35) / 0.35) * 0.5
+        : Math.max(0, 0.25 - ((clampedLobbyDoorProgress - 0.7) / 0.3) * 0.25);
+  const lobbyContentY = -24 * clampedLobbyDoorProgress;
+  const lobbyContentScale = 1 - 0.02 * clampedLobbyDoorProgress;
   const showTravelSweep = travelState === "traveling" || travelState === "opening";
 
   return (
@@ -1058,32 +1067,41 @@ function ElevatorScene({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                  className="pointer-events-auto mx-auto flex w-full max-w-[92rem] flex-col items-center px-4 text-center sm:px-6"
+                  className="pointer-events-auto mx-auto w-full max-w-[92rem] px-4 text-center sm:px-6"
                 >
-                  <img
-                    src={logo}
-                    alt="Ascenseur House"
-                    className="mb-[clamp(0.85rem,1.4vw,1.35rem)] h-[clamp(5.4rem,9.1vw,9.25rem)] w-auto object-contain opacity-95 drop-shadow-[0_0_22px_rgba(255,255,255,0.12)]"
-                  />
-                  <h1
-                    className="origin-center scale-x-[0.96] whitespace-nowrap text-center text-[clamp(1.9rem,9.75vw,4rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.32)] sm:scale-x-100 sm:text-[clamp(3.85rem,8.65vw,8rem)] md:scale-x-[1.04] md:text-[clamp(5.35rem,8.4vw,8.65rem)]"
+                  <motion.div
+                    className="flex flex-col items-center"
                     style={{
-                      fontFamily:
-                        '"Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                      fontStretch: "expanded",
-                      fontWeight: 900,
+                      opacity: lobbyContentOpacity,
+                      y: lobbyContentY,
+                      scale: lobbyContentScale,
                     }}
                   >
-                    ASCENSEUR HOUSE
-                  </h1>
-                  <p
-                    className="mt-[clamp(0.66rem,0.9vw,0.95rem)] text-[clamp(0.72rem,1.12vw,1.22rem)] font-semibold uppercase leading-none tracking-[0.44em] text-white/92 sm:tracking-[0.54em] md:tracking-[0.62em]"
-                    style={{
-                      fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
-                    }}
-                  >
-                    CURATED TO ELEVATE
-                  </p>
+                    <img
+                      src={logo}
+                      alt="Ascenseur House"
+                      className="mb-[clamp(0.85rem,1.4vw,1.35rem)] h-[clamp(5.4rem,9.1vw,9.25rem)] w-auto object-contain opacity-95 drop-shadow-[0_0_22px_rgba(255,255,255,0.12)]"
+                    />
+                    <h1
+                      className="origin-center scale-x-[0.96] whitespace-nowrap text-center text-[clamp(1.9rem,9.75vw,4rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.32)] sm:scale-x-100 sm:text-[clamp(3.85rem,8.65vw,8rem)] md:scale-x-[1.04] md:text-[clamp(5.35rem,8.4vw,8.65rem)]"
+                      style={{
+                        fontFamily:
+                          '"Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif',
+                        fontStretch: "expanded",
+                        fontWeight: 900,
+                      }}
+                    >
+                      ASCENSEUR HOUSE
+                    </h1>
+                    <p
+                      className="mt-[clamp(0.66rem,0.9vw,0.95rem)] text-[clamp(0.72rem,1.12vw,1.22rem)] font-semibold uppercase leading-none tracking-[0.44em] text-white/92 sm:tracking-[0.54em] md:tracking-[0.62em]"
+                      style={{
+                        fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                      }}
+                    >
+                      CURATED TO ELEVATE
+                    </p>
+                  </motion.div>
                 </motion.div>
               ) : (
                 <>
