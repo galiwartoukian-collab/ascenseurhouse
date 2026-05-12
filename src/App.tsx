@@ -657,6 +657,11 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
   );
 
   const socialPlatforms: Array<keyof ProfileSocials> = ["instagram", "tiktok", "soundcloud"];
+  const profileImageFrameClass =
+    profile.id === "anais"
+      ? "h-[48vh] min-h-[20rem] md:h-full md:min-h-0"
+      : "h-[44vh] min-h-[18rem] md:h-full md:min-h-0";
+  const profileImagePositionClass = profile.id === "anais" ? "object-[center_top] md:object-center" : "object-center";
 
   return (
     <motion.div
@@ -688,14 +693,14 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </motion.div>
 
-        <div className="pointer-events-none relative h-[44vh] min-h-[18rem] overflow-hidden md:h-full md:min-h-0">
+        <div className={`pointer-events-none relative overflow-hidden ${profileImageFrameClass}`}>
           <img
             src={currentImageSrc}
             alt={profile.name}
             loading="lazy"
             decoding="async"
             onError={() => setCurrentImageSrc(placeholderProfileImage)}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${profileImagePositionClass}`}
           />
           <div className="pointer-events-none absolute inset-0 bg-black/28 md:bg-black/12" />
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_54%,rgba(0,0,0,0.82)_100%)] md:bg-[linear-gradient(90deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.05)_58%,rgba(0,0,0,0.9)_100%)]" />
