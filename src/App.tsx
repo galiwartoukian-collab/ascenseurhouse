@@ -130,9 +130,9 @@ const profiles: Profile[] = [
     name: "Anaïs",
     floorNumber: "02",
     role: "Resident DJ",
-    genre: "Afro House / Melodic House",
+    genre: "MINIMAL BASS / TECH HOUSE",
     image: anaisImage,
-    bio: "Anaïs leans into rhythm and atmosphere, building elegant sets with soulful percussion, melodic lift, and a pulse that feels cinematic without losing the dancefloor.",
+    bio: "Anaïs brings a stripped-back blend of minimal bass and tech house shaped by late nights, travel, and underground dance culture. Based in Los Angeles but constantly between cities, her sets are built on deep grooves, rolling basslines, and clean transitions that keep the room locked in from start to finish. Whether it’s a rooftop party, warehouse set, or intimate after-hours crowd, Anaïs focuses on rhythm, tension, and creating an atmosphere that feels effortless but impossible to ignore.",
   },
   {
     id: "talar",
