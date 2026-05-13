@@ -84,11 +84,14 @@ const TRANSITION_TO_IDLE_MS = 1180;
 const LOBBY_OPEN_PROGRESS = 0.06;
 const LOBBY_TO_FIRST_LOCK_PROGRESS = 0.12;
 const SCROLL_TRACK_HEIGHT_VH = 360;
+const MOBILE_SCROLL_TRACK_HEIGHT_VH = 720;
 const MOBILE_BREAKPOINT_PX = 768;
 const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
 const MOBILE_LOBBY_TO_FIRST_LOCK_PROGRESS = 0.16;
 const MOBILE_PROGRESS_EPSILON = 0.003;
-const MOBILE_SCROLL_LERP_FACTOR = 0.22;
+const MOBILE_LOBBY_PROGRESS_LERP_FACTOR = 0.35;
+const MOBILE_STOP_STABILITY_MS = 80;
+const MOBILE_STOP_HYSTERESIS = 0.012;
 
 const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
@@ -713,7 +716,7 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
           />
         </div>
 
-        <div className="pointer-events-auto relative z-40 flex min-h-0 flex-1 flex-col justify-start overflow-y-auto px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
+        <div className="pointer-events-auto relative z-40 flex min-h-0 flex-1 flex-col justify-start overflow-y-visible px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:overflow-y-auto md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
           <div className="mb-3.5 inline-flex w-fit items-center gap-2.5 bg-black/28 px-3 py-2 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
             <Music2 className="h-3.5 w-3.5 text-white/78" />
             <span className="text-[0.58rem] font-semibold uppercase tracking-[0.36em] sm:text-[0.62rem]">{profile.role}</span>
@@ -831,7 +834,7 @@ function BookingInsideCabin({
     >
       <div
         ref={mobileScrollRef}
-        className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-contain bg-[#060607] md:overflow-hidden"
+        className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-y-auto bg-[#060607] md:overflow-hidden"
       >
         <motion.div
           aria-hidden="true"
@@ -1187,10 +1190,10 @@ function ScrollController({
     return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 0.02}px)`).matches;
   });
   const lastAutoScrollProgressRef = React.useRef<number | null>(null);
-  const pendingProgressRef = React.useRef<number | null>(null);
-  const animationFrameRef = React.useRef<number | null>(null);
-  const lastProgressRef = React.useRef(0);
+  const lastRawProgressRef = React.useRef(scrollYProgress.get());
   const lastLobbyProgressRef = React.useRef<number | null>(null);
+  const pendingStopRef = React.useRef<Stop | null>(null);
+  const stableStopRef = React.useRef<{ stop: Stop; since: number } | null>(null);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1205,6 +1208,38 @@ function ScrollController({
     return () => query.removeEventListener("change", handleViewportChange);
   }, []);
 
+  React.useEffect(() => {
+    if (isTransitioning) return;
+    pendingStopRef.current = null;
+    stableStopRef.current = null;
+  }, [currentStop, isTransitioning]);
+
+  const getMobileGuardedStop = React.useCallback(
+    (latest: number, desiredStop: Stop) => {
+      if (!isMobile || desiredStop === currentStop) return desiredStop;
+
+      const currentIndex = STOP_ORDER.indexOf(currentStop);
+      const desiredIndex = STOP_ORDER.indexOf(desiredStop);
+      if (currentIndex < 0 || desiredIndex < 0) return desiredStop;
+
+      const direction = Math.sign(latest - lastRawProgressRef.current) || Math.sign(desiredIndex - currentIndex);
+      const nextIndex = currentIndex + Math.sign(desiredIndex - currentIndex);
+      const guardedStop = STOP_ORDER[Math.max(0, Math.min(STOP_ORDER.length - 1, nextIndex))];
+      const midpoint = (getStopProgress(currentStop) + getStopProgress(guardedStop)) / 2;
+      const clearlyPastMidpoint =
+        direction >= 0 ? latest >= midpoint + MOBILE_STOP_HYSTERESIS : latest <= midpoint - MOBILE_STOP_HYSTERESIS;
+      const now = performance.now();
+
+      if (stableStopRef.current?.stop !== guardedStop) {
+        stableStopRef.current = { stop: guardedStop, since: now };
+      }
+
+      const stableLongEnough = now - stableStopRef.current.since >= MOBILE_STOP_STABILITY_MS;
+      return clearlyPastMidpoint || stableLongEnough ? guardedStop : currentStop;
+    },
+    [currentStop, isMobile]
+  );
+
   const processScrollProgress = React.useCallback(
     (latest: number) => {
       const openProgress = isMobile ? MOBILE_LOBBY_OPEN_PROGRESS : LOBBY_OPEN_PROGRESS;
@@ -1213,7 +1248,12 @@ function ScrollController({
       const easedProgress = isMobile
         ? rawProgress * rawProgress * (3 - 2 * rawProgress)
         : 1 - Math.pow(1 - rawProgress, 3);
-      const lobbyProgress = latest >= lockProgress ? 1 : easedProgress;
+      const targetLobbyProgress = latest >= lockProgress ? 1 : easedProgress;
+      const lobbyProgress =
+        isMobile && lastLobbyProgressRef.current !== null
+          ? lastLobbyProgressRef.current +
+            (targetLobbyProgress - lastLobbyProgressRef.current) * MOBILE_LOBBY_PROGRESS_LERP_FACTOR
+          : targetLobbyProgress;
 
       if (
         !isMobile ||
@@ -1224,10 +1264,13 @@ function ScrollController({
         onLobbyProgress(lobbyProgress);
       }
 
-      if (isTransitioning) return;
+      if (isTransitioning || pendingStopRef.current !== null) return;
 
-      const desiredStop = latest < lockProgress ? "lobby" : getDesiredStopFromProgress(latest);
+      const rawDesiredStop = currentStop === "lobby" && latest < lockProgress ? "lobby" : getDesiredStopFromProgress(latest);
+      const desiredStop = getMobileGuardedStop(latest, rawDesiredStop);
       if (desiredStop === currentStop) return;
+
+      pendingStopRef.current = desiredStop;
 
       if (desiredStop === "lobby") {
         onEnterLobby();
@@ -1246,90 +1289,50 @@ function ScrollController({
 
       onEnterProfile(profilesByStop[desiredStop]);
     },
-    [currentStop, isMobile, isTransitioning, onEnterAbout, onEnterBooking, onEnterLobby, onEnterProfile, onLobbyProgress]
+    [
+      currentStop,
+      getMobileGuardedStop,
+      isMobile,
+      isTransitioning,
+      onEnterAbout,
+      onEnterBooking,
+      onEnterLobby,
+      onEnterProfile,
+      onLobbyProgress,
+    ]
   );
-
-  React.useEffect(() => {
-    return () => {
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-      }
-    };
-  }, []);
 
   useMotionValueEvent(scrollYProgress, "change", (latest: number) => {
     if (isAutoScrollingRef.current) {
       lastAutoScrollProgressRef.current = latest;
+      lastRawProgressRef.current = latest;
       return;
     }
 
     if (lastAutoScrollProgressRef.current !== null) {
       const deltaFromAuto = Math.abs(latest - lastAutoScrollProgressRef.current);
-      if (deltaFromAuto < 0.012) return;
+      if (deltaFromAuto < 0.012) {
+        lastRawProgressRef.current = latest;
+        return;
+      }
       lastAutoScrollProgressRef.current = null;
     }
 
-    if (!isMobile) {
-      processScrollProgress(latest);
-      return;
-    }
-
-    pendingProgressRef.current = latest;
-
-    if (animationFrameRef.current !== null) return;
-
-    animationFrameRef.current = window.requestAnimationFrame(() => {
-      animationFrameRef.current = null;
-      const pending = pendingProgressRef.current;
-      if (pending === null) return;
-
-      const smoothed = lastProgressRef.current + (pending - lastProgressRef.current) * MOBILE_SCROLL_LERP_FACTOR;
-      lastProgressRef.current = smoothed;
-      processScrollProgress(smoothed);
-
-      if (Math.abs(pending - smoothed) > MOBILE_PROGRESS_EPSILON) {
-        pendingProgressRef.current = pending;
-        animationFrameRef.current = window.requestAnimationFrame(() => {
-          animationFrameRef.current = null;
-          const queued = pendingProgressRef.current;
-          if (queued === null) return;
-          const nextSmoothed =
-            lastProgressRef.current + (queued - lastProgressRef.current) * MOBILE_SCROLL_LERP_FACTOR;
-          lastProgressRef.current = nextSmoothed;
-          processScrollProgress(nextSmoothed);
-        });
-        return;
-      }
-
-      pendingProgressRef.current = null;
-    });
+    processScrollProgress(latest);
+    lastRawProgressRef.current = latest;
   });
 
   React.useEffect(() => {
-    if (isMobile) return;
-    if (animationFrameRef.current !== null) {
-      window.cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
-    pendingProgressRef.current = null;
-  }, [isMobile]);
-
-  React.useEffect(() => {
-    if (!isMobile) {
-      lastProgressRef.current = 0;
-      return;
-    }
-
-    if (pendingProgressRef.current !== null) {
-      lastProgressRef.current = pendingProgressRef.current;
-    }
-  }, [isMobile]);
+    lastRawProgressRef.current = scrollYProgress.get();
+    lastLobbyProgressRef.current = null;
+    stableStopRef.current = null;
+  }, [isMobile, scrollYProgress]);
 
   return (
     <div
       ref={containerRef}
       className="pointer-events-none relative w-full"
-      style={{ height: `${SCROLL_TRACK_HEIGHT_VH}vh` }}
+      style={{ height: `${isMobile ? MOBILE_SCROLL_TRACK_HEIGHT_VH : SCROLL_TRACK_HEIGHT_VH}vh` }}
       aria-hidden="true"
     />
   );
@@ -1354,6 +1357,31 @@ export default function App() {
     timeoutsRef.current.forEach((id) => window.clearTimeout(id));
     timeoutsRef.current = [];
   }, []);
+
+  React.useLayoutEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    clearTimers();
+    isAutoScrollingRef.current = false;
+    setView("lobby");
+    setActiveFloor("00");
+    setDisplayFloor("00");
+    setTargetFloor("00");
+    setSelectedProfile(null);
+    setTravelState("idle");
+    setLobbyDoorProgress(0);
+    setHasLeftLobby(false);
+    setForceClosedLobby(false);
+    window.scrollTo(0, 0);
+
+    const resetScrollTimer = window.setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+
+    return () => window.clearTimeout(resetScrollTimer);
+  }, [clearTimers]);
 
   const unlockAutoScrollingLater = React.useCallback(() => {
     const timer = window.setTimeout(() => {
@@ -1682,4 +1710,8 @@ if (typeof window !== "undefined") {
     "lobby intro should be slightly slower than floor transitions"
   );
   console.assert(SCROLL_TRACK_HEIGHT_VH > 300, "scroll track should be tall enough to scroll in preview");
+  console.assert(
+    MOBILE_SCROLL_TRACK_HEIGHT_VH > SCROLL_TRACK_HEIGHT_VH,
+    "mobile scroll track should give floor stops extra breathing room"
+  );
 }
