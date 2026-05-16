@@ -1053,8 +1053,8 @@ function BookingInsideCabin({
                             <a href="tel:+16262406905" className="text-white/62">
                               (626) 240-6905
                             </a>
-                            <a href="mailto:ascenseurhouse@gmail.com" className="break-all text-white/62">
-                              ascenseurhouse@gmail.com
+                            <a href="mailto:bookings@ascenseurhouse.com" className="break-all text-white/62">
+                              bookings@ascenseurhouse.com
                             </a>
                           </div>
                         </div>
@@ -1215,8 +1215,8 @@ function BookingInsideCabin({
                       <a href="tel:+16262406905" className="text-white/62">
                         (626) 240-6905
                       </a>
-                      <a href="mailto:ascenseurhouse@gmail.com" className="break-all text-white/62">
-                        ascenseurhouse@gmail.com
+                      <a href="mailto:bookings@ascenseurhouse.com" className="break-all text-white/62">
+                        bookings@ascenseurhouse.com
                       </a>
                     </div>
                   </motion.div>
