@@ -619,18 +619,22 @@ function AboutInsideCabin({
               </p>
             </div>
 
-            <div className="flex w-full flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] text-center">
-              <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
-                DJs
-              </h3>
+            <div className="grid w-full max-w-[68rem] grid-cols-1 items-start gap-y-[clamp(1.15rem,2.2vw,2rem)] text-center md:grid-cols-[minmax(0,1.1fr)_minmax(14rem,0.9fr)] md:gap-x-[clamp(2rem,5vw,5.5rem)]">
+              <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)]">
+                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
+                  DJs
+                </h3>
 
-              <ProfileCircleGrid profiles={djButtons} maxWidthClass="max-w-[34rem]" />
+                <ProfileCircleGrid profiles={djButtons} maxWidthClass="max-w-[34rem]" />
+              </div>
 
-              <h3 className="pt-2 text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
-                Staff
-              </h3>
+              <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)] md:pt-0">
+                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
+                  Staff
+                </h3>
 
-              <ProfileCircleGrid profiles={staffButtons} maxWidthClass="max-w-[18rem]" />
+                <ProfileCircleGrid profiles={staffButtons} maxWidthClass="max-w-[18rem]" />
+              </div>
             </div>
           </div>
         </div>
