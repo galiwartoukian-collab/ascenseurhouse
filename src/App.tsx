@@ -55,7 +55,6 @@ type ElevatorPanelProps = {
   onGoToAbout: () => void;
   onGoToAra: () => void;
   onGoToAnais: () => void;
-  onGoToTalar: () => void;
   onGoToBliss: () => void;
   onGoToBooking: () => void;
 };
@@ -76,7 +75,11 @@ const DOOR_EASE: [number, number, number, number] = [0.77, 0, 0.175, 1];
 const LOBBY_DOOR_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_GLOW_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 const CABIN_SHAKE_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
-const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "talar", "bliss", "booking"] as const;
+// Talar is preserved in the profile data and routing helpers, but intentionally
+// left out of the active stop order while that floor is temporarily hidden.
+const HIDDEN_PROFILE_STOPS: readonly ProfileStop[] = ["talar"] as const;
+const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "bliss", "booking"] as const;
+const ACTIVE_PROFILE_STOPS: readonly ProfileStop[] = ["ara", "anais", "bliss"] as const;
 
 const AUTO_SCROLL_UNLOCK_MS = 820;
 const TRANSITION_TO_TRAVEL_MS = 190;
@@ -315,7 +318,6 @@ function ElevatorPanel({
   onGoToAbout,
   onGoToAra,
   onGoToAnais,
-  onGoToTalar,
   onGoToBliss,
   onGoToBooking,
 }: ElevatorPanelProps) {
@@ -344,12 +346,6 @@ function ElevatorPanel({
               active={activeFloor === "02" || targetFloor === "02"}
               disabled={disabled}
               onClick={onGoToAnais}
-            />
-            <MetalButton
-              label="3"
-              active={activeFloor === "03" || targetFloor === "03"}
-              disabled={disabled}
-              onClick={onGoToTalar}
             />
             <MetalButton
               label="4"
@@ -422,12 +418,6 @@ function ElevatorPanel({
               onClick={onGoToAnais}
             />
             <MetalButton
-              label="3"
-              active={activeFloor === "03" || targetFloor === "03"}
-              disabled={disabled}
-              onClick={onGoToTalar}
-            />
-            <MetalButton
               label="4"
               active={activeFloor === "04" || targetFloor === "04"}
               disabled={disabled}
@@ -438,7 +428,7 @@ function ElevatorPanel({
               active={activeFloor === "B" || targetFloor === "B"}
               disabled={disabled}
               onClick={onGoToBooking}
-              />
+            />
           </div>
         </div>
       </div>
@@ -456,7 +446,7 @@ function TravelIndicator({
   const isTraveling = travelState === "traveling";
   const label = displayFloor === "B" ? "BOOK" : displayFloor;
   const [tickerIndex, setTickerIndex] = React.useState(0);
-  const tickerValues = React.useMemo(() => ["00", "A", "01", "02", "03", "04", "B"], []);
+  const tickerValues = React.useMemo(() => ["00", "A", "01", "02", "04", "B"], []);
 
   React.useEffect(() => {
     if (!isTraveling) {
@@ -524,23 +514,58 @@ function TravelIndicator({
   );
 }
 
+type ProfileCircleLink = {
+  name: string;
+  floor: string;
+  image: string;
+  onClick: () => void;
+};
+
+function ProfileCircleGrid({ profiles, maxWidthClass }: { profiles: ProfileCircleLink[]; maxWidthClass: string }) {
+  return (
+    <div
+      className={`grid w-full ${maxWidthClass} ${
+        profiles.length === 1 ? "grid-cols-1" : "grid-cols-2"
+      } justify-items-center gap-x-5 gap-y-5 sm:gap-x-6 md:gap-x-7 lg:gap-x-8`}
+    >
+      {profiles.map((profile) => (
+        <button
+          key={profile.name}
+          type="button"
+          onClick={profile.onClick}
+          aria-label={`Go to ${profile.name} on ${profile.floor}`}
+          className="group flex flex-col items-center gap-2 text-center outline-none"
+        >
+          <span className="relative block h-[clamp(5.8rem,12.4vw,9.4rem)] w-[clamp(5.8rem,12.4vw,9.4rem)] overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
+            <img src={profile.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
+            <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
+          </span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/58 transition group-hover:text-white/80">
+            {profile.floor}
+          </span>
+          <span className="sr-only">{profile.name}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function AboutInsideCabin({
   visible,
   onGoToAra,
   onGoToAnais,
-  onGoToTalar,
   onGoToBliss,
 }: {
   visible: boolean;
   onGoToAra: () => void;
   onGoToAnais: () => void;
-  onGoToTalar: () => void;
   onGoToBliss: () => void;
 }) {
   const djButtons = [
     { name: "Ara", floor: "Floor 01", image: araButtonImage, onClick: onGoToAra },
     { name: "Anaïs", floor: "Floor 02", image: profilesByStop.anais.image, onClick: onGoToAnais },
-    { name: "Talar", floor: "Floor 03", image: profilesByStop.talar.image, onClick: onGoToTalar },
+  ];
+  const staffButtons = [
     { name: "Bliss Eliss", floor: "Floor 04", image: profilesByStop.bliss.image, onClick: onGoToBliss },
   ];
 
@@ -599,26 +624,13 @@ function AboutInsideCabin({
                 DJS
               </h3>
 
-              <div className="grid w-full max-w-[54rem] grid-cols-2 justify-items-center gap-x-5 gap-y-5 sm:grid-cols-4 sm:gap-x-6 md:gap-x-7 lg:gap-x-8">
-                {djButtons.map((dj) => (
-                  <button
-                    key={dj.name}
-                    type="button"
-                    onClick={dj.onClick}
-                    aria-label={`Go to ${dj.name} on ${dj.floor}`}
-                    className="group flex flex-col items-center gap-2 text-center outline-none"
-                  >
-                    <span className="relative block h-[clamp(5.8rem,12.4vw,9.4rem)] w-[clamp(5.8rem,12.4vw,9.4rem)] overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
-                      <img src={dj.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
-                      <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
-                    </span>
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/58 transition group-hover:text-white/80">
-                      {dj.floor}
-                    </span>
-                    <span className="sr-only">{dj.name}</span>
-                  </button>
-                ))}
-              </div>
+              <ProfileCircleGrid profiles={djButtons} maxWidthClass="max-w-[34rem]" />
+
+              <h3 className="pt-2 text-center text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
+                Staff
+              </h3>
+
+              <ProfileCircleGrid profiles={staffButtons} maxWidthClass="max-w-[18rem]" />
             </div>
           </div>
         </div>
@@ -1224,7 +1236,6 @@ function ElevatorScene({
   onReturnToLobby,
   onGoToAra,
   onGoToAnais,
-  onGoToTalar,
   onGoToBliss,
 }: ElevatorSceneProps) {
   const isLobby = view === "lobby";
@@ -1352,7 +1363,6 @@ function ElevatorScene({
                       visible={contentVisible}
                       onGoToAra={onGoToAra}
                       onGoToAnais={onGoToAnais}
-                      onGoToTalar={onGoToTalar}
                       onGoToBliss={onGoToBliss}
                     />
                   )}
@@ -1870,7 +1880,6 @@ export default function App() {
               onGoToAbout={goToAbout}
               onGoToAra={goToAra}
               onGoToAnais={goToAnais}
-              onGoToTalar={goToTalar}
               onGoToBliss={goToBliss}
               onGoToBooking={goToBooking}
             />
@@ -1926,8 +1935,9 @@ if (typeof window !== "undefined" && import.meta.env.DEV) {
   console.assert(getStopProgress("lobby") === 0, "lobby progress should be 0");
   console.assert(getStopProgress("about") < getStopProgress("ara"), "about should come before ara");
   console.assert(getStopProgress("ara") < getStopProgress("anais"), "ara should come before anais");
-  console.assert(getStopProgress("anais") < getStopProgress("talar"), "anais should come before talar");
-  console.assert(getStopProgress("talar") < getStopProgress("bliss"), "talar should come before bliss");
+  console.assert(HIDDEN_PROFILE_STOPS.includes("talar"), "Talar should remain preserved as a temporarily hidden profile stop");
+  console.assert(!STOP_ORDER.includes("talar"), "Talar should be hidden from the active scroll order");
+  console.assert(!ACTIVE_PROFILE_STOPS.includes("talar"), "Talar should be hidden from active profile navigation");
   console.assert(getStopProgress("anais") < getStopProgress("bliss"), "anais should come before bliss");
   console.assert(getStopProgress("bliss") < getStopProgress("booking"), "bliss should come before booking");
   console.assert(getStopProgress("booking") <= 1, "booking progress should stay within scroll range");
@@ -1935,7 +1945,7 @@ if (typeof window !== "undefined" && import.meta.env.DEV) {
 
   console.assert(getStopFromProfile(profilesByStop.ara) === "ara", "Ara profile should resolve to ara stop");
   console.assert(getStopFromProfile(profilesByStop.anais) === "anais", "Anais profile should resolve to anais stop");
-  console.assert(getStopFromProfile(profilesByStop.talar) === "talar", "Talar profile should resolve to talar stop");
+  console.assert(getStopFromProfile(profilesByStop.talar) === "talar", "Talar profile should remain restorable as talar stop");
   console.assert(getStopFromProfile(profilesByStop.bliss) === "bliss", "Bliss profile should resolve to bliss stop");
 
   console.assert(LOBBY_OPEN_PROGRESS >= 0.05, "lobby doors should have enough runway to open smoothly");
