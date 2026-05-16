@@ -327,7 +327,7 @@ function ElevatorPanel({
   onGoToBooking,
 }: ElevatorPanelProps) {
   return (
-    <div className="pointer-events-none fixed right-0 z-[9999] origin-right md:bottom-auto md:right-10 md:top-1/2 md:-translate-y-1/2">
+    <div className="pointer-events-none fixed right-0 z-[9999] origin-right md:bottom-auto md:right-4 md:top-[calc(50%+9rem)] md:-translate-y-1/2 lg:right-6">
       {/* MOBILE - OPTION B / MIDDLE RIGHT */}
       <div className="pointer-events-auto fixed right-0 top-1/2 -translate-y-1/2 md:hidden">
         <div
