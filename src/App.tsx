@@ -516,7 +516,7 @@ function TravelIndicator({
 
 type ProfileCircleLink = {
   name: string;
-  floor: string;
+  label: string;
   image: string;
   onClick: () => void;
 };
@@ -533,15 +533,15 @@ function ProfileCircleGrid({ profiles, maxWidthClass }: { profiles: ProfileCircl
           key={profile.name}
           type="button"
           onClick={profile.onClick}
-          aria-label={`Go to ${profile.name} on ${profile.floor}`}
+          aria-label={`Go to ${profile.name}`}
           className="group flex flex-col items-center gap-2 text-center outline-none"
         >
           <span className="relative block h-[clamp(5.8rem,12.4vw,9.4rem)] w-[clamp(5.8rem,12.4vw,9.4rem)] overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
             <img src={profile.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
             <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
           </span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/58 transition group-hover:text-white/80">
-            {profile.floor}
+          <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-white/58 transition group-hover:text-white/80">
+            {profile.label}
           </span>
           <span className="sr-only">{profile.name}</span>
         </button>
@@ -562,11 +562,11 @@ function AboutInsideCabin({
   onGoToBliss: () => void;
 }) {
   const djButtons = [
-    { name: "Ara", floor: "Floor 01", image: araButtonImage, onClick: onGoToAra },
-    { name: "Anaïs", floor: "Floor 02", image: profilesByStop.anais.image, onClick: onGoToAnais },
+    { name: "Ara", label: "Ara", image: araButtonImage, onClick: onGoToAra },
+    { name: "Anaïs", label: "Anaïs", image: profilesByStop.anais.image, onClick: onGoToAnais },
   ];
   const staffButtons = [
-    { name: "Bliss Eliss", floor: "Floor 04", image: profilesByStop.bliss.image, onClick: onGoToBliss },
+    { name: "Bliss Eliss", label: "Bliss Eliss", image: profilesByStop.bliss.image, onClick: onGoToBliss },
   ];
 
   return (
@@ -620,13 +620,13 @@ function AboutInsideCabin({
             </div>
 
             <div className="flex w-full flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] text-center">
-              <h3 className="text-center text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
-                DJS
+              <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
+                DJs
               </h3>
 
               <ProfileCircleGrid profiles={djButtons} maxWidthClass="max-w-[34rem]" />
 
-              <h3 className="pt-2 text-center text-[clamp(1.82rem,2.8vw,3rem)] font-black uppercase leading-none tracking-[-0.01em] text-white">
+              <h3 className="pt-2 text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
                 Staff
               </h3>
 
