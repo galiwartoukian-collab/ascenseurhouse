@@ -34,29 +34,31 @@ type FloorTarget = {
   profile?: Profile | null;
 };
 
+type NavigationHandler = () => boolean;
+
 type ElevatorSceneProps = {
   view: View;
   selectedProfile: Profile | null;
   displayFloor: FloorCode;
   travelState: TravelState;
   lobbyDoorProgress: number;
-  onExitBookingUp: () => void;
-  onReturnToLobby: () => void;
-  onGoToAra: () => void;
-  onGoToAnais: () => void;
-  onGoToTalar: () => void;
-  onGoToBliss: () => void;
+  onExitBookingUp: NavigationHandler;
+  onReturnToLobby: NavigationHandler;
+  onGoToAra: NavigationHandler;
+  onGoToAnais: NavigationHandler;
+  onGoToTalar: NavigationHandler;
+  onGoToBliss: NavigationHandler;
 };
 
 type ElevatorPanelProps = {
   activeFloor: FloorCode;
   targetFloor: FloorCode;
   disabled: boolean;
-  onGoToAbout: () => void;
-  onGoToAra: () => void;
-  onGoToAnais: () => void;
-  onGoToBliss: () => void;
-  onGoToBooking: () => void;
+  onGoToAbout: NavigationHandler;
+  onGoToAra: NavigationHandler;
+  onGoToAnais: NavigationHandler;
+  onGoToBliss: NavigationHandler;
+  onGoToBooking: NavigationHandler;
 };
 
 type ScrollControllerProps = {
@@ -64,10 +66,10 @@ type ScrollControllerProps = {
   isTransitioning: boolean;
   isAutoScrollingRef: React.RefObject<boolean>;
   containerRef: React.RefObject<HTMLDivElement | null>;
-  onEnterLobby: () => void;
-  onEnterAbout: () => void;
-  onEnterProfile: (profile: Profile) => void;
-  onEnterBooking: () => void;
+  onEnterLobby: NavigationHandler;
+  onEnterAbout: NavigationHandler;
+  onEnterProfile: (profile: Profile) => boolean;
+  onEnterBooking: NavigationHandler;
   onLobbyProgress: (progress: number) => void;
 };
 
@@ -81,11 +83,11 @@ const HIDDEN_PROFILE_STOPS: readonly ProfileStop[] = ["talar"] as const;
 const STOP_ORDER: readonly Stop[] = ["lobby", "about", "ara", "anais", "bliss", "booking"] as const;
 const ACTIVE_PROFILE_STOPS: readonly ProfileStop[] = ["ara", "anais", "bliss"] as const;
 
-const AUTO_SCROLL_UNLOCK_MS = 820;
 const TRANSITION_TO_TRAVEL_MS = 190;
 const TRANSITION_TO_CONTENT_MS = 500;
 const TRANSITION_TO_OPEN_MS = 860;
 const TRANSITION_TO_IDLE_MS = 1180;
+const AUTO_SCROLL_UNLOCK_MS = TRANSITION_TO_IDLE_MS + 120;
 
 const LOBBY_OPEN_PROGRESS = 0.06;
 const LOBBY_TO_FIRST_LOCK_PROGRESS = 0.12;
@@ -96,8 +98,11 @@ const MOBILE_LOBBY_OPEN_PROGRESS = 0.1;
 const MOBILE_LOBBY_TO_FIRST_LOCK_PROGRESS = 0.16;
 const MOBILE_PROGRESS_EPSILON = 0.003;
 const MOBILE_LOBBY_PROGRESS_LERP_FACTOR = 0.35;
-const MOBILE_STOP_STABILITY_MS = 80;
-const MOBILE_STOP_HYSTERESIS = 0.012;
+const MOBILE_STOP_STABILITY_MS = 110;
+const MOBILE_STOP_HYSTERESIS = 0.018;
+const MOBILE_MIN_PROGRESS_DELTA_TO_NAVIGATE = 0.0015;
+const SCROLL_NAVIGATION_COOLDOWN_MS = 360;
+const BOOKING_EXIT_TOUCH_THRESHOLD_PX = 42;
 
 const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
@@ -782,14 +787,16 @@ function BookingInsideCabin({
   onReturnToLobby,
 }: {
   visible: boolean;
-  onExitUp: () => void;
-  onReturnToLobby: () => void;
+  onExitUp: NavigationHandler;
+  onReturnToLobby: NavigationHandler;
 }) {
   const bookingRootRef = React.useRef<HTMLDivElement | null>(null);
   const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartedOnInteractiveRef = React.useRef(false);
+  const exitRequestPendingRef = React.useRef(false);
+  const exitResetTimerRef = React.useRef<number | null>(null);
   const [submitStatus, setSubmitStatus] = React.useState<BookingSubmitStatus>("idle");
 
   const handleBookingSubmit = React.useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
@@ -828,6 +835,12 @@ function BookingInsideCabin({
   }, []);
 
   React.useEffect(() => {
+    if (visible) {
+      exitRequestPendingRef.current = false;
+    }
+  }, [visible]);
+
+  React.useEffect(() => {
     if (submitStatus === "idle") return;
 
     mobileScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -851,15 +864,27 @@ function BookingInsideCabin({
       return mobileScrollRef.current;
     };
 
+    const requestBookingExit = () => {
+      if (exitRequestPendingRef.current) return;
+      exitRequestPendingRef.current = onExitUp();
+
+      if (!exitRequestPendingRef.current) {
+        exitResetTimerRef.current = window.setTimeout(() => {
+          exitRequestPendingRef.current = false;
+          exitResetTimerRef.current = null;
+        }, SCROLL_NAVIGATION_COOLDOWN_MS);
+      }
+    };
+
     const handleWheel = (event: WheelEvent) => {
       if (!targetIsInsideBooking(event.target) || targetIsInteractive(event.target)) return;
 
       const el = getActiveScrollElement();
       if (!el) return;
 
-      if (el.scrollTop <= 0 && event.deltaY < 0) {
+      if (el.scrollTop <= 0 && event.deltaY < -18) {
         event.preventDefault();
-        onExitUp();
+        requestBookingExit();
       }
     };
 
@@ -879,8 +904,8 @@ function BookingInsideCabin({
       const currentY = event.touches[0]?.clientY ?? touchStartYRef.current;
       const deltaY = currentY - touchStartYRef.current;
 
-      if (el.scrollTop <= 0 && deltaY > 14) {
-        onExitUp();
+      if (el.scrollTop <= 0 && deltaY > BOOKING_EXIT_TOUCH_THRESHOLD_PX) {
+        requestBookingExit();
         touchStartYRef.current = null;
       }
     };
@@ -893,6 +918,10 @@ function BookingInsideCabin({
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
+      if (exitResetTimerRef.current !== null) {
+        window.clearTimeout(exitResetTimerRef.current);
+        exitResetTimerRef.current = null;
+      }
     };
   }, [onExitUp]);
 
@@ -1450,6 +1479,7 @@ function ScrollController({
   const lastLobbyProgressRef = React.useRef<number | null>(null);
   const pendingStopRef = React.useRef<Stop | null>(null);
   const stableStopRef = React.useRef<{ stop: Stop; since: number } | null>(null);
+  const scrollNavigationCooldownUntilRef = React.useRef(0);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1468,6 +1498,7 @@ function ScrollController({
     if (isTransitioning) return;
     pendingStopRef.current = null;
     stableStopRef.current = null;
+    scrollNavigationCooldownUntilRef.current = performance.now() + SCROLL_NAVIGATION_COOLDOWN_MS;
   }, [currentStop, isTransitioning]);
 
   const getMobileGuardedStop = React.useCallback(
@@ -1478,7 +1509,10 @@ function ScrollController({
       const desiredIndex = STOP_ORDER.indexOf(desiredStop);
       if (currentIndex < 0 || desiredIndex < 0) return desiredStop;
 
-      const direction = Math.sign(latest - lastRawProgressRef.current) || Math.sign(desiredIndex - currentIndex);
+      const progressDelta = latest - lastRawProgressRef.current;
+      if (Math.abs(progressDelta) < MOBILE_MIN_PROGRESS_DELTA_TO_NAVIGATE) return currentStop;
+
+      const direction = Math.sign(progressDelta) || Math.sign(desiredIndex - currentIndex);
       const nextIndex = currentIndex + Math.sign(desiredIndex - currentIndex);
       const guardedStop = STOP_ORDER[Math.max(0, Math.min(STOP_ORDER.length - 1, nextIndex))];
       const midpoint = (getStopProgress(currentStop) + getStopProgress(guardedStop)) / 2;
@@ -1521,29 +1555,28 @@ function ScrollController({
       }
 
       if (isTransitioning || pendingStopRef.current !== null) return;
+      if (performance.now() < scrollNavigationCooldownUntilRef.current) return;
 
       const rawDesiredStop = currentStop === "lobby" && latest < lockProgress ? "lobby" : getDesiredStopFromProgress(latest);
       const desiredStop = getMobileGuardedStop(latest, rawDesiredStop);
       if (desiredStop === currentStop) return;
 
-      pendingStopRef.current = desiredStop;
+      let transitionStarted = false;
 
       if (desiredStop === "lobby") {
-        onEnterLobby();
-        return;
+        transitionStarted = onEnterLobby();
+      } else if (desiredStop === "booking") {
+        transitionStarted = onEnterBooking();
+      } else if (desiredStop === "about") {
+        transitionStarted = onEnterAbout();
+      } else {
+        transitionStarted = onEnterProfile(profilesByStop[desiredStop]);
       }
 
-      if (desiredStop === "booking") {
-        onEnterBooking();
-        return;
+      if (transitionStarted) {
+        pendingStopRef.current = desiredStop;
+        scrollNavigationCooldownUntilRef.current = performance.now() + SCROLL_NAVIGATION_COOLDOWN_MS;
       }
-
-      if (desiredStop === "about") {
-        onEnterAbout();
-        return;
-      }
-
-      onEnterProfile(profilesByStop[desiredStop]);
     },
     [
       currentStop,
@@ -1582,6 +1615,7 @@ function ScrollController({
     lastRawProgressRef.current = scrollYProgress.get();
     lastLobbyProgressRef.current = null;
     stableStopRef.current = null;
+    scrollNavigationCooldownUntilRef.current = performance.now() + SCROLL_NAVIGATION_COOLDOWN_MS;
   }, [isMobile, scrollYProgress]);
 
   return (
@@ -1608,6 +1642,7 @@ export default function App() {
   const timeoutsRef = React.useRef<number[]>([]);
   const scrollAreaRef = React.useRef<HTMLDivElement | null>(null);
   const isAutoScrollingRef = React.useRef(false);
+  const transitionLockedRef = React.useRef(false);
 
   const clearTimers = React.useCallback(() => {
     timeoutsRef.current.forEach((id) => window.clearTimeout(id));
@@ -1621,6 +1656,7 @@ export default function App() {
 
     clearTimers();
     isAutoScrollingRef.current = false;
+    transitionLockedRef.current = false;
     setView("lobby");
     setActiveFloor("00");
     setDisplayFloor("00");
@@ -1672,8 +1708,10 @@ export default function App() {
 
   const goToStop = React.useCallback(
     (target: FloorTarget) => {
-      if (travelState !== "idle") return;
+      if (transitionLockedRef.current || travelState !== "idle") return false;
+      if (activeFloor === target.floor && displayFloor === target.floor && view === target.view) return false;
 
+      transitionLockedRef.current = true;
       clearTimers();
       isAutoScrollingRef.current = true;
       setTargetFloor(target.floor);
@@ -1710,10 +1748,13 @@ export default function App() {
         window.setTimeout(() => {
           setTravelState("idle");
           setActiveFloor(target.floor);
+          transitionLockedRef.current = false;
         }, TRANSITION_TO_IDLE_MS)
       );
+
+      return true;
     },
-    [clearTimers, scrollToStop, travelState]
+    [activeFloor, clearTimers, displayFloor, scrollToStop, travelState, view]
   );
 
   React.useEffect(() => {
@@ -1745,91 +1786,82 @@ export default function App() {
   }, [clearTimers]);
 
   const openProfile = React.useCallback(
-    (profile: Profile) => {
+    (profile: Profile) =>
       goToStop({
         stop: getStopFromProfile(profile),
         view: "profile",
         floor: profile.floorNumber,
         profile,
-      });
-    },
+      }),
     [goToStop]
   );
 
-  const openBooking = React.useCallback(() => {
+  const openBooking = React.useCallback(() =>
     goToStop({
       stop: "booking",
       view: "booking",
       floor: "B",
       profile: null,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goLobby = React.useCallback(() => {
+  const goLobby = React.useCallback(() =>
     goToStop({
       stop: "lobby",
       view: "lobby",
       floor: "00",
       profile: null,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goToAra = React.useCallback(() => {
+  const goToAra = React.useCallback(() =>
     goToStop({
       stop: "ara",
       view: "profile",
       floor: "01",
       profile: profilesByStop.ara,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goToAnais = React.useCallback(() => {
+  const goToAnais = React.useCallback(() =>
     goToStop({
       stop: "anais",
       view: "profile",
       floor: "02",
       profile: profilesByStop.anais,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goToTalar = React.useCallback(() => {
+  const goToTalar = React.useCallback(() =>
     goToStop({
       stop: "talar",
       view: "profile",
       floor: "03",
       profile: profilesByStop.talar,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goToBliss = React.useCallback(() => {
+  const goToBliss = React.useCallback(() =>
     goToStop({
       stop: "bliss",
       view: "profile",
       floor: "04",
       profile: profilesByStop.bliss,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
-  const goToBooking = React.useCallback(() => {
+  const goToBooking = React.useCallback(() =>
     goToStop({
       stop: "booking",
       view: "booking",
       floor: "B",
       profile: null,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
   const currentStop = getStopFromFloor(activeFloor);
   const isTransitioning = travelState !== "idle";
 
-  const goToAbout = React.useCallback(() => {
+  const goToAbout = React.useCallback(() =>
     goToStop({
       stop: "about",
       view: "profile",
       floor: "A",
       profile: null,
-    });
-  }, [goToStop]);
+    }), [goToStop]);
 
   return (
     <div
