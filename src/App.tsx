@@ -6,6 +6,7 @@ import "./index.css";
 type View = "lobby" | "profile" | "booking";
 type TravelState = "idle" | "closing" | "traveling" | "opening";
 type Stop = "lobby" | "about" | "ara" | "anais" | "talar" | "bliss" | "booking";
+type ProfileStop = Extract<Stop, "ara" | "anais" | "talar" | "bliss">;
 type FloorCode = "00" | "A" | "01" | "02" | "03" | "04" | "B";
 
 type ProfileSocials = {
@@ -95,6 +96,7 @@ const MOBILE_STOP_HYSTERESIS = 0.012;
 
 const LOBBY_DOOR_DURATION = 0.62;
 const FLOOR_DOOR_DURATION = 0.58;
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzvlkkq";
 
 import logo from "./assets/logo.png";
 import aboutHeaderImage from "./assets/header.png";
@@ -157,12 +159,21 @@ const profiles: Profile[] = [
   },
 ];
 
-const profilesByStop: Record<Extract<Stop, "ara" | "anais" | "talar" | "bliss">, Profile> = {
-  ara: profiles[0],
-  anais: profiles[1],
-  talar: profiles[2],
-  bliss: profiles[3],
-};
+const PROFILE_STOPS: readonly ProfileStop[] = ["ara", "anais", "talar", "bliss"] as const;
+
+const profilesByStop = PROFILE_STOPS.reduce(
+  (byStop, stop) => {
+    const profile = profiles.find((candidate) => candidate.id === stop);
+
+    if (!profile) {
+      throw new Error(`Missing profile for ${stop}`);
+    }
+
+    byStop[stop] = profile;
+    return byStop;
+  },
+  {} as Record<ProfileStop, Profile>
+);
 
 function getDesiredStopFromProgress(progress: number): Stop {
   for (let index = 0; index < STOP_ORDER.length - 1; index += 1) {
@@ -213,7 +224,7 @@ function getStopFromFloor(floor: FloorCode): Stop {
   }
 }
 
-function getStopFromProfile(profile: Profile): Extract<Stop, "ara" | "anais" | "talar" | "bliss"> {
+function getStopFromProfile(profile: Profile): ProfileStop {
   return profile.id;
 }
 
@@ -526,9 +537,9 @@ function AboutInsideCabin({
 }) {
   const djButtons = [
     { name: "Ara", floor: "Floor 01", image: araButtonImage, onClick: onGoToAra },
-    { name: "Anaïs", floor: "Floor 02", image: profiles[1].image, onClick: onGoToAnais },
-    { name: "Talar", floor: "Floor 03", image: profiles[2].image, onClick: onGoToTalar },
-    { name: "Bliss Eliss", floor: "Floor 04", image: profiles[3].image, onClick: onGoToBliss },
+    { name: "Anaïs", floor: "Floor 02", image: profilesByStop.anais.image, onClick: onGoToAnais },
+    { name: "Talar", floor: "Floor 03", image: profilesByStop.talar.image, onClick: onGoToTalar },
+    { name: "Bliss Eliss", floor: "Floor 04", image: profilesByStop.bliss.image, onClick: onGoToBliss },
   ];
 
   return (
@@ -759,6 +770,35 @@ function BookingInsideCabin({
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const touchStartYRef = React.useRef<number | null>(null);
   const touchStartedOnInteractiveRef = React.useRef(false);
+  const [submitStatus, setSubmitStatus] = React.useState<"idle" | "sending" | "success" | "error">("idle");
+
+  const handleBookingSubmit = React.useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setSubmitStatus("sending");
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Formspree submission failed");
+      }
+
+      setSubmitStatus("success");
+      form.reset();
+    } catch {
+      setSubmitStatus("error");
+    }
+  }, []);
 
   React.useEffect(() => {
     const interactiveSelector = "input, textarea, select, button, a, label";
@@ -882,8 +922,9 @@ function BookingInsideCabin({
               </p>
 
               <form
-                action="https://formspree.io/f/mvzvlkkq"
+                action={FORMSPREE_ENDPOINT}
                 method="POST"
+                onSubmit={handleBookingSubmit}
                 className="pointer-events-auto relative z-40 mt-6 w-full max-w-[58rem]"
               >
                 <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
@@ -954,19 +995,36 @@ function BookingInsideCabin({
                   <div className="flex flex-col items-center gap-4 pt-1 sm:col-span-2">
                     <UIButton
                       type="submit"
-                      className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
+                      disabled={submitStatus === "sending"}
+                      className="cursor-pointer border px-7 py-3.5 text-white disabled:cursor-not-allowed disabled:opacity-70 sm:px-9"
                       style={{
                         borderColor: "rgba(255,255,255,0.14)",
                         background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(122,12,12,0.22))",
                       }}
                     >
-                      Send Inquiry
+                      {submitStatus === "sending" ? "Sending…" : "Send Inquiry"}
                     </UIButton>
+
+                    {submitStatus === "success" && (
+                      <p className="text-center text-sm text-white/70 sm:text-base" role="status">
+                        Your inquiry has been sent. We’ll be in touch soon.
+                      </p>
+                    )}
+
+                    {submitStatus === "error" && (
+                      <p className="text-center text-sm text-white/70 sm:text-base" role="alert">
+                        Something went wrong. Please try again or contact us directly.
+                      </p>
+                    )}
 
                     <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-sm text-white/62 sm:text-base">
                       <span className="uppercase tracking-[0.22em] text-white/38">Direct Contact</span>
-                      <span>(626) 240-6905</span>
-                      <span className="break-all">ascenseurhouse@gmail.com</span>
+                      <a href="tel:+16262406905" className="text-white/62">
+                        (626) 240-6905
+                      </a>
+                      <a href="mailto:ascenseurhouse@gmail.com" className="break-all text-white/62">
+                        ascenseurhouse@gmail.com
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -1523,7 +1581,7 @@ export default function App() {
       stop: "ara",
       view: "profile",
       floor: "01",
-      profile: profiles[0],
+      profile: profilesByStop.ara,
     });
   }, [goToStop]);
 
@@ -1532,7 +1590,7 @@ export default function App() {
       stop: "anais",
       view: "profile",
       floor: "02",
-      profile: profiles[1],
+      profile: profilesByStop.anais,
     });
   }, [goToStop]);
 
@@ -1541,7 +1599,7 @@ export default function App() {
       stop: "talar",
       view: "profile",
       floor: "03",
-      profile: profiles[2],
+      profile: profilesByStop.talar,
     });
   }, [goToStop]);
 
@@ -1550,7 +1608,7 @@ export default function App() {
       stop: "bliss",
       view: "profile",
       floor: "04",
-      profile: profiles[3],
+      profile: profilesByStop.bliss,
     });
   }, [goToStop]);
 
@@ -1614,7 +1672,7 @@ export default function App() {
       )}
 
       <AnimatePresence>
-        {activeFloor !== "00" && activeFloor !== "A" && travelState === "idle" && (
+        {activeFloor !== "00" && travelState === "idle" && (
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1671,7 +1729,7 @@ export default function App() {
   );
 }
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && import.meta.env.DEV) {
   console.assert(getStopFromFloor("00") === "lobby", "00 should map to lobby");
   console.assert(getStopFromFloor("A") === "about", "A should map to about");
   console.assert(getStopFromFloor("01") === "ara", "01 should map to ara");
@@ -1690,10 +1748,10 @@ if (typeof window !== "undefined") {
   console.assert(getStopProgress("booking") <= 1, "booking progress should stay within scroll range");
   console.assert(getStopProgress("about") < 0.2, "about should be close to the top");
 
-  console.assert(getStopFromProfile(profiles[0]) === "ara", "Ara profile should resolve to ara stop");
-  console.assert(getStopFromProfile(profiles[1]) === "anais", "Anais profile should resolve to anais stop");
-  console.assert(getStopFromProfile(profiles[2]) === "talar", "Talar profile should resolve to talar stop");
-  console.assert(getStopFromProfile(profiles[3]) === "bliss", "Bliss profile should resolve to bliss stop");
+  console.assert(getStopFromProfile(profilesByStop.ara) === "ara", "Ara profile should resolve to ara stop");
+  console.assert(getStopFromProfile(profilesByStop.anais) === "anais", "Anais profile should resolve to anais stop");
+  console.assert(getStopFromProfile(profilesByStop.talar) === "talar", "Talar profile should resolve to talar stop");
+  console.assert(getStopFromProfile(profilesByStop.bliss) === "bliss", "Bliss profile should resolve to bliss stop");
 
   console.assert(LOBBY_OPEN_PROGRESS >= 0.05, "lobby doors should have enough runway to open smoothly");
   console.assert(
