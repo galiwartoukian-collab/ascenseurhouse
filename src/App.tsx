@@ -251,7 +251,7 @@ function UIButton({
   return (
     <button
       {...props}
-      className={`inline-flex items-start justify-center rounded-full px-5 py-3 text-sm font-medium tracking-[0.08em] transition duration-300 ${className}`}
+      className={`inline-flex items-start justify-center rounded-full px-5 py-3 text-sm font-title tracking-[0.08em] transition duration-300 ${className}`}
       style={{
         boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 24px rgba(0,0,0,0.28)",
         ...style,
@@ -290,7 +290,7 @@ function MetalButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={`Go to ${label}`}
-      className="group relative h-6 w-6 rounded-full border text-[11px] font-semibold text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
+      className="group relative h-6 w-6 rounded-full border text-[11px] font-title text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
       style={{
         borderColor: active ? "rgba(122,12,12,0.42)" : "rgba(255,255,255,0.08)",
         background: active
@@ -608,29 +608,29 @@ function AboutInsideCabin({
               aria-hidden="true"
               className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.88)_100%)]"
             />
-            <h2 className="absolute inset-x-0 bottom-[-0.14em] mx-auto origin-center scale-x-[0.9] whitespace-normal px-4 text-center text-[clamp(2.85rem,12.2vw,13.4rem)] font-black uppercase leading-[0.78] tracking-[-0.045em] text-white sm:scale-x-[0.92] sm:text-[clamp(4.15rem,12.1vw,13.7rem)] md:scale-x-[0.94] md:whitespace-nowrap md:text-[clamp(5.9rem,10.45vw,13.4rem)]">
+            <h2 className="font-display absolute inset-x-0 bottom-[-0.14em] mx-auto origin-center scale-x-[0.9] whitespace-normal px-4 text-center text-[clamp(2.85rem,12.2vw,13.4rem)] uppercase leading-[0.84] tracking-[-0.03em] text-white sm:scale-x-[0.92] sm:text-[clamp(4.15rem,12.1vw,13.7rem)] md:scale-x-[0.94] md:whitespace-nowrap md:text-[clamp(5.9rem,10.45vw,13.4rem)]">
               ASCENSEUR HOUSE
             </h2>
           </div>
 
           <div className="relative mx-auto flex w-full max-w-[94rem] flex-1 flex-col items-center gap-[clamp(0.9rem,1.45vw,1.55rem)] px-5 pb-8 pt-[clamp(1.55rem,3.1vw,3.45rem)] text-center sm:px-8 sm:pb-10 md:px-12 md:pb-12">
-            <p className="text-center text-[clamp(1.08rem,1.75vw,2.05rem)] font-medium uppercase leading-none tracking-[0.38em] text-white sm:tracking-[0.5em] md:tracking-[0.58em]">
+            <p className="text-center text-[clamp(1.08rem,1.75vw,2.05rem)] font-subheading uppercase leading-none tracking-[0.38em] text-white sm:tracking-[0.5em] md:tracking-[0.58em]">
               CURATED TO ELEVATE
             </p>
 
             <div className="flex max-w-[74rem] flex-col items-center gap-2 text-center sm:gap-2.5">
-              <p className="text-center text-[clamp(1rem,1.32vw,1.54rem)] font-light leading-[1.22] tracking-[0.005em] text-white/85">
+              <p className="text-center text-[clamp(1rem,1.32vw,1.54rem)] font-body leading-[1.35] tracking-[0.01em] text-white/85">
                 Ascenseur House is a multi-level experience where sound, atmosphere, and presence are intentionally shaped.
               </p>
 
-              <p className="max-w-[58rem] text-center text-[clamp(0.98rem,1.24vw,1.42rem)] font-light leading-[1.22] text-white/80">
+              <p className="max-w-[58rem] text-center text-[clamp(0.98rem,1.24vw,1.42rem)] font-body leading-[1.34] text-white/80">
                 This isn’t just a lineup, theres levels to this shit
               </p>
             </div>
 
             <div className="grid w-full max-w-[68rem] grid-cols-1 items-start gap-y-[clamp(1.15rem,2.2vw,2rem)] text-center md:grid-cols-[minmax(0,1.1fr)_minmax(14rem,0.9fr)] md:gap-x-[clamp(2rem,5vw,5.5rem)]">
               <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)]">
-                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
+                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-title uppercase leading-none tracking-[0.34em] text-white/52">
                   DJs
                 </h3>
 
@@ -638,7 +638,7 @@ function AboutInsideCabin({
               </div>
 
               <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)] md:pt-0">
-                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-normal uppercase leading-none tracking-[0.34em] text-white/52">
+                <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-title uppercase leading-none tracking-[0.34em] text-white/52">
                   Staff
                 </h3>
 
@@ -757,18 +757,18 @@ function ProfileInsideCabin({ profile, visible }: { profile: Profile; visible: b
         <div className="pointer-events-auto relative z-40 flex min-h-0 flex-1 flex-col justify-start overflow-y-visible px-6 pb-24 pt-8 text-left sm:px-8 md:justify-center md:overflow-y-auto md:py-16 md:pl-8 md:pr-[12rem] lg:pl-10 lg:pr-[13rem] xl:pl-12 xl:pr-[14rem]">
           <div className="mb-3.5 inline-flex w-fit items-center gap-2.5 bg-black/28 px-3 py-2 text-white/86 shadow-[0_0_28px_rgba(0,0,0,0.18)]">
             <Music2 className="h-3.5 w-3.5 text-white/78" />
-            <span className="font-montserrat-medium text-[0.58rem] uppercase tracking-[0.36em] sm:text-[0.62rem]">{profile.role}</span>
+            <span className="font-subheading text-[0.58rem] uppercase tracking-[0.36em] sm:text-[0.62rem]">{profile.role}</span>
           </div>
 
-          <h2 className="font-bebas text-[3.1rem] uppercase leading-[0.82] tracking-[-0.04em] text-[var(--text)] sm:text-[4rem] md:text-[4.5rem] lg:text-[5.2rem] xl:text-[5.8rem]">
+          <h2 className="font-display text-[2.9rem] uppercase leading-[0.88] tracking-[-0.025em] text-[var(--text)] sm:text-[3.8rem] md:text-[4.3rem] lg:text-[4.9rem] xl:text-[5.4rem]">
             {profile.name}
           </h2>
 
-          <div className="font-montserrat-bold mt-3.5 inline-block w-fit self-start border border-white/12 bg-black/38 px-3 py-1 text-[0.64rem] uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-[0.7rem] md:text-xs">
+          <div className="font-title mt-3.5 inline-block w-fit self-start border border-white/12 bg-black/38 px-3 py-1 text-[0.64rem] uppercase tracking-[0.22em] text-white/94 shadow-[0_0_0_1px_rgba(122,12,12,0.18)] sm:text-[0.7rem] md:text-xs">
             {profile.genre}
           </div>
 
-          <div className="font-montserrat-light mt-4 max-w-[38rem] space-y-3 text-[0.95rem] leading-[1.14] tracking-[-0.02em] text-white/86 sm:text-base md:mt-5 md:text-[1.05rem] lg:text-[1.12rem] xl:text-[1.18rem]">
+          <div className="font-body mt-4 max-w-[38rem] space-y-3 text-[0.95rem] leading-[1.14] tracking-[0.002em] text-white/86 sm:text-base md:mt-5 md:text-[1.05rem] lg:text-[1.12rem] xl:text-[1.18rem]">
             {bioParagraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -987,10 +987,10 @@ function BookingInsideCabin({
                   >
                     <div className="mb-4 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-2.5 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
                       <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
-                      <span className="text-[10px] uppercase tracking-[0.34em]">Private Inquiry</span>
+                      <span className="text-[10px] font-subheading uppercase tracking-[0.26em]">Private Inquiry</span>
                     </div>
 
-                    <h2 className="max-w-full text-center text-[clamp(2.35rem,4.7vw,5.2rem)] font-semibold leading-[0.95] tracking-[0.06em] text-[var(--text)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.52)] sm:whitespace-nowrap sm:tracking-[0.09em]">
+                    <h2 className="max-w-full text-center text-[clamp(2.35rem,4.7vw,5.2rem)] font-subheading leading-[0.98] tracking-[0.035em] text-[var(--text)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.52)] sm:whitespace-nowrap sm:tracking-[0.09em]">
                       Book Ascenseur House
                     </h2>
 
@@ -1011,7 +1011,7 @@ function BookingInsideCabin({
                           type="text"
                           name="name"
                           required
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                           style={{
                             borderColor: "rgba(255,255,255,0.1)",
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -1023,7 +1023,7 @@ function BookingInsideCabin({
                         <input
                           type="text"
                           name="company"
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                           style={{
                             borderColor: "rgba(255,255,255,0.1)",
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -1036,7 +1036,7 @@ function BookingInsideCabin({
                           type="email"
                           name="email"
                           required
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                           style={{
                             borderColor: "rgba(255,255,255,0.1)",
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -1048,7 +1048,7 @@ function BookingInsideCabin({
                         <input
                           type="tel"
                           name="phone"
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
+                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
                           style={{
                             borderColor: "rgba(255,255,255,0.1)",
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -1060,7 +1060,7 @@ function BookingInsideCabin({
                         <textarea
                           name="message"
                           required
-                          className="min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
+                          className="min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
                           style={{
                             borderColor: "rgba(255,255,255,0.1)",
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
@@ -1082,7 +1082,7 @@ function BookingInsideCabin({
                           </UIButton>
 
                           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-sm text-white/62 sm:text-base">
-                            <span className="uppercase tracking-[0.22em] text-white/38">Direct Contact</span>
+                            <span className="font-title uppercase tracking-[0.16em] text-white/38">Direct Contact</span>
                             <a href="tel:+16262406905" className="text-white/62">
                               (626) 240-6905
                             </a>
@@ -1134,14 +1134,14 @@ function BookingInsideCabin({
                       />
                     </div>
 
-                    <div className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.54em] text-white/42 sm:text-xs">
+                    <div className="relative z-10 text-[10px] font-title uppercase tracking-[0.32em] text-white/42 sm:text-xs">
                       Submitting Inquiry
                     </div>
-                    <h2 className="relative z-10 mt-4 text-[clamp(2.4rem,7vw,6.4rem)] font-black uppercase leading-[0.86] tracking-[-0.04em] text-white">
+                    <h2 className="relative z-10 mt-4 text-[clamp(2.4rem,7vw,6.4rem)] font-display uppercase leading-[0.9] tracking-[-0.02em] text-white">
                       Routing Request
                     </h2>
                     <motion.p
-                      className="relative z-10 mt-5 text-sm uppercase tracking-[0.34em] text-white/66 sm:text-base"
+                      className="relative z-10 mt-5 text-sm font-subheading uppercase tracking-[0.22em] text-white/66 sm:text-base"
                       animate={{ opacity: [0.46, 1, 0.46] }}
                       transition={{ duration: 1.7, repeat: Infinity, ease: "easeInOut" }}
                     >
@@ -1163,10 +1163,10 @@ function BookingInsideCabin({
                   >
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(122,12,12,0.32),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.18))]" />
                     <div className="pointer-events-none absolute inset-x-[12%] top-1/2 h-px bg-white/12" />
-                    <div className="relative z-10 mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] uppercase tracking-[0.34em] text-white/54">
+                    <div className="relative z-10 mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] font-subheading uppercase tracking-[0.26em] text-white/54">
                       Floor B · Request Logged
                     </div>
-                    <h2 className="relative z-10 text-[clamp(2.7rem,8vw,7rem)] font-black uppercase leading-[0.82] tracking-[-0.05em] text-white drop-shadow-[0_18px_54px_rgba(122,12,12,0.26)]">
+                    <h2 className="relative z-10 text-[clamp(2.7rem,8vw,7rem)] font-display uppercase leading-[0.86] tracking-[-0.03em] text-white drop-shadow-[0_18px_54px_rgba(122,12,12,0.26)]">
                       Inquiry Received
                     </h2>
                     <p className="relative z-10 mt-6 max-w-[38rem] text-base leading-7 text-white/72 sm:text-lg">
@@ -1210,10 +1210,10 @@ function BookingInsideCabin({
                     className="relative flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center overflow-hidden rounded-[30px] border border-red-900/35 bg-black/30 px-5 py-16 text-center shadow-[0_34px_100px_rgba(0,0,0,0.48)] backdrop-blur-sm md:min-h-[calc(100vh-10rem)]"
                   >
                     <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(122,12,12,0.26),transparent_40%)]" />
-                    <div className="relative z-10 mb-5 text-[10px] font-semibold uppercase tracking-[0.5em] text-red-100/46">
+                    <div className="relative z-10 mb-5 text-[10px] font-title uppercase tracking-[0.32em] text-red-100/46">
                       Route Interrupted
                     </div>
-                    <h2 className="relative z-10 text-[clamp(2.25rem,6vw,5.4rem)] font-black uppercase leading-[0.88] tracking-[-0.04em] text-white">
+                    <h2 className="relative z-10 text-[clamp(2.25rem,6vw,5.4rem)] font-display uppercase leading-[0.9] tracking-[-0.02em] text-white">
                       Inquiry Not Sent
                     </h2>
                     <p className="relative z-10 mt-5 max-w-[35rem] text-base leading-7 text-white/72 sm:text-lg">
@@ -1244,7 +1244,7 @@ function BookingInsideCabin({
                       </UIButton>
                     </div>
                     <div className="relative z-10 mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-sm text-white/62 sm:text-base">
-                      <span className="uppercase tracking-[0.22em] text-white/38">Direct Contact</span>
+                      <span className="font-title uppercase tracking-[0.16em] text-white/38">Direct Contact</span>
                       <a href="tel:+16262406905" className="text-white/62">
                         (626) 240-6905
                       </a>
@@ -1370,7 +1370,7 @@ function ElevatorScene({
                       className="mb-[clamp(0.85rem,1.4vw,1.35rem)] h-[clamp(5.4rem,9.1vw,9.25rem)] w-auto object-contain opacity-95 drop-shadow-[0_0_22px_rgba(255,255,255,0.12)]"
                     />
                     <h1
-                      className="origin-center scale-x-[0.96] whitespace-nowrap text-center text-[clamp(1.9rem,9.75vw,4rem)] font-black uppercase leading-[0.82] tracking-[0.015em] text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.32)] sm:scale-x-100 sm:text-[clamp(3.85rem,8.65vw,8rem)] md:scale-x-[1.04] md:text-[clamp(5.35rem,8.4vw,8.65rem)]"
+                      className="origin-center scale-x-[0.96] whitespace-nowrap text-center text-[clamp(1.9rem,9.75vw,4rem)] font-display uppercase leading-[0.88] tracking-[0.01em] text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.32)] sm:scale-x-100 sm:text-[clamp(3.85rem,8.65vw,8rem)] md:scale-x-[1.04] md:text-[clamp(5.35rem,8.4vw,8.65rem)]"
                       style={{
                         fontFamily:
                           '"Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif',
@@ -1381,7 +1381,7 @@ function ElevatorScene({
                       ASCENSEUR HOUSE
                     </h1>
                     <p
-                      className="mt-[clamp(0.66rem,0.9vw,0.95rem)] text-[clamp(0.72rem,1.12vw,1.22rem)] font-semibold uppercase leading-none tracking-[0.44em] text-white/92 sm:tracking-[0.54em] md:tracking-[0.62em]"
+                      className="mt-[clamp(0.66rem,0.9vw,0.95rem)] text-[clamp(0.72rem,1.12vw,1.22rem)] font-subheading uppercase leading-none tracking-[0.3em] text-white/92 sm:tracking-[0.54em] md:tracking-[0.62em]"
                       style={{
                         fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                       }}
