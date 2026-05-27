@@ -148,6 +148,10 @@ const profiles: Profile[] = [
     genre: "MINIMAL BASS / TECH HOUSE",
     image: anaisImage,
     bio: "Anaïs brings a stripped-back blend of minimal bass and tech house shaped by late nights, travel, and underground dance culture. Based in Los Angeles but constantly between cities, her sets are built on deep grooves, rolling basslines, and clean transitions that keep the room locked in from start to finish. Whether it’s a rooftop party, warehouse set, or intimate after-hours crowd, Anaïs focuses on rhythm, tension, and creating an atmosphere that feels effortless but impossible to ignore.",
+    socials: {
+      instagram: "https://www.instagram.com/theofficialanais?igsh=NTc4MTIwNjQ2YQ==",
+      soundcloud: "https://soundcloud.com/theofficialanais",
+    },
   },
   {
     id: "talar",
