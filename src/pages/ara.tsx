@@ -3,12 +3,12 @@ import type { Profile } from "../types";
 import image from "../assets/ara.jpeg";
 const profile: Profile = {
     id: "ara",
-    name: "Ara",
+    name: "ARA32",
     floorNumber: "01",
     role: "Resident DJ",
     genre: "House / Open Format",
     image,
-    bio: "Ara is a bi-coastal DJ blending house music and Middle Eastern remixes with the energy of late nights in LA and NYC. Inspired by the Ascenseur House aesthetic, his sets move through different levels of bass, tempo, and tension, building from dark late-night sounds into high-energy moments that keep the room moving.",
+    bio: "ARA32 is a bi-coastal DJ blending house music and Middle Eastern remixes with the energy of late nights in LA and NYC. Inspired by the Ascenseur House aesthetic, his sets move through different levels of bass, tempo, and tension, building from dark late-night sounds into high-energy moments that keep the room moving.",
     socials: {
       instagram: "https://www.instagram.com/arahartounian?igsh=NTc4MTIwNjQ2YQ==",
       tiktok: "https://www.tiktok.com/@aleppoara?_r=1&_t=ZT-96GNZLZe5tN",

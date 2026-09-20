@@ -1,5 +1,6 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { sendInquiry } from "../booking/sendInquiry";
 import { CalendarDays } from "lucide-react";
 import type { BookingSubmitStatus, NavigationHandler } from "../types";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvzvlkkq";
@@ -25,18 +26,24 @@ function UIButton({
 
 export default function BookingInsideCabin({
   visible,
-  onReturnToLobby,
+  onReturnToAbout,
 }: {
   visible: boolean;
-  onReturnToLobby: NavigationHandler;
+  onReturnToAbout: NavigationHandler;
 }) {
-  const bookingRootRef = React.useRef<HTMLDivElement | null>(null);
   const mobileScrollRef = React.useRef<HTMLDivElement | null>(null);
   const desktopFormScrollRef = React.useRef<HTMLDivElement | null>(null);
   const [submitStatus, setSubmitStatus] = React.useState<BookingSubmitStatus>("idle");
 
+  const submission = React.useRef<AbortController | null>(null);
+  React.useEffect(() => () => { submission.current?.abort(); }, []);
+
   const handleBookingSubmit = React.useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // The outgoing form remains mounted briefly during AnimatePresence exit.
+    if (submission.current) return;
+    const controller = new AbortController();
+    submission.current = controller;
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -44,25 +51,15 @@ export default function BookingInsideCabin({
     setSubmitStatus("sending");
 
     try {
-      const minimumLoadingTime = new Promise((resolve) => window.setTimeout(resolve, 900));
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      await minimumLoadingTime;
-
-      if (!response.ok) {
-        throw new Error("Formspree submission failed");
-      }
+      await sendInquiry(FORMSPREE_ENDPOINT, formData, controller.signal);
+      if (controller.signal.aborted) return;
 
       setSubmitStatus("success");
       form.reset();
     } catch {
-      setSubmitStatus("error");
+      if (!controller.signal.aborted) setSubmitStatus("error");
+    } finally {
+      if (submission.current === controller) submission.current = null;
     }
   }, []);
 
@@ -81,11 +78,10 @@ export default function BookingInsideCabin({
   return (
     <motion.div
       key="booking"
-      initial={{ opacity: 0, scale: 0.985, y: 18 }}
+      initial={false}
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-      ref={bookingRootRef}
       className="pointer-events-auto absolute inset-0 isolate z-50 overflow-hidden"
     >
       <div
@@ -99,10 +95,10 @@ export default function BookingInsideCabin({
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(130deg,#050505_0%,#0d0d10_46%,#050505_100%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.7)_40%,rgba(0,0,0,0.82)_100%)]" />
           <div
-            className="pointer-events-none absolute inset-0"
+            className="pointer-events-none absolute inset-0 atmosphere"
             style={{
               background:
-                "radial-gradient(circle at 32% 58%, rgba(122,12,12,0.14) 0%, rgba(122,12,12,0.06) 26%, transparent 62%)",
+                "var(--atmosphere-full)",
             }}
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/75 to-transparent" />
@@ -110,7 +106,7 @@ export default function BookingInsideCabin({
             className="pointer-events-none absolute top-0 h-full w-[26%] opacity-12 blur-xl md:w-[34%] md:opacity-22 md:blur-3xl"
             style={{
               background:
-                "linear-gradient(90deg, transparent 0%, rgba(122,12,12,0.18) 18%, rgba(122,12,12,0.55) 50%, rgba(122,12,12,0.18) 82%, transparent 100%)",
+                "var(--light-sweep)",
             }}
             animate={{ x: ["-25%", "140%", "-25%"] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -124,7 +120,7 @@ export default function BookingInsideCabin({
             className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 lg:px-14"
           >
             <div className="pointer-events-auto relative mx-auto flex w-full max-w-[58rem] flex-col items-center px-0 text-center md:max-w-[min(58rem,calc(100vw-21.5rem))] xl:max-w-[58rem]">
-              <AnimatePresence mode="wait">
+              <AnimatePresence initial={false} mode="wait">
                 {submitStatus === "idle" && (
                   <motion.div
                     key="booking-form"
@@ -166,6 +162,7 @@ export default function BookingInsideCabin({
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
                             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
                           }}
+                          aria-label="Name"
                           placeholder="Name"
                         />
 
@@ -178,6 +175,7 @@ export default function BookingInsideCabin({
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
                             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
                           }}
+                          aria-label="Company / Venue"
                           placeholder="Company / Venue"
                         />
 
@@ -191,6 +189,7 @@ export default function BookingInsideCabin({
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
                             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
                           }}
+                          aria-label="Email"
                           placeholder="Email"
                         />
 
@@ -203,6 +202,7 @@ export default function BookingInsideCabin({
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
                             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
                           }}
+                          aria-label="Phone Number"
                           placeholder="Phone Number"
                         />
 
@@ -215,6 +215,7 @@ export default function BookingInsideCabin({
                             background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
                             boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 22px 48px rgba(0,0,0,0.22)",
                           }}
+                          aria-label="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                           placeholder="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                         />
 
@@ -224,7 +225,7 @@ export default function BookingInsideCabin({
                             className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
                             style={{
                               borderColor: "rgba(255,255,255,0.14)",
-                              background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(122,12,12,0.22))",
+                              background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(var(--accent-rgb),0.22))",
                             }}
                           >
                             Send Inquiry
@@ -256,7 +257,7 @@ export default function BookingInsideCabin({
                     transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
                     className="relative flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center overflow-hidden rounded-[30px] border border-white/8 bg-black/28 px-5 py-16 text-center shadow-[0_30px_90px_rgba(0,0,0,0.44)] backdrop-blur-sm md:min-h-[calc(100vh-10rem)]"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(122,12,12,0.36),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.2))]" />
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(var(--accent-rgb),0.36),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.2))]" />
                     <motion.div
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/12"
@@ -265,19 +266,19 @@ export default function BookingInsideCabin({
                     />
                     <motion.div
                       aria-hidden="true"
-                      className="pointer-events-none absolute top-0 h-full w-[34%] bg-[linear-gradient(90deg,transparent,rgba(122,12,12,0.48),transparent)] blur-2xl"
+                      className="pointer-events-none absolute top-0 h-full w-[34%] bg-[linear-gradient(90deg,transparent,rgba(var(--accent-rgb),0.48),transparent)] blur-2xl"
                       animate={{ x: ["-170%", "170%"] }}
                       transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                     />
 
-                    <div className="relative z-10 mb-8 flex h-36 w-24 items-center justify-center rounded-[22px] border border-white/10 bg-[#09090b] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_70px_rgba(122,12,12,0.3)] sm:h-44 sm:w-28">
+                    <div className="relative z-10 mb-8 flex h-36 w-24 items-center justify-center rounded-[22px] border border-white/10 bg-[#09090b] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04),0_0_70px_rgba(var(--accent-rgb),0.3)] sm:h-44 sm:w-28">
                       <motion.div
                         className="absolute inset-y-3 left-1/2 w-px -translate-x-1/2 bg-white/18"
                         animate={{ scaleY: [0.32, 1, 0.32], opacity: [0.24, 0.9, 0.24] }}
                         transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
                       />
                       <motion.div
-                        className="h-12 w-12 rounded-full border border-[rgba(122,12,12,0.55)] bg-[radial-gradient(circle,rgba(122,12,12,0.95),rgba(25,2,2,0.9))] shadow-[0_0_34px_rgba(122,12,12,0.62)]"
+                        className="h-12 w-12 rounded-full border border-[rgba(var(--accent-rgb),0.55)] bg-[radial-gradient(circle,rgba(var(--accent-rgb),0.95),rgba(var(--wine-rgb),0.9))] shadow-[0_0_34px_rgba(var(--accent-rgb),0.62)]"
                         animate={{ scale: [0.92, 1.08, 0.92], opacity: [0.78, 1, 0.78] }}
                         transition={{ duration: 1.05, repeat: Infinity, ease: "easeInOut" }}
                       />
@@ -310,12 +311,12 @@ export default function BookingInsideCabin({
                     transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
                     className="relative flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center overflow-hidden rounded-[30px] border border-white/10 bg-black/30 px-5 py-16 text-center shadow-[0_34px_100px_rgba(0,0,0,0.48)] backdrop-blur-sm md:min-h-[calc(100vh-10rem)]"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(122,12,12,0.32),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.18))]" />
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(var(--accent-rgb),0.32),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.18))]" />
                     <div className="pointer-events-none absolute inset-x-[12%] top-1/2 h-px bg-white/12" />
                     <div className="relative z-10 mb-7 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[10px] font-subheading uppercase tracking-[0.26em] text-white/54">
                       Floor B · Request Logged
                     </div>
-                    <h2 className="relative z-10 text-[clamp(2.7rem,8vw,7rem)] font-display uppercase leading-[0.86] tracking-[-0.03em] text-white drop-shadow-[0_18px_54px_rgba(122,12,12,0.26)]">
+                    <h2 className="relative z-10 text-[clamp(2.7rem,8vw,7rem)] font-display uppercase leading-[0.86] tracking-[-0.03em] text-white drop-shadow-[0_18px_54px_rgba(var(--accent-rgb),0.26)]">
                       Inquiry Received
                     </h2>
                     <p className="relative z-10 mt-6 max-w-[38rem] text-base leading-7 text-white/72 sm:text-lg">
@@ -324,14 +325,14 @@ export default function BookingInsideCabin({
                     <div className="relative z-10 mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
                       <UIButton
                         type="button"
-                        onClick={onReturnToLobby}
+                        onClick={onReturnToAbout}
                         className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
                         style={{
                           borderColor: "rgba(255,255,255,0.16)",
-                          background: "linear-gradient(180deg, rgba(255,255,255,0.1), rgba(122,12,12,0.24))",
+                          background: "linear-gradient(180deg, rgba(255,255,255,0.1), rgba(var(--accent-rgb),0.24))",
                         }}
                       >
-                        Return to Lobby
+                        Return to About
                       </UIButton>
                       <UIButton
                         type="button"
@@ -358,7 +359,7 @@ export default function BookingInsideCabin({
                     transition={{ duration: 0.46, ease: [0.22, 1, 0.36, 1] }}
                     className="relative flex min-h-[calc(100vh-8rem)] w-full flex-col items-center justify-center overflow-hidden rounded-[30px] border border-red-900/35 bg-black/30 px-5 py-16 text-center shadow-[0_34px_100px_rgba(0,0,0,0.48)] backdrop-blur-sm md:min-h-[calc(100vh-10rem)]"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(122,12,12,0.26),transparent_40%)]" />
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(var(--accent-rgb),0.26),transparent_40%)]" />
                     <div className="relative z-10 mb-5 text-[10px] font-title uppercase tracking-[0.32em] text-red-100/46">
                       Route Interrupted
                     </div>
@@ -375,21 +376,21 @@ export default function BookingInsideCabin({
                         className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
                         style={{
                           borderColor: "rgba(255,255,255,0.16)",
-                          background: "linear-gradient(180deg, rgba(255,255,255,0.1), rgba(122,12,12,0.24))",
+                          background: "linear-gradient(180deg, rgba(255,255,255,0.1), rgba(var(--accent-rgb),0.24))",
                         }}
                       >
                         Try Again
                       </UIButton>
                       <UIButton
                         type="button"
-                        onClick={onReturnToLobby}
+                        onClick={onReturnToAbout}
                         className="cursor-pointer border px-7 py-3.5 text-white/82 sm:px-9"
                         style={{
                           borderColor: "rgba(255,255,255,0.1)",
                           background: "linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018))",
                         }}
                       >
-                        Return to Lobby
+                        Return to About
                       </UIButton>
                     </div>
                     <div className="relative z-10 mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-sm text-white/62 sm:text-base">

@@ -4,7 +4,7 @@ import image from "../assets/anais.png";
 const profile: Profile = {
     id: "anais",
     name: "Anaïs",
-    floorNumber: "02",
+    floorNumber: "03",
     role: "Resident DJ",
     genre: "MINIMAL BASS / TECH HOUSE",
     image,

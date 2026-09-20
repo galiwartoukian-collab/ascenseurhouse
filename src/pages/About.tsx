@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import aboutHeaderImage from "../assets/header.png";
+import aboutHeaderImage from "../assets/header.webp";
 import araButtonImage from "../assets/eb.jpg";
 import anaisImage from "../assets/anais.png";
 import blissImage from "../assets/blisseliss.jpg";
-import bendiProfileImage from "../assets/bendiprofile.jpeg";
+import bendiProfileImage from "../assets/bendiprofile2.jpeg";
 type ProfileCircleLink = {
   name: string;
   label: string;
@@ -26,7 +26,7 @@ function ProfileCircleGrid({ profiles, maxWidthClass }: { profiles: ProfileCircl
           aria-label={`Go to ${profile.name}`}
           className="group flex w-full min-w-0 max-w-[clamp(5.8rem,12.4vw,9.4rem)] flex-col items-center gap-2 text-center outline-none"
         >
-          <span className="relative block aspect-square w-full overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(122,12,12,0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(164,32,32,0.45),0_0_70px_rgba(122,12,12,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-red-700/80">
+          <span className="relative block aspect-square w-full overflow-hidden rounded-full bg-black shadow-[0_0_22px_rgba(var(--accent-rgb),0.2)] ring-1 ring-white/8 transition duration-300 group-hover:scale-[1.035] group-hover:shadow-[0_0_28px_rgba(var(--peach-rgb),0.45),0_0_70px_rgba(var(--accent-rgb),0.24)] group-focus-visible:ring-2 group-focus-visible:ring-[rgba(var(--peach-rgb),0.8)]">
             <img src={profile.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
             <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,transparent_42%,rgba(0,0,0,0.38)_100%)]" />
           </span>
@@ -54,7 +54,7 @@ export default function AboutInsideCabin({
   onGoToBliss: () => void;
 }) {
   const djButtons = [
-    { name: "Ara", label: "Ara", image: araButtonImage, onClick: onGoToAra },
+    { name: "ARA32", label: "ARA32", image: araButtonImage, onClick: onGoToAra },
     { name: "Bendi", label: "Bendi", image: bendiProfileImage, onClick: onGoToBendi },
     { name: "Anaïs", label: "Anaïs", image: anaisImage, onClick: onGoToAnais },
   ];
@@ -65,7 +65,7 @@ export default function AboutInsideCabin({
   return (
     <motion.div
       key="about"
-      initial={{ opacity: 0, scale: 0.975, y: 28 }}
+      initial={false}
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
@@ -74,11 +74,7 @@ export default function AboutInsideCabin({
       <section className="relative min-h-full w-full overflow-hidden bg-black text-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(122,12,12,0.28),transparent_31%),radial-gradient(circle_at_50%_88%,rgba(122,12,12,0.5),transparent_46%),linear-gradient(180deg,#020202_0%,#070000_52%,#000_100%)]"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-[5%] top-[38%] h-[58vh] rounded-full bg-[rgba(122,12,12,0.2)] blur-[100px]"
+          className="pointer-events-none absolute inset-0 atmosphere"
         />
 
         <div className="relative z-10 flex min-h-full flex-col items-center text-center">
@@ -110,12 +106,12 @@ export default function AboutInsideCabin({
               </p>
 
               <p className="max-w-[58rem] text-center text-[clamp(0.98rem,1.24vw,1.42rem)] font-body leading-[1.34] text-white/80">
-                This isn’t just a lineup, theres levels to this shit
+                Going up?
               </p>
             </div>
 
-            <div className="grid w-full max-w-[68rem] grid-cols-1 items-start gap-y-[clamp(1.15rem,2.2vw,2rem)] text-center md:grid-cols-[minmax(14rem,0.9fr)_minmax(0,1.1fr)] md:gap-x-[clamp(2rem,5vw,5.5rem)]">
-              <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)] md:pt-0">
+            <div className="grid w-full max-w-[68rem] grid-cols-1 items-start gap-y-[clamp(1.15rem,2.2vw,2rem)] text-center md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)] md:gap-x-[clamp(2rem,5vw,5.5rem)]">
+              <div className="flex min-w-0 flex-col items-center gap-[clamp(0.85rem,1.2vw,1.25rem)] md:order-2 md:pt-0">
                 <h3 className="text-center text-[clamp(0.72rem,0.82vw,0.92rem)] font-title uppercase leading-none tracking-[0.34em] text-white/52">
                   Manager
                 </h3>

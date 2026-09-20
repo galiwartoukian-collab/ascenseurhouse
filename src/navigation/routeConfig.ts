@@ -1,20 +1,21 @@
-import type { FloorCode, Stop } from "../types";
+import type { FloorCode, ProfileStop, Stop } from "../types";
 
 export const paths: Record<Stop, string> = {
-  lobby: "/", about: "/about", booking: "/booking",
+  about: "/", booking: "/booking",
   ara: "/ara", bendi: "/bendi", anais: "/anais", bliss: "/bliss",
 };
 export const floors: Record<Stop, FloorCode> = {
-  lobby: "00", about: "A", booking: "B", ara: "01", bendi: "03", anais: "02", bliss: "04",
+  about: "A", booking: "B", ara: "01", bendi: "02", anais: "03", bliss: "04",
 };
 export function routeFromPath(path: string): Stop {
   const normalized = path.replace(/\/+$/, "") || "/";
-  return (Object.keys(paths) as Stop[]).find(route => paths[route] === normalized) ?? "lobby";
+  if (normalized === "/about") return "about";
+  return (Object.keys(paths) as Stop[]).find(route => paths[route] === normalized) ?? "about";
 }
-export function isProfile(route: Stop) {
-  return route !== "lobby" && route !== "about" && route !== "booking";
+export function isProfile(route: Stop): route is ProfileStop {
+  return route !== "about" && route !== "booking";
 }
-export const SCROLL_SEQUENCE: readonly Stop[] = ["lobby", "about", "ara", "bendi", "anais", "bliss", "booking"];
+export const SCROLL_SEQUENCE: readonly Stop[] = ["about", "ara", "bendi", "anais", "bliss", "booking"];
 
 export function nextMainFloor(route: Stop): Stop | null {
   return SCROLL_SEQUENCE[SCROLL_SEQUENCE.indexOf(route) + 1] ?? null;

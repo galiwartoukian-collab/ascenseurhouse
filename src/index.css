@@ -2,22 +2,35 @@
 @import "tailwindcss";
 
 :root {
-  --black: #050505;
-  --panel-black: #0b0b0b;
-  --panel-soft: #121212;
+  --black: #030304;
 
---metal-dark: #1c1f23;
---metal-mid: #2a2d31;
---metal-light: #3a3f45;
-  --metal-edge: #d8dce0;
+  --gold-rgb: 255, 206, 132;
+  --orange-rgb: 242, 118, 69;
+  --peach-rgb: 245, 154, 112;
+  --coral-rgb: 240, 82, 85;
+  --pink-rgb: 229, 47, 104;
+  --magenta-rgb: 185, 31, 98;
+  --wine-rgb: 113, 27, 73;
+  --violet-rgb: 91, 67, 142;
+  --blue-rgb: 7, 95, 145;
+  --navy-rgb: 6, 24, 32;
+  --bloom-peach: #ad6c4a;
+  --bloom-amber: #a34e36;
+  --bloom-coral: #8b3342;
+  --bloom-pink: #70203f;
+  --bloom-berry: #351126;
+  --bloom-violet: #38265c;
+  --bloom-blue: #064363;
+  --bloom-navy: #061820;
+  --accent-rgb: var(--pink-rgb);
+  --reflection-rgb: var(--blue-rgb);
+  --active-button: linear-gradient(160deg, rgba(var(--magenta-rgb), .8), rgba(var(--wine-rgb), .98));
+  --light-sweep: linear-gradient(90deg, transparent, rgba(var(--peach-rgb), .22) 24%, rgba(var(--coral-rgb), .32) 40%, rgba(var(--pink-rgb), .35) 60%, rgba(var(--blue-rgb), .15) 82%, transparent);
+  --warm-bloom: radial-gradient(ellipse at 24% 58%, rgba(var(--peach-rgb), .09), rgba(var(--pink-rgb), .08) 30%, transparent 62%);
+  --cool-bloom: radial-gradient(ellipse at 98% 88%, rgba(var(--blue-rgb), .06), transparent 42%);
+  --door-reflection: radial-gradient(ellipse at 100% 65%, rgba(var(--peach-rgb), .15), rgba(var(--coral-rgb), .10) 20%, rgba(var(--pink-rgb), .07) 40%, transparent 70%), radial-gradient(ellipse at 0% 20%, rgba(var(--blue-rgb), .07), transparent 42%);
 
-  --deep-red: #7a0c0c;
-  --burnt-orange: #c2410c;
-  --hot-pink: #e11d48;
-
-  --text: #f5f5f5;
-  --muted: rgba(245, 245, 245, 0.62);
-  --line: rgba(255, 255, 255, 0.08);
+  --text: #f4efe8;
 }
 
 html,
@@ -32,10 +45,6 @@ body,
 
 body {
   overflow-x: hidden;
-}
-
-
-body {
   font-family: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-weight: 500;
 }
@@ -73,17 +82,47 @@ body {
   font-weight: 400;
 }
 
-.font-montserrat-light {
-  font-family: "Montserrat", system-ui, sans-serif;
-  font-weight: 300;
+:root, .atmosphere {
+  --atmosphere-warm: radial-gradient(ellipse 9% 12% at var(--warm-x, 38%) 82%, rgba(var(--gold-rgb), .10), transparent 78%), radial-gradient(ellipse 54% 58% at var(--warm-x, 38%) 82%, var(--bloom-peach), var(--bloom-amber) 14%, var(--bloom-coral) 30%, var(--bloom-pink) 46%, var(--bloom-berry) 60%, #03030400 82%), radial-gradient(ellipse 36% 44% at 90% 14%, var(--bloom-blue), var(--bloom-violet) 28%, var(--bloom-navy) 55%, #03030400 84%);
+  --atmosphere-cool: radial-gradient(ellipse 52% 56% at 60% 30%, var(--bloom-peach), var(--bloom-coral) 20%, var(--bloom-pink) 40%, var(--bloom-berry) 58%, #03030400 82%), radial-gradient(ellipse 39% 48% at 98% var(--cool-y, 86%), var(--bloom-blue), var(--bloom-violet) 26%, var(--bloom-navy) 55%, #03030400 84%);
+  --atmosphere-full: radial-gradient(ellipse 10% 12% at var(--warm-x, 22%) 64%, rgba(var(--gold-rgb), .12), transparent 78%), radial-gradient(ellipse 54% 55% at var(--warm-x, 22%) 64%, var(--bloom-peach) 0%, var(--bloom-amber) 12%, var(--bloom-coral) 28%, var(--bloom-pink) 44%, var(--bloom-berry) 60%, #03030400 82%), radial-gradient(ellipse 27% 32% at 59% 88%, var(--bloom-pink), var(--bloom-berry) 46%, #03030400 82%), radial-gradient(ellipse 36% 49% at 98% var(--cool-y, 76%), var(--bloom-blue), var(--bloom-violet) 24%, var(--bloom-navy) 56%, #03030400 84%);
 }
 
-.font-montserrat-medium {
-  font-family: "Montserrat", system-ui, sans-serif;
-  font-weight: 500;
+/* Warm blooms carry the color hierarchy; cool light stays at edges.
+   Small gold cores add light without becoming a yellow background. */
+.atmosphere { background-color: var(--black); background-image: var(--atmosphere-full); }
+.atmosphere-cool { background-image: var(--atmosphere-cool); }
+.atmosphere::after, .door-reflection::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("./assets/grain.png") repeat;
+  opacity: .025;
 }
+[data-atmosphere="ara"] { --warm-x: 58%; --cool-y: 90%; }
+[data-atmosphere="bendi"] { --cool-y: 86%; }
+[data-atmosphere="bendi"] .atmosphere { background-image: var(--atmosphere-cool); }
+[data-atmosphere="anais"] { --warm-x: 76%; --cool-y: 20%; }
+[data-atmosphere="bliss"] { --warm-x: 56%; }
+[data-atmosphere="bliss"] .atmosphere { background-image: var(--atmosphere-warm); }
+.door-reflection { background-image: var(--door-reflection); }
 
-.font-montserrat-bold {
-  font-family: "Montserrat", system-ui, sans-serif;
-  font-weight: 700;
+/* Desktop floor controls only; the mobile metal buttons remain unchanged. */
+@media (min-width: 768px) {
+  .desktop-floor-button { border: 1px solid transparent; }
+  .desktop-floor-button:hover:not(:disabled),
+  .desktop-floor-button:focus-visible {
+    color: white;
+    border-color: rgba(var(--floor-color), .35);
+    background: rgba(var(--floor-color), .12);
+    outline: none;
+  }
+  .desktop-floor-button[aria-current="page"],
+  .desktop-floor-button:active:not(:disabled) {
+    color: white;
+    border-color: rgba(var(--floor-color), .65);
+    background: rgba(var(--floor-color), .72);
+    box-shadow: 0 0 14px rgba(var(--floor-color), .22);
+  }
 }

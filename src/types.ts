@@ -1,9 +1,8 @@
-export type View = "lobby" | "profile" | "booking";
 export type TravelState = "idle" | "closing" | "traveling" | "opening";
 export type BookingSubmitStatus = "idle" | "sending" | "success" | "error";
-export type Stop = "lobby" | "about" | "ara" | "anais" | "bendi" | "bliss" | "booking";
+export type Stop = "about" | "ara" | "anais" | "bendi" | "bliss" | "booking";
 export type ProfileStop = Extract<Stop, "ara" | "anais" | "bendi" | "bliss">;
-export type FloorCode = "00" | "A" | "01" | "02" | "03" | "04" | "B";
+export type FloorCode = "A" | "01" | "02" | "03" | "04" | "B";
 
 export type ProfileSocials = {
   instagram?: string;
@@ -18,6 +17,7 @@ export type Profile = {
   role: string;
   genre: string;
   image: string;
+  desktopImage?: string;
   bio: string;
   socials?: ProfileSocials;
 };

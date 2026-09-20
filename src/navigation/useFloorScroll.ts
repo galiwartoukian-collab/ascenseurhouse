@@ -3,7 +3,7 @@ import type { Stop } from "../types";
 import { GestureGate, ScrollBoundary } from "./gesture";
 import { nextMainFloor, previousMainFloor, prepareRoute } from "./routes";
 
-export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: Stop) => boolean, setLobbyProgress: (value: number) => void) {
+export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: Stop) => boolean) {
   const gate = useRef(new GestureGate());
   useEffect(() => {
     gate.current.block(performance.now());
@@ -12,7 +12,6 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     let touchUsed = false;
     const interactive = (target: EventTarget | null) => target instanceof Element && !!target.closest(route === "booking" ? "input,textarea,select,button,a,[contenteditable=true]" : "input,textarea,select,[contenteditable=true]");
     const scrollElement = (target: EventTarget | null): HTMLElement | null => {
-      if (route === "lobby") return document.documentElement;
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(`[data-floor-scroll="${route}"]`))
         .filter(el => el.clientHeight > 0 && /^(auto|scroll)$/.test(getComputedStyle(el).overflowY));
       const containing = candidates.filter(el => target instanceof Node && el.contains(target));
@@ -31,11 +30,10 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       const el = scrollElement(event?.target ?? null);
       if (!el) return;
       const max = Math.max(0, el.scrollHeight - el.clientHeight);
-      if (route === "lobby") setLobbyProgress(Math.min(1, el.scrollTop / Math.max(1, max * 0.8)));
       const boundary = boundaryFor(el);
       if (event) {
         // Ignore scroll events from form fields or unrelated nested elements.
-        if (event.target !== el && !(route === "lobby" && event.target === document)) return;
+        if (event.target !== el) return;
         const delta = boundary.observe(el.scrollTop, performance.now(), gate.current);
         const edge = delta > 0 && boundary.atEdge(delta, el.clientHeight, el.scrollHeight);
         const destination = nextMainFloor(route);
@@ -102,5 +100,5 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       window.removeEventListener("touchend", end);
       window.removeEventListener("touchcancel", end);
     };
-  }, [route, locked, navigate, setLobbyProgress]);
+  }, [route, locked, navigate]);
 }

@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 // GitHub Pages has no rewrite rules. Real directory entries serve each React route.
+// /about boots the same app, which replaces its URL with / (preserving query/hash).
 const html = await readFile(new URL('../dist/index.html', import.meta.url), 'utf8');
 for (const route of ['about', 'booking', 'ara', 'bendi', 'anais', 'bliss']) {
   const directory = new URL(`../dist/${route}/`, import.meta.url);

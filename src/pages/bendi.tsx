@@ -1,10 +1,10 @@
 import ProfileInsideCabin from "./ProfileInsideCabin";
 import type { Profile } from "../types";
-import image from "../assets/bendiprofile.jpeg";
+import image from "../assets/bendiprofile2.jpeg";
 const profile: Profile = {
     id: "bendi",
     name: "Bendi",
-    floorNumber: "03",
+    floorNumber: "02",
     role: "DJ",
     genre: "Ascenseur House",
     image,
