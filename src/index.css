@@ -108,21 +108,149 @@ body {
 [data-atmosphere="bliss"] .atmosphere { background-image: var(--atmosphere-warm); }
 .door-reflection { background-image: var(--door-reflection); }
 
-/* Desktop floor controls only; the mobile metal buttons remain unchanged. */
+/* About refinements and floor buttons apply only to desktop/tablet. */
 @media (min-width: 768px) {
-  .desktop-floor-button { border: 1px solid transparent; }
+  @font-face {
+    font-family: "About Display";
+    src: url("./assets/about-display-medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+  }
+
+  .about-title {
+    font-family: "About Display", var(--font-display);
+    font-weight: 500;
+    -webkit-text-stroke: 0;
+    width: 120%;
+    left: -10%;
+    right: auto;
+    scale: 0.88 0.85;
+    line-height: 0.76;
+    bottom: -0.12em;
+  }
+
+  .about-content {
+    padding-top: calc(clamp(1.55rem, 3.1vw, 3.45rem) + 0.2vw);
+    padding-bottom: 1.5rem;
+    gap: 0.65rem;
+  }
+
+  .about-tagline { font-weight: 300; }
+
+  .about-going-up {
+    margin-top: 0.25rem;
+    margin-bottom: 0.15rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+  }
+
+  .about-mobile-profiles { display: none; }
+
+  .about-house {
+    display: flex;
+    width: 100%;
+    max-width: 52rem;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.75rem, 1vw, 1rem);
+  }
+
+  .about-house-heading {
+    font-family: var(--font-title);
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .about-house-profiles {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.25rem, 2.4vw, 2.75rem);
+  }
+
+  .about-house-profile {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    border-radius: 0.25rem;
+  }
+
+  .about-house-profile:focus-visible {
+    outline: 1px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 6px;
+  }
+
+  .about-house-role, .about-house-name {
+    font-family: var(--font-title);
+    font-size: clamp(0.65rem, 0.95vw, 0.95rem);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .about-house-portrait {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 11rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    background: black;
+  }
+
+  .about-house-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms;
+  }
+
+  .about-house-profile:hover img { transform: scale(1.1); }
+
+  .desktop-floor-button {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.88);
+    background: linear-gradient(160deg, #303236, #151618 65%, #0b0c0d);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.16), inset 0 -5px 9px rgba(0, 0, 0, 0.6), 0 3px 7px rgba(0, 0, 0, 0.4);
+  }
+
+  .desktop-floor-button::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+  }
+
   .desktop-floor-button:hover:not(:disabled),
   .desktop-floor-button:focus-visible {
     color: white;
-    border-color: rgba(var(--floor-color), .35);
-    background: rgba(var(--floor-color), .12);
-    outline: none;
+    border-color: rgba(var(--floor-color), .5);
+    outline: 1px solid rgba(var(--floor-color), .35);
+    outline-offset: 2px;
   }
+
   .desktop-floor-button[aria-current="page"],
   .desktop-floor-button:active:not(:disabled) {
     color: white;
-    border-color: rgba(var(--floor-color), .65);
-    background: rgba(var(--floor-color), .72);
-    box-shadow: 0 0 14px rgba(var(--floor-color), .22);
+    border-color: rgba(var(--floor-color), .7);
+    background: linear-gradient(160deg, rgba(var(--floor-color), .55), #171719 85%);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2), inset 0 0 9px rgba(var(--floor-color), .4), inset 0 -4px 8px rgba(0, 0, 0, .4), 0 0 10px rgba(var(--floor-color), .2);
+  }
+
+  .desktop-floor-button[aria-current="page"]::before {
+    border-color: rgba(var(--floor-color), .6);
+    box-shadow: inset 0 0 5px rgba(var(--floor-color), .3);
   }
 }

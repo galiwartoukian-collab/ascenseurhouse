@@ -88,7 +88,7 @@
 
 @media (min-width: 768px) {
   .profile-cabin { height: 100%; --photo-position: 50% 68%; --bridge-x: 34%; --bridge-y: 43%; --navy-y: 12%; --spill-x: 53%; --spill-y: 94%; --bridge-height: 64%; --navy-width: 43%; --spill-width: 40%; }
-  .profile-cabin[data-atmosphere="bendi"] { --photo-position: 48% 48%; --bridge-x: 34%; --bridge-y: 72%; --navy-y: 10%; --spill-x: 48%; --spill-y: 100%; --bridge-height: 58%; --navy-width: 40%; --spill-width: 35%; }
+  .profile-cabin[data-atmosphere="bendi"] { --photo-position: 48% 48%; --bloom-y: 52%; --warm-x: 58%; --cool-y: 90%; --photo-dissolve: none; }
   .profile-cabin[data-atmosphere="anais"] { --photo-position: 50% 30%; --bridge-x: 32.75%; --navy-x: 47.75%; --bridge-y: 32%; --navy-y: 85%; --spill-x: 54%; --spill-y: 104%; --bridge-height: 70%; --navy-width: 36%; --spill-width: 43%; }
   .profile-cabin[data-atmosphere="bliss"] { --photo-position: 43% 50%; --bridge-x: 35%; --bridge-y: 64%; --navy-y: 8%; --spill-x: 55%; --spill-y: 96%; --bridge-height: 63%; --navy-width: 42%; --spill-width: 40%; }
   /* Only the outer pigment dissolves faster; Anaïs keeps the approved blend. */
@@ -96,18 +96,11 @@
     --plum-mid: .5; --plum-tail: .16; --navy-tail: .24;
     --base-mid: .72; --base-tail: .28;
   }
-  .profile-cabin[data-atmosphere="ara"] {
+  .profile-cabin[data-atmosphere="ara"],
+  .profile-cabin[data-atmosphere="bendi"] {
     --bridge-x: 34.5%; --navy-x: 47.5%;
     --plum-mid: .38; --plum-tail: .08; --navy-tail: .14;
     --base-mid: .62; --base-tail: .16;
-  }
-  .profile-cabin[data-atmosphere="bendi"] {
-    /* Existing pigment fields cover the photo boundary; no separate dissolve. */
-    --photo-dissolve: none;
-    --bridge-x: calc(33% + 88px); --bridge-y: calc(68% - 112px); --bridge-width: 27%; --bridge-height: 90%;
-    --bridge-core: .78; --plum-mid: .50; --plum-tail: .12;
-    --navy-x: calc(32% + 88px); --navy-y: calc(2% - 112px); --navy-width: 29%; --navy-height: 65%;
-    --navy-core: .65; --navy-tail: .24; --navy-mid-stop: 40%;
   }
   .profile-cabin[data-atmosphere="bliss"] {
     /* Existing pigment fields cover the photo boundary; no separate dissolve. */
