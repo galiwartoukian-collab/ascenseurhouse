@@ -56,19 +56,25 @@ export class GestureGate {
   }
 }
 
-// Mobile profiles capture the starting boundary and decide only on release.
+// Mobile pages capture the starting boundary and decide only on release.
 export class ProfileTouchGate {
+  private allowFittingContent: boolean;
+
+  constructor(allowFittingContent = false) {
+    this.allowFittingContent = allowFittingContent;
+  }
+
   private startY: number | null = null;
   private atTop = false;
   private atBottom = false;
 
   begin(y: number, top: number, height: number, total: number) {
     this.cancel();
-    if (height <= 0 || total <= height) return;
+    if (height <= 0 || (!this.allowFittingContent && total <= height)) return;
     const maxScroll = Math.max(0, total - height);
     this.startY = y;
     this.atTop = top <= 3;
-    this.atBottom = top >= maxScroll - 3;
+    this.atBottom = (this.allowFittingContent && maxScroll <= 3) || top >= maxScroll - 3;
   }
 
   cancel() {
@@ -79,8 +85,9 @@ export class ProfileTouchGate {
   finish(y: number, top: number, height: number, total: number, locked: boolean): number {
     const delta = this.startY === null ? 0 : this.startY - y;
     const maxScroll = Math.max(0, total - height);
-    const eligible = !locked && height > 0 && total > height && Math.abs(delta) >= 90
-      && (delta > 0 ? this.atBottom && top >= maxScroll - 3 : this.atTop && top <= 3);
+    const atBottom = (this.allowFittingContent && maxScroll <= 3) || top >= maxScroll - 3;
+    const eligible = !locked && height > 0 && (this.allowFittingContent || total > height) && Math.abs(delta) >= 90
+      && (delta > 0 ? this.atBottom && atBottom : this.atTop && top <= 3);
     this.cancel();
     return eligible ? Math.sign(delta) : 0;
   }

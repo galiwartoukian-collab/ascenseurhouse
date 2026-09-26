@@ -10,7 +10,7 @@ import * as routes from '../src/navigation/routeConfig.ts';
 const source = ts.transpileModule(fs.readFileSync(new URL('../src/navigation/useFloorScroll.ts', import.meta.url), 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText;
-function setup(route, total, mobile = true, height = 568) {
+function setup(route, total, mobile = true, height = 568, locked = false) {
   class Element {
     constructor(height, total, overflow) {
       Object.assign(this, { clientHeight: height, scrollHeight: total, scrollTop: 0, overflow, isConnected: true });
@@ -18,7 +18,7 @@ function setup(route, total, mobile = true, height = 568) {
     contains() { return true; }
     closest() { return null; }
   }
-  const outer = new Element(height, total, mobile ? 'auto' : 'hidden');
+  const outer = new Element(height, total, mobile || route === 'about' ? 'auto' : 'hidden');
   const inner = new Element(mobile ? total : height, total, mobile ? 'visible' : 'auto');
   const listeners = {};
   const navigations = [];
@@ -27,19 +27,19 @@ function setup(route, total, mobile = true, height = 568) {
   vm.runInNewContext(source, {
     exports, Element, Node: Element, performance: { now: () => now },
     getComputedStyle: el => ({ overflowY: el.overflow }),
-    document: { querySelectorAll: () => [outer, inner] },
+    document: { querySelectorAll: () => route === 'about' ? [outer] : [outer, inner] },
     window: { matchMedia: () => ({ matches: mobile }), addEventListener: (name, fn) => { listeners[name] = fn; }, removeEventListener() {} },
     require: name => name === 'react' ? { useRef: value => ({ current: value }), useEffect: fn => fn() }
       : name === './gesture' ? gesture : { ...routes, prepareRoute: () => Promise.resolve() },
   });
-  exports.useFloorScroll(route, false, destination => { navigations.push(destination); return true; });
+  exports.useFloorScroll(route, locked, destination => { navigations.push(destination); return true; });
   now = 2000; // Beyond the hook's initial transition block.
   function event(name, y = 500, overrides = {}) {
     let prevented = false;
     listeners[name]({ target: inner, touches: name === 'touchend' || name === 'touchcancel' ? [] : [{ clientY: y, identifier: 1 }], changedTouches: [{ clientY: y, identifier: 1 }], cancelable: true, preventDefault() { prevented = true; }, ...overrides });
     return prevented;
   }
-  return { outer, inner, event, navigations };
+  return { outer, inner, event, navigations, setTime: value => { now = value; } };
 }
 
 // Browser-measured mobile clientHeight/scrollHeight pairs.
@@ -140,4 +140,72 @@ test('viewport resize cannot turn a middle-start gesture into a boundary gesture
   event('touchmove', 200);
   event('touchend', 200);
   assert.deepEqual(navigations, []);
+});
+
+test('About: native scrolling and momentum cannot navigate; a new bottom swipe exits on release', () => {
+  const { outer, event, navigations } = setup('about', 1200);
+  for (const start of [0, 300, 628.9]) {
+    outer.scrollTop = start;
+    event('touchstart');
+    assert.equal(event('touchmove', 200), false);
+    outer.scrollTop = 632;
+    event('scroll', 200, { target: outer });
+    assert.deepEqual(navigations, []);
+    event('touchend', 100);
+    event('scroll', 100, { target: outer });
+    assert.deepEqual(navigations, []);
+  }
+  event('touchstart');
+  assert.equal(event('touchmove', 410), false);
+  assert.deepEqual(navigations, []);
+  assert.equal(event('touchend', 410), false);
+  assert.deepEqual(navigations, ['ara']);
+});
+for (const total of [500, 568, 570.9, 571, 571.1]) {
+  test(`About: fitting-content tolerance with scrollHeight ${total}`, () => {
+    const { event, navigations } = setup('about', total);
+    event('touchstart');
+    event('touchmove', 410);
+    assert.deepEqual(navigations, []);
+    event('touchend', 410);
+    assert.deepEqual(navigations, total <= 571 ? ['ara'] : []);
+  });
+}
+test('About: downward swipes, short swipes, and cancelled gestures do nothing', () => {
+  const { event, navigations } = setup('about', 568);
+  for (const y of [700, 411, 500]) {
+    event('touchstart');
+    assert.equal(event('touchmove', y), false);
+    event('touchend', y);
+  }
+  event('touchstart');
+  event('touchmove', 200);
+  event('touchcancel', 200);
+  event('touchend', 200);
+  assert.deepEqual(navigations, []);
+});
+test('About: traveling or a gesture begun during arrival cooldown cannot navigate', () => {
+  for (const locked of [true, false]) {
+    const { event, navigations, setTime } = setup('about', 568, true, 568, locked);
+    if (!locked) setTime(100);
+    event('touchstart');
+    setTime(3000);
+    event('touchmove', 200);
+    event('touchend', 200);
+    assert.deepEqual(navigations, []);
+  }
+});
+test('desktop About retains its existing touch navigation', () => {
+  const { event, navigations } = setup('about', 568, false);
+  event('touchstart');
+  assert.equal(event('touchmove', 200), true);
+  assert.deepEqual(navigations, ['ara']);
+});
+test('About: fitting content remains at bottom during browser rubber-banding', () => {
+  const { outer, event, navigations } = setup('about', 568);
+  outer.scrollTop = -10;
+  event('touchstart');
+  event('touchmove', 410);
+  event('touchend', 410);
+  assert.deepEqual(navigations, ['ara']);
 });
