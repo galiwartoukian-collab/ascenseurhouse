@@ -1,3 +1,14 @@
+@media (max-width: 767px) {
+  .profile-mobile-scroll {
+    height: 100%;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* Photo composition is local to the cabins; the shared palette stays unchanged. */
 .profile-cabin {
   --photo-position: 50% 67%;

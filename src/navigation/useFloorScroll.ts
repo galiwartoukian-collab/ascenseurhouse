@@ -12,6 +12,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     let touchTarget: EventTarget | null = null;
     let touchScrollOwner: HTMLElement | null = null;
     let touchUsed = false;
+    let touchId: number | null = null;
     const profileTouch = new ProfileTouchGate();
     const mobileProfile = () => isProfile(route) && window.matchMedia("(max-width: 767px)").matches;
     const interactive = (target: EventTarget | null) => target instanceof Element && !!target.closest(route === "booking" ? "input,textarea,select,button,a,[contenteditable=true]" : "input,textarea,select,[contenteditable=true]");
@@ -72,21 +73,40 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     };
     const start = (event: TouchEvent) => {
       touchY = event.touches[0]?.clientY ?? null;
+      touchId = event.touches[0]?.identifier ?? null;
       touchTarget = event.target;
       touchUsed = false;
       const el = scrollElement(touchTarget);
       touchScrollOwner = el;
-      profileTouch.end();
-      if (mobileProfile() && el && event.touches.length === 1) profileTouch.begin(el.scrollTop, el.clientHeight, el.scrollHeight);
+      profileTouch.cancel();
+      if (mobileProfile() && el && touchY !== null && event.touches.length === 1
+        && !locked && performance.now() >= gate.current.blockedUntil && !interactive(touchTarget)) {
+        profileTouch.begin(touchY, el.scrollTop, el.clientHeight, el.scrollHeight);
+      }
       if (el) boundaryFor(el).observe(el.scrollTop, performance.now(), gate.current);
       gate.current.beginTouch(performance.now(), !!el && el.scrollTop <= 0);
     };
-    const end = () => {
+    const cancel = () => {
       touchY = null;
+      touchId = null;
       touchTarget = null;
       touchScrollOwner = null;
-      profileTouch.end();
+      profileTouch.cancel();
       gate.current.endTouch(performance.now());
+    };
+    const end = (event: TouchEvent) => {
+      if (mobileProfile() && !touchUsed && touchY !== null && event.touches.length === 0) {
+        const el = touchScrollOwner;
+        const touch = Array.from(event.changedTouches).find(touch => touch.identifier === touchId);
+        const now = performance.now();
+        if (touch && el?.isConnected && scrollElement(touchTarget) === el) {
+          const direction = profileTouch.finish(touch.clientY, el.scrollTop, el.clientHeight, el.scrollHeight,
+            locked || now < gate.current.blockedUntil || interactive(touchTarget));
+          const destination = direction > 0 ? nextMainFloor(route) : direction < 0 ? previousMainFloor(route) : null;
+          if (destination && navigate(destination)) gate.current.block(now);
+        }
+      }
+      cancel();
     };
     const move = (event: TouchEvent) => {
       if (touchY === null || touchUsed) return;
@@ -94,21 +114,10 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       const delta = touchY - y;
       touchY = y;
       if (mobileProfile()) {
-        // Use the owner whose boundaries were captured at touchstart, even if
-        // layout changes while the finger is down. A new owner needs a new touch.
-        const el = touchScrollOwner;
-        if (!el || !el.isConnected || el.scrollHeight <= el.clientHeight || scrollElement(touchTarget) !== el) {
-          profileTouch.end();
+        // Native scrolling owns every move; only release can navigate.
+        if (event.touches.length !== 1 || event.touches[0]?.identifier !== touchId) {
+          profileTouch.cancel();
           touchUsed = true;
-          return;
-        }
-        const destination = delta > 0 ? nextMainFloor(route) : previousMainFloor(route);
-        const now = performance.now();
-        if (el && profileTouch.input(delta, el.scrollTop, el.clientHeight, el.scrollHeight,
-          locked || now < gate.current.blockedUntil || interactive(touchTarget) || event.touches.length !== 1 || !destination) && destination) {
-          touchUsed = true;
-          gate.current.block(now);
-          if (navigate(destination) && event.cancelable) event.preventDefault();
         }
         return;
       }
@@ -119,9 +128,9 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     window.addEventListener("scroll", prefetch, true);
     window.addEventListener("wheel", wheel, { passive: false });
     window.addEventListener("touchstart", start, { passive: true });
-    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("touchmove", move, { passive: mobileProfile() });
     window.addEventListener("touchend", end, { passive: true });
-    window.addEventListener("touchcancel", end, { passive: true });
+    window.addEventListener("touchcancel", cancel, { passive: true });
     prefetch();
     return () => {
       window.removeEventListener("ascenseur:floor-ready", ready);
@@ -130,7 +139,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       window.removeEventListener("touchstart", start);
       window.removeEventListener("touchmove", move);
       window.removeEventListener("touchend", end);
-      window.removeEventListener("touchcancel", end);
+      window.removeEventListener("touchcancel", cancel);
     };
   }, [route, locked, navigate]);
 }

@@ -56,39 +56,33 @@ export class GestureGate {
   }
 }
 
-// Mobile profiles require a separate touch starting at the absolute boundary.
+// Mobile profiles capture the starting boundary and decide only on release.
 export class ProfileTouchGate {
+  private startY: number | null = null;
   private atTop = false;
   private atBottom = false;
-  private amount = 0;
-  private direction = 0;
 
-  begin(top: number, height: number, total: number) {
-    this.end();
-    this.atTop = top <= 0;
-    this.atBottom = top + height >= total;
+  begin(y: number, top: number, height: number, total: number) {
+    this.cancel();
+    if (height <= 0 || total <= height) return;
+    const maxScroll = Math.max(0, total - height);
+    this.startY = y;
+    this.atTop = top <= 3;
+    this.atBottom = top >= maxScroll - 3;
   }
 
-  end() {
+  cancel() {
+    this.startY = null;
     this.atTop = this.atBottom = false;
-    this.amount = this.direction = 0;
   }
 
-  input(delta: number, top: number, height: number, total: number, locked: boolean) {
-    if (delta === 0 && !locked) return false;
-    const direction = Math.sign(delta);
-    const atEdge = direction < 0 ? this.atTop && top <= 0 : direction > 0 && this.atBottom && top + height >= total;
-    if (locked || !atEdge) {
-      // Once native scrolling wins, this finger must be released before trying again.
-      this.end();
-      return false;
-    }
-    if (direction !== this.direction) this.amount = 0;
-    this.direction = direction;
-    this.amount += Math.min(Math.abs(delta), 120);
-    if (this.amount < 90) return false;
-    this.end();
-    return true;
+  finish(y: number, top: number, height: number, total: number, locked: boolean): number {
+    const delta = this.startY === null ? 0 : this.startY - y;
+    const maxScroll = Math.max(0, total - height);
+    const eligible = !locked && height > 0 && total > height && Math.abs(delta) >= 90
+      && (delta > 0 ? this.atBottom && top >= maxScroll - 3 : this.atTop && top <= 3);
+    this.cancel();
+    return eligible ? Math.sign(delta) : 0;
   }
 }
 
