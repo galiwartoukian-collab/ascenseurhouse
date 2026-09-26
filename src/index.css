@@ -92,6 +92,20 @@ body {
    Small gold cores add light without becoming a yellow background. */
 .atmosphere { background-color: var(--black); background-image: var(--atmosphere-full); }
 .atmosphere-cool { background-image: var(--atmosphere-cool); }
+/* About only: offset light fields wrap around a sweeping plum channel. */
+[data-floor-scroll="about"] .atmosphere {
+  --atmosphere-full:
+    linear-gradient(180deg, #030304 0%, rgba(3,3,4,.88) 19%, rgba(3,3,4,.32) 42%, transparent 64%),
+    radial-gradient(ellipse 112% 76% at -14% 12%, transparent 58%, rgba(48,12,49,.3) 68%, rgba(17,9,30,.88) 78%, rgba(24,13,45,.8) 84%, rgba(53,23,87,.35) 92%, transparent 104%),
+    radial-gradient(ellipse 121% 82% at -14% 12%, transparent 72%, rgba(50,36,134,.55) 83%, rgba(5,85,176,.86) 92%, rgba(29,54,149,.64) 99%, transparent 113%),
+    radial-gradient(ellipse 78% 62% at -18% 42%, rgba(235,103,39,.96) 0%, rgba(222,65,65,.88) 42%, rgba(208,30,100,.38) 74%, transparent 100%),
+    radial-gradient(ellipse 88% 57% at 30% 24%, rgba(201,27,104,.92) 16%, rgba(173,24,110,.84) 52%, rgba(108,25,104,.3) 80%, transparent 108%),
+    radial-gradient(ellipse 73% 51% at 108% 112%, rgba(222,65,65,.9) 5%, rgba(208,30,100,.76) 43%, rgba(131,28,114,.42) 74%, transparent 105%),
+    radial-gradient(ellipse 96% 46% at -16% 114%, rgba(235,103,39,.94) 12%, rgba(222,65,65,.84) 46%, rgba(182,39,101,.48) 76%, transparent 110%),
+    radial-gradient(ellipse 65% 104% at 112% 37%, #0755b0 0%, #313092 44%, rgba(83,34,115,.72) 76%, transparent 115%),
+    radial-gradient(ellipse 125% 108% at 34% 64%, #831c72 0%, #532273 64%, #251334 100%);
+}
+
 .atmosphere::after, .door-reflection::after {
   content: "";
   position: absolute;

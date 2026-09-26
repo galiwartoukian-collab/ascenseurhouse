@@ -1,4 +1,6 @@
 import React from "react";
+import aboutHeaderImage from "../assets/header.webp";
+import "./Booking.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { sendInquiry } from "../booking/sendInquiry";
 import { CalendarDays } from "lucide-react";
@@ -82,7 +84,7 @@ export default function BookingInsideCabin({
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.99, y: visible ? 0 : 8 }}
       exit={{ opacity: 0, scale: 0.985, y: -10 }}
       transition={{ duration: 0.54, ease: [0.22, 1, 0.36, 1] }}
-      className="pointer-events-auto absolute inset-0 isolate z-50 overflow-hidden"
+      className="booking-page pointer-events-auto absolute inset-0 isolate z-50 overflow-hidden"
     >
       <div
         data-floor-scroll="booking" ref={mobileScrollRef}
@@ -101,6 +103,9 @@ export default function BookingInsideCabin({
                 "var(--atmosphere-full)",
             }}
           />
+          <div className="booking-photograph">
+            <img src={aboutHeaderImage} alt="" />
+          </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/75 to-transparent" />
           <motion.div
             className="pointer-events-none absolute top-0 h-full w-[26%] opacity-12 blur-xl md:w-[34%] md:opacity-22 md:blur-3xl"
@@ -117,9 +122,9 @@ export default function BookingInsideCabin({
         <div className="pointer-events-auto relative z-30 flex min-h-full flex-col pt-20 md:h-full md:min-h-0 md:pt-0">
           <div
             data-floor-scroll="booking" ref={desktopFormScrollRef}
-            className="min-h-0 w-full overflow-visible px-6 py-7 pb-14 sm:px-10 md:flex md:h-full md:items-center md:overflow-y-auto md:px-10 md:py-16 lg:px-14"
+            className="booking-content min-h-0 w-full overflow-visible px-6 pb-14 sm:px-10 md:flex md:h-full md:overflow-y-auto lg:px-14"
           >
-            <div className="pointer-events-auto relative mx-auto flex w-full max-w-[58rem] flex-col items-center px-0 text-center md:max-w-[min(58rem,calc(100vw-21.5rem))] xl:max-w-[58rem]">
+            <div className="booking-composition pointer-events-auto relative mx-auto flex w-full flex-col items-center px-0 text-center">
               <AnimatePresence initial={false} mode="wait">
                 {submitStatus === "idle" && (
                   <motion.div
@@ -130,16 +135,16 @@ export default function BookingInsideCabin({
                     transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     className="pointer-events-auto flex w-full flex-col items-center"
                   >
-                    <div className="mb-4 inline-flex items-center gap-3 border border-white/8 bg-black/36 px-4 py-2.5 text-white/78 shadow-[0_18px_40px_rgba(0,0,0,0.28)] backdrop-blur-md">
+                    <div className="booking-eyebrow inline-flex items-center gap-3 text-white/78">
                       <CalendarDays className="h-4 w-4 shrink-0 text-white/70" />
                       <span className="text-[10px] font-subheading uppercase tracking-[0.26em]">Private Inquiry</span>
                     </div>
 
-                    <h2 className="max-w-full text-center text-[clamp(2.35rem,4.7vw,5.2rem)] font-subheading leading-[0.98] tracking-[0.035em] text-[var(--text)] drop-shadow-[0_18px_42px_rgba(0,0,0,0.52)] sm:whitespace-nowrap sm:tracking-[0.09em]">
+                    <h2 className="booking-heading">
                       Book Ascenseur House
                     </h2>
 
-                    <p className="mt-4 max-w-[58ch] text-center text-sm leading-6 text-white/70 sm:text-base sm:leading-7 md:text-base md:leading-7">
+                    <p className="booking-description">
                       Private events, artist bookings, venue partnerships, and curated experiences shaped with the atmosphere of Ascenseur House.
                     </p>
 
@@ -147,21 +152,16 @@ export default function BookingInsideCabin({
                       action={FORMSPREE_ENDPOINT}
                       method="POST"
                       onSubmit={handleBookingSubmit}
-                      className="pointer-events-auto relative z-40 mt-6 w-full max-w-[58rem]"
+                      className="booking-form pointer-events-auto relative z-40 w-full"
                     >
                       <input type="hidden" name="_subject" value="New Ascenseur House Booking Inquiry" />
 
-                      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 md:gap-5">
+                      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4">
                         <input
                           type="text"
                           name="name"
                           required
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
-                          style={{
-                            borderColor: "rgba(255,255,255,0.1)",
-                            background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
-                          }}
+                          className="booking-field"
                           aria-label="Name"
                           placeholder="Name"
                         />
@@ -169,12 +169,7 @@ export default function BookingInsideCabin({
                         <input
                           type="text"
                           name="company"
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
-                          style={{
-                            borderColor: "rgba(255,255,255,0.1)",
-                            background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
-                          }}
+                          className="booking-field"
                           aria-label="Company / Venue"
                           placeholder="Company / Venue"
                         />
@@ -183,12 +178,7 @@ export default function BookingInsideCabin({
                           type="email"
                           name="email"
                           required
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
-                          style={{
-                            borderColor: "rgba(255,255,255,0.1)",
-                            background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
-                          }}
+                          className="booking-field"
                           aria-label="Email"
                           placeholder="Email"
                         />
@@ -196,12 +186,7 @@ export default function BookingInsideCabin({
                         <input
                           type="tel"
                           name="phone"
-                          className="w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:px-6 sm:py-3.5 sm:text-lg"
-                          style={{
-                            borderColor: "rgba(255,255,255,0.1)",
-                            background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 18px 42px rgba(0,0,0,0.2)",
-                          }}
+                          className="booking-field"
                           aria-label="Phone Number"
                           placeholder="Phone Number"
                         />
@@ -209,12 +194,7 @@ export default function BookingInsideCabin({
                         <textarea
                           name="message"
                           required
-                          className="min-h-[130px] w-full appearance-none rounded-[20px] border px-5 py-3.5 text-base text-[var(--text)] outline-none transition font-body placeholder:font-body placeholder:text-white/32 focus:border-white/24 focus:bg-white/[0.06] sm:col-span-2 sm:px-6 sm:py-3.5 sm:text-lg md:min-h-[136px]"
-                          style={{
-                            borderColor: "rgba(255,255,255,0.1)",
-                            background: "linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.032))",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04), 0 22px 48px rgba(0,0,0,0.22)",
-                          }}
+                          className="booking-field booking-message sm:col-span-2"
                           aria-label="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                           placeholder="Tell us about your event, who you’d like to book, and whether you are in New York or Los Angeles."
                         />
@@ -222,16 +202,12 @@ export default function BookingInsideCabin({
                         <div className="flex flex-col items-center gap-4 pt-1 sm:col-span-2">
                           <UIButton
                             type="submit"
-                            className="cursor-pointer border px-7 py-3.5 text-white sm:px-9"
-                            style={{
-                              borderColor: "rgba(255,255,255,0.14)",
-                              background: "linear-gradient(180deg, rgba(255,255,255,0.09), rgba(var(--accent-rgb),0.22))",
-                            }}
+                            className="booking-submit"
                           >
                             Send Inquiry
                           </UIButton>
 
-                          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-sm text-white/62 sm:text-base">
+                          <div className="booking-contact">
                             <span className="font-title uppercase tracking-[0.16em] text-white/38">Direct Contact</span>
                             <a href="tel:+16262406905" className="text-white/62">
                               (626) 240-6905
