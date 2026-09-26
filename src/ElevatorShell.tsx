@@ -207,11 +207,11 @@ function ElevatorScene({
   const showTravelSweep = travelState === "traveling" || travelState === "opening";
 
   return (
-    <div data-elevator-state={travelState} data-elevator-floor={displayFloor} className={`relative ${["01", "02", "03", "04"].includes(displayFloor) ? "h-full md:h-screen" : "h-screen"} w-screen overflow-hidden bg-[var(--black)] text-[var(--text)]`}>
+    <div data-elevator-state={travelState} data-elevator-floor={displayFloor} className={`relative ${["A", "01", "02", "03", "04"].includes(displayFloor) ? "h-full md:h-screen" : "h-screen"} w-screen overflow-hidden bg-[var(--black)] text-[var(--text)]`}>
       <div className="pointer-events-none absolute inset-0 bg-black/95" />
 
       <motion.div
-        className={`relative ${["01", "02", "03", "04"].includes(displayFloor) ? "h-full md:h-screen" : "h-screen"} w-screen overflow-hidden bg-[#080808] shadow-[0_35px_80px_rgba(0,0,0,0.68)]`}
+        className={`relative ${["A", "01", "02", "03", "04"].includes(displayFloor) ? "h-full md:h-screen" : "h-screen"} w-screen overflow-hidden bg-[#080808] shadow-[0_35px_80px_rgba(0,0,0,0.68)]`}
       >
         <div className="pointer-events-none absolute inset-0 border border-white/6" />
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 border-b border-white/8 bg-[#0d0d0d]" />

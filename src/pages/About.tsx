@@ -69,7 +69,7 @@ export default function AboutInsideCabin({
       animate={{ opacity: visible ? 1 : 0, scale: visible ? 1 : 0.992, y: visible ? 0 : 10 }}
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
-      data-floor-scroll="about" className="absolute inset-0 z-[100] overflow-y-auto overflow-x-hidden overscroll-y-contain"
+      data-floor-scroll="about" className="about-mobile-scroll absolute inset-0 z-[100] overflow-y-auto overflow-x-hidden overscroll-y-contain"
     >
       <section className="relative min-h-full w-full overflow-hidden bg-black text-white">
         <div
