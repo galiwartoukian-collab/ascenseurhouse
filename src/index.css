@@ -216,6 +216,8 @@ body {
 
   .about-house-profile:hover img { transform: scale(1.1); }
 
+}
+
   .desktop-floor-button {
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.88);
@@ -253,4 +255,85 @@ body {
     border-color: rgba(var(--floor-color), .6);
     box-shadow: inset 0 0 5px rgba(var(--floor-color), .3);
   }
+
+/* Shared header and compact elevator housing on every floor. */
+.elevator-header {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 64px;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #0d0d0d;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.elevator-logo { cursor: pointer; flex-shrink: 0; }
+.header-level-indicator {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+.levels-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  min-width: 44px;
+  cursor: pointer;
+  color: rgba(255,255,255,.72);
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.levels-trigger:hover { color: white; }
+.levels-icon { position: relative; width: 17px; height: 14px; }
+.levels-icon span { position: absolute; left: 0; width: 17px; height: 1px; background: currentColor; transition: transform .18s, opacity .18s; }
+.levels-icon span:nth-child(1) { top: 1px; }
+.levels-icon span:nth-child(2) { top: 6px; }
+.levels-icon span:nth-child(3) { top: 11px; }
+.levels-icon[data-open="true"] span:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+.levels-icon[data-open="true"] span:nth-child(2) { opacity: 0; }
+.levels-icon[data-open="true"] span:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+.elevator-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 24px;
+  width: 240px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100dvh - 84px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 18px 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 8px;
+  background: linear-gradient(115deg, #191a1c, #0c0d0e 55%, #111214);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 0 16px rgba(0,0,0,.4), 0 16px 32px rgba(0,0,0,.45);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity .18s, transform .2s, visibility .2s;
+}
+.elevator-panel[data-open="true"] { opacity: 1; visibility: visible; transform: translateY(0); }
+.elevator-panel-title { margin: 0 0 12px 4px; font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+.elevator-floor-row { display: flex; align-items: center; gap: 18px; width: 100%; padding: 6px 4px; text-align: left; cursor: pointer; border-radius: 4px; }
+.elevator-floor-row:disabled { cursor: not-allowed; opacity: .5; }
+.elevator-floor-row .desktop-floor-button { position: relative; display: grid; place-items: center; flex: 0 0 44px; height: 44px; border-radius: 50%; font: 700 11px var(--font-title); letter-spacing: .08em; transition: transform .12s, box-shadow .18s; }
+.elevator-floor-row:active:not(:disabled) .desktop-floor-button { transform: scale(.94); }
+.elevator-floor-name { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.58); }
+.elevator-floor-row:hover .elevator-floor-name, .elevator-floor-row[aria-current="page"] .elevator-floor-name { color: rgba(255,255,255,.9); }
+.elevator-header button:focus-visible { outline: 1px solid rgba(255,255,255,.8); outline-offset: 4px; }
+@media (max-width: 600px) {
+  .elevator-header { padding: 0 12px; }
+  .header-level-indicator { transform: translate(-50%, -50%) scale(.88); }
+  .levels-trigger-label { display: none; }
+  .elevator-panel { right: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .elevator-panel, .levels-icon span, .elevator-floor-row .desktop-floor-button { transition: none; }
 }

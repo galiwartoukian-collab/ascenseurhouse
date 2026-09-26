@@ -1,11 +1,10 @@
 import React, { Suspense } from "react";
-import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
-import { ElevatorPanel, ElevatorScene } from "./ElevatorShell";
+import { MotionConfig, useReducedMotion } from "framer-motion";
+import { ElevatorHeader, ElevatorScene } from "./ElevatorShell";
 import { floors, isProfile, pages, paths, prepareRoute, routeFromPath } from "./navigation/routes";
 import { DoorTransition } from "./navigation/routeLoader";
 import { useFloorScroll } from "./navigation/useFloorScroll";
 import type { Stop, TravelState } from "./types";
-import logo from "./assets/logo.png";
 
 type Position = { window: number; panels: number[] };
 const zero: Position = { window: 0, panels: [] };
@@ -32,7 +31,7 @@ class PageErrorBoundary extends React.Component<{ children: React.ReactNode; onR
 export default function App() {
   const [initial] = React.useState(() => routeFromPath(window.location.pathname));
   const [route, setRoute] = React.useState<Stop>(initial);
-  const [target, setTarget] = React.useState<Stop>(initial);
+  const [, setTarget] = React.useState<Stop>(initial);
   const [travelState, setTravelState] = React.useState<TravelState>(initial === "about" ? "idle" : "traveling");
   const [arrivalKey, setArrivalKey] = React.useState(0);
   const [error, setError] = React.useState("");
@@ -158,19 +157,7 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="relative bg-[var(--black)]">
-          <div className="fixed left-1/2 top-2 z-[10001] -translate-x-1/2">
-            <div className="relative">
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-16 w-40 -translate-x-1/2 -translate-y-1/2 opacity-60 blur-2xl" style={{ background: "radial-gradient(circle, rgba(var(--accent-rgb),0.45) 0%, rgba(var(--accent-rgb),0.25) 35%, rgba(var(--accent-rgb),0.08) 65%, transparent 100%)", boxShadow: "0 0 30px rgba(var(--accent-rgb),0.35), 0 0 60px rgba(var(--accent-rgb),0.2)" }} />
-              <button type="button" onClick={goToAbout} aria-label="Return to About" className="relative z-[10002] cursor-pointer">
-                <img src={logo} alt="Ascenseur House" className="h-10 w-auto object-contain opacity-90 md:h-12" />
-              </button>
-            </div>
-          </div>
-        <AnimatePresence>
-          {visible && <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 40 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
-            <ElevatorPanel activeFloor={floors[route]} targetFloor={floors[target]} disabled={!visible} onGoToAbout={goToAbout} onGoToAra={goToAra} onGoToBendi={goToBendi} onGoToAnais={goToAnais} onGoToBliss={goToBliss} onGoToBooking={goToBooking} />
-          </motion.div>}
-        </AnimatePresence>
+        <ElevatorHeader activeFloor={floors[route]} travelState={travelState} disabled={!visible} onGoToAbout={goToAbout} onGoToAra={goToAra} onGoToBendi={goToBendi} onGoToAnais={goToAnais} onGoToBliss={goToBliss} onGoToBooking={goToBooking} />
         <div className="fixed inset-0 h-dvh overflow-hidden">
           <ElevatorScene onDoorsClosed={onDoorsClosed} onDoorsOpened={onDoorsOpened} displayFloor={floors[route]} travelState={travelState}>
             <PageErrorBoundary onReady={onReady} key={`${route}-${arrivalKey}`}>

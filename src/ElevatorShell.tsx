@@ -1,11 +1,11 @@
 import React from "react";
-import { floors, SCROLL_SEQUENCE, previousMainFloor, nextMainFloor } from "./navigation/routeConfig";
+import logo from "./assets/logo.png";
 import { AnimatePresence, motion } from "framer-motion";
 import type { TravelState, FloorCode, NavigationHandler } from "./types";
 import { DoorMotion, DOOR_CLOSE_SECONDS, DOOR_OPEN_SECONDS } from "./navigation/doorMotion";
 type ElevatorPanelProps = {
   activeFloor: FloorCode;
-  targetFloor: FloorCode;
+  travelState: TravelState;
   disabled: boolean;
   onGoToAbout: NavigationHandler;
   onGoToAra: NavigationHandler;
@@ -24,138 +24,85 @@ type ElevatorSceneProps = {
 };
 const DOOR_EASE: [number, number, number, number] = [0.45, 0, 0.55, 1];
 const CABIN_GLOW_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-function MetalButton({
-  label,
-  destination,
-  active = false,
-  disabled = false,
-  onClick,
-}: {
-  label: string;
-  destination: string;
-  active?: boolean;
-  disabled?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <motion.button
-      type="button"
-      whileTap={disabled ? undefined : { scale: 0.96 }}
-      whileHover={
-        disabled
-          ? undefined
-          : {
-              y: -1,
-              boxShadow: active
-                ? "inset 0 1px 2px rgba(255,255,255,0.16), inset 0 -6px 12px rgba(0,0,0,0.28), 0 0 28px rgba(var(--accent-rgb),0.35)"
-                : "inset 0 1px 2px rgba(255,255,255,0.12), inset 0 -6px 12px rgba(0,0,0,0.5), 0 0 22px rgba(var(--reflection-rgb),0.32)",
-            }
-      }
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={`Go to ${destination}`}
-      aria-current={active ? "page" : undefined}
-      className="group relative h-6 w-6 rounded-full border text-[11px] font-title text-[var(--text)] transition duration-300 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9 md:h-12 md:w-12"
-      style={{
-        borderColor: active ? "rgba(var(--accent-rgb),0.42)" : "rgba(255,255,255,0.08)",
-        background: active
-          ? "var(--active-button)"
-          : "linear-gradient(180deg, #2e3237 0%, #17191c 100%)",
-        boxShadow: active
-          ? "inset 0 1px 2px rgba(255,255,255,0.16), inset 0 -6px 12px rgba(0,0,0,0.28), 0 0 0 1px rgba(var(--accent-rgb),0.12), 0 0 24px rgba(var(--accent-rgb),0.22), 0 8px 18px rgba(0,0,0,0.3)"
-          : "inset 0 1px 2px rgba(255,255,255,0.1), inset 0 -6px 12px rgba(0,0,0,0.5), 0 8px 18px rgba(0,0,0,0.3)",
-      }}
-    >
-      <span className="pointer-events-none absolute inset-[4px] rounded-full border border-white/10" />
-      <span
-        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition duration-300 group-hover:opacity-100"
-        style={{
-          boxShadow: "0 0 18px rgba(var(--accent-rgb),0.35), 0 0 36px rgba(var(--accent-rgb),0.18)",
-        }}
-      />
-      <span
-        className={`pointer-events-none absolute right-[6px] top-[6px] h-1.5 w-1.5 rounded-full transition ${
-          active ? "bg-white/85" : "bg-white/12"
-        }`}
-      />
-      <span className={`relative z-10 tracking-[0.08em] ${active ? "text-white" : "text-white/88"}`}>
-        {label}
-      </span>
-    </motion.button>
-  );
-}
-
-function ElevatorPanel({
-  activeFloor,
-  targetFloor,
-  disabled,
-  onGoToAbout,
-  onGoToAra,
-  onGoToAnais,
-  onGoToBendi,
-  onGoToBliss,
-  onGoToBooking,
+function ElevatorHeader({
+  activeFloor, travelState, disabled,
+  onGoToAbout, onGoToAra, onGoToAnais, onGoToBendi, onGoToBliss, onGoToBooking,
 }: ElevatorPanelProps) {
+  const [open, setOpen] = React.useState(false);
+  const trigger = React.useRef<HTMLButtonElement>(null);
+  const controls = React.useRef<HTMLDivElement>(null);
   const destinations = [
-    { floor: "A", label: "A", name: "About", onClick: onGoToAbout },
-    { floor: "01", label: "1", name: "ARA32", onClick: onGoToAra },
-    { floor: "02", label: "2", name: "Bendi", onClick: onGoToBendi },
-    { floor: "03", label: "3", name: "Anaïs", onClick: onGoToAnais },
-    { floor: "04", label: "4", name: "Bliss Eliss", onClick: onGoToBliss },
-    { floor: "B", label: "B", name: "Booking", onClick: onGoToBooking },
+    { floor: "A", name: "About", onClick: onGoToAbout },
+    { floor: "01", name: "ARA32", onClick: onGoToAra },
+    { floor: "02", name: "Bendi", onClick: onGoToBendi },
+    { floor: "03", name: "Anaïs", onClick: onGoToAnais },
+    { floor: "04", name: "Bliss Eliss", onClick: onGoToBliss },
+    { floor: "B", name: "Booking", onClick: onGoToBooking },
   ];
   const floorColors: Record<string, string> = {
     A: "var(--peach-rgb)", "01": "var(--coral-rgb)",
     "02": "var(--magenta-rgb)", "03": "var(--violet-rgb)",
     "04": "var(--blue-rgb)", B: "var(--wine-rgb)",
   };
-  const currentRoute = SCROLL_SEQUENCE.find(route => floors[route] === targetFloor)!;
-  const previous = previousMainFloor(currentRoute);
-  const next = nextMainFloor(currentRoute);
-  const previousDestination = destinations.find(item => previous && item.floor === floors[previous]);
-  const nextDestination = destinations.find(item => next && item.floor === floors[next]);
+  React.useEffect(() => {
+    if (!open) return;
+    const outside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !controls.current?.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        trigger.current?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [open]);
   return (
-    <div className="pointer-events-none fixed right-0 z-[9999] origin-right md:bottom-auto md:right-[0.5vw] md:top-1/2 md:-translate-y-1/2">
-      {/* MOBILE - OPTION B / MIDDLE RIGHT */}
-      <div className="pointer-events-auto fixed right-0 top-1/2 -translate-y-1/2 md:hidden">
-        <div
-          className="rounded-l-[18px] border border-r-0 border-white/10 bg-[#0f1114]/96 px-1.5 py-2 shadow-[0_16px_30px_rgba(0,0,0,0.38)]"
-        >
-          <div className="grid grid-cols-1 gap-2">
-            {destinations.map(({ floor, label, name, onClick }) => (
-              <MetalButton key={floor} label={label} destination={name}
-                active={activeFloor === floor || targetFloor === floor}
-                disabled={disabled} onClick={onClick} />
-            ))}
-          </div>
-        </div>
+    <header className="elevator-header">
+      <button type="button" onClick={onGoToAbout} aria-label="Return to About" className="elevator-logo">
+        <img src={logo} alt="Ascenseur House" className="h-10 w-auto object-contain opacity-90 md:h-12" />
+      </button>
+      <TravelIndicator displayFloor={activeFloor} travelState={travelState} />
+      <div ref={controls} className="elevator-controls"
+        onWheel={event => event.stopPropagation()}
+        onTouchStart={event => event.stopPropagation()}
+        onTouchMove={event => event.stopPropagation()}
+        onBlur={event => {
+          if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+        }}>
+        <button ref={trigger} type="button" className="levels-trigger"
+          aria-label={open ? "Close levels navigation" : "Open levels navigation"}
+          aria-expanded={open} aria-controls="elevator-levels"
+          onClick={() => setOpen(value => !value)}>
+          <span className="levels-icon" data-open={open} aria-hidden="true"><span /><span /><span /></span>
+          <span className="levels-trigger-label">Levels</span>
+        </button>
+        <nav id="elevator-levels" aria-label="Floor navigation" className="elevator-panel"
+          data-open={open} inert={!open} aria-hidden={!open}>
+          <div className="elevator-panel-title">Levels</div>
+          {destinations.map(({ floor, name, onClick }) => (
+            <button key={floor} type="button" className="elevator-floor-row" disabled={disabled}
+              aria-label={`Go to ${name}, level ${floor}`} aria-current={activeFloor === floor ? "page" : undefined}
+              style={{ "--floor-color": floorColors[floor] } as React.CSSProperties}
+              onClick={() => {
+                onClick();
+                setOpen(false);
+                trigger.current?.focus();
+              }}>
+              <span className="desktop-floor-button" aria-current={activeFloor === floor ? "page" : undefined} aria-hidden="true">{floor}</span>
+              <span className="elevator-floor-name">{name}</span>
+            </button>
+          ))}
+        </nav>
       </div>
-
-      {/* Desktop/tablet floor strip; mobile retains its original housing. */}
-      <nav aria-label="Floor navigation"
-        className="pointer-events-auto hidden w-[52px] flex-col items-center gap-1 rounded-[8px] border border-white/10 bg-[#090a0b]/95 px-1 py-3 shadow-[0_8px_24px_rgba(0,0,0,0.3)] md:flex">
-        <button type="button" aria-label="Previous floor" title={previousDestination?.name ?? "First floor"}
-          disabled={disabled || !previousDestination} onClick={previousDestination?.onClick}
-          className="mb-2 flex h-4 w-10 items-center justify-center rounded-full text-white/40 hover:text-white/80 disabled:opacity-20 disabled:cursor-default">
-          <svg aria-hidden="true" width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M2 6L6 2L10 6" stroke="currentColor" strokeWidth="1" /></svg>
-        </button>
-        {destinations.map(({ floor, name, onClick }) => {
-          const active = targetFloor === floor;
-          return <button key={floor} type="button" onClick={onClick} disabled={disabled}
-            aria-label={`Go to ${name}`} aria-current={active ? "page" : undefined}
-            title={`${floor} — ${name}`}
-            className="desktop-floor-button relative h-10 w-10 rounded-full font-title text-[11px] tracking-[0.08em] text-white/60 transition-colors disabled:cursor-not-allowed"
-            style={{ "--floor-color": floorColors[floor] } as React.CSSProperties}>
-            {floor}
-          </button>;
-        })}
-        <button type="button" aria-label="Next floor" title={nextDestination?.name ?? "Final floor"}
-          disabled={disabled || !nextDestination} onClick={nextDestination?.onClick}
-          className="mt-2 flex h-4 w-10 items-center justify-center rounded-full text-white/40 hover:text-white/80 disabled:opacity-20 disabled:cursor-default">
-          <svg aria-hidden="true" width="12" height="8" viewBox="0 0 12 8" fill="none"><path d="M2 2L6 6L10 2" stroke="currentColor" strokeWidth="1" /></svg>
-        </button>
-      </nav>
-    </div>
+    </header>
   );
 }
 
@@ -167,7 +114,7 @@ function TravelIndicator({
   travelState: TravelState;
 }) {
   const isTraveling = travelState === "traveling";
-  const label = displayFloor === "B" ? "BOOK" : displayFloor;
+  const label = displayFloor;
   const [tickerIndex, setTickerIndex] = React.useState(0);
   const tickerValues = React.useMemo(() => ["A", "01", "02", "03", "04", "B"], []);
 
@@ -185,7 +132,7 @@ function TravelIndicator({
   }, [isTraveling, tickerValues]);
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-14 z-40 -translate-x-1/2 scale-[0.88] sm:scale-100 md:top-17">
+    <div className="header-level-indicator" role="status" aria-label={`Level ${displayFloor}`}>
       <motion.div
         initial={false}
         animate={{
@@ -209,7 +156,7 @@ function TravelIndicator({
           }}
         />
 
-        <div className="relative flex items-center justify-center gap-2 text-center">
+        <div aria-hidden="true" className="relative flex items-center justify-center gap-2 text-center">
           <motion.span
             animate={{ opacity: isTraveling ? [0.25, 0.9, 0.25] : 0.2 }}
             transition={{ duration: 1.1, repeat: isTraveling ? Infinity : 0 }}
@@ -270,7 +217,7 @@ function ElevatorScene({
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 border-b border-white/8 bg-[#0d0d0d]" />
         <div className="pointer-events-none absolute bottom-0 left-0 z-20 h-7 w-full border-t border-white/8 bg-[#060606]" />
 
-        <TravelIndicator displayFloor={displayFloor} travelState={travelState} />
+
 
         <div className="relative isolate h-full w-full overflow-hidden bg-[var(--black)]">
           <motion.div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden atmosphere atmosphere-cool">
@@ -360,4 +307,4 @@ function ElevatorScene({
 }
 
 
-export { ElevatorPanel, ElevatorScene };
+export { ElevatorHeader, ElevatorScene };
