@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { Stop } from "../types";
-import { GestureGate, ScrollBoundary } from "./gesture";
+import { GestureGate, ProfileTouchGate, ScrollBoundary } from "./gesture";
 import { nextMainFloor, previousMainFloor, prepareRoute } from "./routes";
+import { isProfile } from "./routeConfig";
 
 export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: Stop) => boolean) {
   const gate = useRef(new GestureGate());
@@ -10,6 +11,8 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     let touchY: number | null = null;
     let touchTarget: EventTarget | null = null;
     let touchUsed = false;
+    const profileTouch = new ProfileTouchGate();
+    const mobileProfile = () => isProfile(route) && window.matchMedia("(max-width: 767px)").matches;
     const interactive = (target: EventTarget | null) => target instanceof Element && !!target.closest(route === "booking" ? "input,textarea,select,button,a,[contenteditable=true]" : "input,textarea,select,[contenteditable=true]");
     const scrollElement = (target: EventTarget | null): HTMLElement | null => {
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(`[data-floor-scroll="${route}"]`))
@@ -37,7 +40,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
         const delta = boundary.observe(el.scrollTop, performance.now(), gate.current);
         const edge = delta > 0 && boundary.atEdge(delta, el.clientHeight, el.scrollHeight);
         const destination = nextMainFloor(route);
-        if (delta && gate.current.input(edge ? boundary.distance : delta, performance.now(), locked, edge && destination !== null) && destination) navigate(destination);
+        if (!mobileProfile() && delta && gate.current.input(edge ? boundary.distance : delta, performance.now(), locked, edge && destination !== null) && destination) navigate(destination);
       }
       const next = nextMainFloor(route);
       if (next && (max === 0 || el.scrollTop >= max * 0.55)) void prepareRoute(next).catch(() => {});
@@ -67,12 +70,15 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       touchTarget = event.target;
       touchUsed = false;
       const el = scrollElement(touchTarget);
+      profileTouch.end();
+      if (mobileProfile() && el && event.touches.length === 1) profileTouch.begin(el.scrollTop, el.clientHeight, el.scrollHeight);
       if (el) boundaryFor(el).observe(el.scrollTop, performance.now(), gate.current);
       gate.current.beginTouch(performance.now(), !!el && el.scrollTop <= 0);
     };
     const end = () => {
       touchY = null;
       touchTarget = null;
+      profileTouch.end();
       gate.current.endTouch(performance.now());
     };
     const move = (event: TouchEvent) => {
@@ -80,6 +86,18 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       const y = event.touches[0]?.clientY ?? touchY;
       const delta = touchY - y;
       touchY = y;
+      if (mobileProfile()) {
+        const el = scrollElement(touchTarget);
+        const destination = delta > 0 ? nextMainFloor(route) : previousMainFloor(route);
+        const now = performance.now();
+        if (el && profileTouch.input(delta, el.scrollTop, el.clientHeight, el.scrollHeight,
+          locked || now < gate.current.blockedUntil || interactive(touchTarget) || event.touches.length !== 1 || !destination) && destination) {
+          touchUsed = true;
+          gate.current.block(now);
+          if (navigate(destination) && event.cancelable) event.preventDefault();
+        }
+        return;
+      }
       if (gesture(delta, touchTarget)) { touchUsed = true; event.preventDefault(); }
     };
     const ready = () => prefetch();

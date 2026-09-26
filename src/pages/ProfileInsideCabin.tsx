@@ -62,7 +62,7 @@ export default function ProfileInsideCabin({ profile, visible }: { profile: Prof
       exit={{ opacity: 0, scale: 0.985, y: -12 }}
       transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
       data-floor-scroll={profile.id}
-      className="pointer-events-auto absolute inset-0 z-[100] overflow-y-auto overscroll-y-contain md:overflow-hidden"
+      className="pointer-events-auto absolute inset-0 z-[100] overflow-y-auto overscroll-y-contain touch-pan-y md:touch-auto md:overflow-hidden"
     >
       <div data-atmosphere={profile.id} className="profile-cabin">
         <div className="profile-cabin-photo">

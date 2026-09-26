@@ -56,6 +56,42 @@ export class GestureGate {
   }
 }
 
+// Mobile profiles require a separate touch starting at the absolute boundary.
+export class ProfileTouchGate {
+  private atTop = false;
+  private atBottom = false;
+  private amount = 0;
+  private direction = 0;
+
+  begin(top: number, height: number, total: number) {
+    this.end();
+    this.atTop = top <= 0;
+    this.atBottom = top + height >= total;
+  }
+
+  end() {
+    this.atTop = this.atBottom = false;
+    this.amount = this.direction = 0;
+  }
+
+  input(delta: number, top: number, height: number, total: number, locked: boolean) {
+    if (delta === 0 && !locked) return false;
+    const direction = Math.sign(delta);
+    const atEdge = direction < 0 ? this.atTop && top <= 0 : direction > 0 && this.atBottom && top + height >= total;
+    if (locked || !atEdge) {
+      // Once native scrolling wins, this finger must be released before trying again.
+      this.end();
+      return false;
+    }
+    if (direction !== this.direction) this.amount = 0;
+    this.direction = direction;
+    this.amount += Math.min(Math.abs(delta), 120);
+    if (this.amount < 90) return false;
+    this.end();
+    return true;
+  }
+}
+
 // One instance per actual scroll container; never compare desktop and mobile offsets.
 export class ScrollBoundary {
   top: number;
