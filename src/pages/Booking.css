@@ -102,3 +102,14 @@
 @media (prefers-reduced-motion: reduce) {
   .booking-field, .booking-page .booking-submit { transition: none; }
 }
+
+@media (max-width: 767px) {
+  .booking-mobile-scroll {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+}

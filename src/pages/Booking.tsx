@@ -88,7 +88,7 @@ export default function BookingInsideCabin({
     >
       <div
         data-floor-scroll="booking" ref={mobileScrollRef}
-        className="pointer-events-auto relative h-full w-full overflow-y-auto overscroll-y-auto bg-[#060607] md:overflow-hidden"
+        className="booking-mobile-scroll pointer-events-auto relative h-full w-full overflow-y-auto overscroll-y-auto bg-[#060607] md:overflow-hidden"
       >
         <motion.div
           aria-hidden="true"
