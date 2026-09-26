@@ -10,6 +10,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     gate.current.block(performance.now());
     let touchY: number | null = null;
     let touchTarget: EventTarget | null = null;
+    let touchScrollOwner: HTMLElement | null = null;
     let touchUsed = false;
     const profileTouch = new ProfileTouchGate();
     const mobileProfile = () => isProfile(route) && window.matchMedia("(max-width: 767px)").matches;
@@ -18,7 +19,11 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       const candidates = Array.from(document.querySelectorAll<HTMLElement>(`[data-floor-scroll="${route}"]`))
         .filter(el => el.clientHeight > 0 && /^(auto|scroll)$/.test(getComputedStyle(el).overflowY));
       const containing = candidates.filter(el => target instanceof Node && el.contains(target));
-      return containing.reverse().find(el => el.scrollHeight > el.clientHeight + 2) ?? candidates.find(el => el.scrollHeight > el.clientHeight + 2) ?? candidates[0] ?? null;
+      // Duplicate markers describe different owners at different breakpoints.
+      // A fitting inner profile must never stand in for its scrolling ancestor.
+      return containing.reverse().find(el => el.scrollHeight > el.clientHeight)
+        ?? candidates.find(el => el.scrollHeight > el.clientHeight)
+        ?? (mobileProfile() ? null : candidates[0] ?? null);
     };
     const boundaries = new WeakMap<HTMLElement, ScrollBoundary>();
     const boundaryFor = (el: HTMLElement) => {
@@ -70,6 +75,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       touchTarget = event.target;
       touchUsed = false;
       const el = scrollElement(touchTarget);
+      touchScrollOwner = el;
       profileTouch.end();
       if (mobileProfile() && el && event.touches.length === 1) profileTouch.begin(el.scrollTop, el.clientHeight, el.scrollHeight);
       if (el) boundaryFor(el).observe(el.scrollTop, performance.now(), gate.current);
@@ -78,6 +84,7 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
     const end = () => {
       touchY = null;
       touchTarget = null;
+      touchScrollOwner = null;
       profileTouch.end();
       gate.current.endTouch(performance.now());
     };
@@ -87,7 +94,14 @@ export function useFloorScroll(route: Stop, locked: boolean, navigate: (route: S
       const delta = touchY - y;
       touchY = y;
       if (mobileProfile()) {
-        const el = scrollElement(touchTarget);
+        // Use the owner whose boundaries were captured at touchstart, even if
+        // layout changes while the finger is down. A new owner needs a new touch.
+        const el = touchScrollOwner;
+        if (!el || !el.isConnected || el.scrollHeight <= el.clientHeight || scrollElement(touchTarget) !== el) {
+          profileTouch.end();
+          touchUsed = true;
+          return;
+        }
         const destination = delta > 0 ? nextMainFloor(route) : previousMainFloor(route);
         const now = performance.now();
         if (el && profileTouch.input(delta, el.scrollTop, el.clientHeight, el.scrollHeight,
